@@ -2,7 +2,7 @@ class Class4Tst(object):
     def __init__(self, *args, **kwargs):
         self.n = args[0]
 
-#some changes 4 tst git token4
+#some changes 4 tst git token5
 
 if __name__ == "__main__":
     c = Class4Tst(10)
