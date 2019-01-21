@@ -2,6 +2,11 @@ class Class4Tst(object):
     def __init__(self, *args, **kwargs):
         self.n = args[0]
 
+    def foo(self, b):
+        return b
+
+    
+
 
 
 import pyximport 
@@ -14,3 +19,4 @@ if __name__ == "__main__":
     print(np.linspace(0,1,10))
     gl = GasLayer(10)
     print(gl.get_arr())
+    print(c.foo(88))
