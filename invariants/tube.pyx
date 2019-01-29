@@ -42,6 +42,14 @@ cdef class InterpXY(object):
             return np.asarray(self.get_vs(x))
         return self.get_v(x)
     
+    def __repr__(self):
+        xs = list(np.array(self.xs))
+        ys = list(np.array(self.ys))
+        return f'InterpXY(xs={xs}, ys={ys})'
+    
+    def __str__(self):
+        return repr(self)
+    
     @cython.boundscheck(False)
     @cython.wraparound(False)   
     cpdef double get_v(self, double x):
@@ -151,6 +159,14 @@ cdef class Tube(object):
 
         self.w = InterpXY(xss, ws)
         self.w_reverse = InterpXY(ws, xss)
+        
+    def __repr__(self):
+        xs = list(np.array(self.get_xs()))
+        ys = list(np.array(self.get_ds()))
+        return f'Tube(xs={xs}, ds={ys})'
+    
+    def __str__(self):
+        return repr(self)
     
     cpdef double get_d(self, double x):
         """
