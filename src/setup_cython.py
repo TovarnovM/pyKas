@@ -1,0 +1,20 @@
+#python setup_cython.py build_ext --inplace
+import glob
+import os
+import sys
+import shutil
+from distutils.core import setup
+from Cython.Build import cythonize
+from distutils.extension import Extension
+
+
+if __name__ == '__main__':
+    true_mod_name='all'
+    extentions = [
+        Extension("tube", ["invariants\\tube.pyx"]),
+        # Extension("pyx2", ["pak2\\pyx2.pyx"])
+    ]
+    setup(
+        name=true_mod_name,
+        ext_modules = cythonize(extentions, annotate=True)
+    )

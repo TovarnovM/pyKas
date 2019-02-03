@@ -1,3 +1,5 @@
+# distutils: language=c++
+# cython: language_level=3
 
 import numpy as np
 from copy import deepcopy
@@ -87,8 +89,8 @@ cdef class InterpXY(object):
             if self.xs[0] > t:
                 return -1
             n = 0
-        cdef int minw, maxw;
-        cdef int lengthM1 = self.length - 1;
+        cdef int minw, maxw
+        cdef int lengthM1 = self.length - 1
         if self.xs[n] <= t:
             if n == lengthM1 or self.xs[n + 1] > t:
                 return n
