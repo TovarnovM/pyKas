@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.append(os.path.dirname(sys.path[0]))
+sys.path.append("src\\")
 from invariants.tube import Tube, InterpXY
 from math import pi, sqrt
 from pytest import approx

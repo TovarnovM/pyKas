@@ -1,3 +1,4 @@
+# distutils: language=c++
 cdef int foo1(int a):
     print(a)
     return 2*a

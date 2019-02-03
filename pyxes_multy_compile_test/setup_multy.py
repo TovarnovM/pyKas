@@ -12,9 +12,9 @@ if __name__ == '__main__':
     true_mod_name='pyx23'
     extentions = [
         Extension("pyx1", ["pak1\\pyx1.pyx"]),
-        Extension("pyx2", ["pak2\\pyx2.pyx"], include_dirs=["pak1\\"])
+        Extension("pyx2", ["pak2\\pyx2.pyx"])
     ]
     setup(
         name=true_mod_name,
-        ext_modules = cythonize(extentions, language="c++", annotate=True)
+        ext_modules = cythonize(extentions, annotate=True)
     )
