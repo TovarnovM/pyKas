@@ -130,3 +130,5 @@ imageio.mimsave(os.path.dirname(os.path.realpath(__file__))+'\\movie.gif', image
 
 for f in tqdm(files):
     os.remove(f)
+
+color = '#FF0000'
