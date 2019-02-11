@@ -1,7 +1,7 @@
 import sys
 import os
-sys.path.append("src\\")
-from invariants.tube import Tube, InterpXY
+sys.path.append(os.getcwd()+"\\src\\")
+from tube import Tube, InterpXY
 from math import pi, sqrt
 from pytest import approx
 import numpy as np
@@ -76,11 +76,15 @@ def test_tube_dsdx_2():
 
 if __name__ == "__main__":
     xs = [1,2,4]
-    ds = [1,1,1]
-    s = pi/4
-    t = Tube(xs, ds)
-    for i in range(33):
-        x1 = -10 + random.random() * 30
-        x2 = -10 + random.random() * 30
-        x1, x2 = min(x1, x2), max(x1, x2)
-        print( np.asarray(t.get_dsdx(np.array([x1, x2])) ))
+    ixy = InterpXY([1,2,3], [4,5,6])
+    ans = np.array(ixy.get_vs(np.array([-1,1,1.5,2,2.25,2.5,3,33])))
+    print(ans)
+    print([4,4,4.5,5,5.25,5.5,6,6.])
+    # ds = [1,1,1]
+    # s = pi/4
+    # t = Tube(xs, ds)
+    # for i in range(33):
+    #     x1 = -10 + random.random() * 30
+    #     x2 = -10 + random.random() * 30
+    #     x1, x2 = min(x1, x2), max(x1, x2)
+    #     print( np.asarray(t.get_dsdx(np.array([x1, x2])) ))

@@ -13,8 +13,7 @@ cdef class InterpXY(object):
     xs - array like - занчения абсцисс функции
     ys - array like - значения ординат функции
     """
-    cdef public double[:] xs, ys, ks, bs
-    cdef int length, n
+
     def __init__(self, xs, ys):
         """
         __init__(self, xs, ys)
@@ -76,7 +75,7 @@ cdef class InterpXY(object):
         Возвращает интерполированные значения функции в точках 'x'
         """
         cdef double[:] res = np.empty(len(xs), dtype=np.double)
-        cdef int i
+        cdef size_t i
         for i in range(len(res)):
             res[i] = self.get_v(xs[i])
         return res
@@ -137,7 +136,6 @@ cdef class Tube(object):
         ds - array like - диаметры трубы в этич точках
         deltax4ws - double - на сколько метров от крайних точек можно так же считать объемы
     """
-    cdef InterpXY d, s, w, w_reverse
     def __init__(self, xs, ds, deltax4ws=1000.0):
         """
         xs - array like - координаты точек по оси
@@ -204,7 +202,7 @@ cdef class Tube(object):
         Так же len(result) == len(xs) - 1
         """
         cdef double[:] res = np.empty(len(xs)-1, dtype=np.double)
-        cdef int i
+        cdef size_t i
         cdef double dx, si ,si1
         si = self.s.get_v(xs[0])
         for i in range(len(res)):
@@ -223,7 +221,7 @@ cdef class Tube(object):
         len(result) == len(xs) - 1
         """
         cdef double[:] res = np.empty(len(xs)-1, dtype=np.double)
-        cdef int i
+        cdef size_t i
         cdef double wi ,wi1
         wi = self.w.get_v(xs[0])
         for i in range(len(res)):
