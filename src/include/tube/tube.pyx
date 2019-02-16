@@ -1,10 +1,14 @@
 # distutils: language=c++
 # cython: language_level=3
 
-import numpy as np
+
+# cimport numpy as cnp
 from copy import deepcopy
 import cython
+import numpy as np
+
 from libc.math cimport pi
+cimport numpy as np
 
 cdef class InterpXY(object):
     """

@@ -1,6 +1,8 @@
 import sys
 import os
-sys.path.append(os.getcwd()+"\\src\\")
+wd = os.path.abspath(__file__) # os.path.dirname(os.path.dirname(os.getcwd()))
+wd = os.path.dirname(os.path.dirname(wd))
+sys.path.append(wd+"\\src\\")
 from tube import Tube, InterpXY
 from math import pi, sqrt
 from pytest import approx

@@ -6,15 +6,19 @@ import shutil
 from distutils.core import setup
 from Cython.Build import cythonize
 from distutils.extension import Extension
+from clean_stuff import cleanstuff
+import numpy
 
 
 if __name__ == '__main__':
     true_mod_name='all'
     extentions = [
-        Extension("tube", ["invariants\\tube.pyx"]),
-        # Extension("pyx2", ["pak2\\pyx2.pyx"])
+        Extension("tube", ["include\\tube\\tube.pyx"] ,include_dirs=[numpy.get_include()]),
+        Extension("gaslayer", ["include\\gaslayer\\gaslayer.pyx"], library_dirs=['\\include\\tube\\'] ),
     ]
+    ext_modules = cythonize(extentions, annotate=True)
     setup(
         name=true_mod_name,
-        ext_modules = cythonize(extentions, annotate=True)
+        ext_modules=ext_modules,
     )
+    cleanstuff()
