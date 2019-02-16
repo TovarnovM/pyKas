@@ -24,6 +24,7 @@ def test_tube_d():
     assert t.get_ds() == approx(ds)
     assert t.get_xs() == approx(xs)
     assert t.get_d(3) == approx(0.75)
+    assert t.get_d(33) == approx(0.5)
 
 def test_tube_s():
     d = sqrt(4 / pi) # s = 1

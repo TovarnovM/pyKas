@@ -140,6 +140,7 @@ cdef class Tube(object):
         ds - array like - диаметры трубы в этич точках
         deltax4ws - double - на сколько метров от крайних точек можно так же считать объемы
     """
+    
     def __init__(self, xs, ds, deltax4ws=1000.0):
         """
         xs - array like - координаты точек по оси

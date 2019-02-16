@@ -371,26 +371,63 @@ body.cython { font-family: courier; font-size: 12; }
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">02</span>: <span class="c"># cython: language_level=3</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">03</span>: </pre>
-<pre class="cython line score-0">&#xA0;<span class="">04</span>: <span class="k">from</span> <span class="nn">tube.tube</span> <span class="k">cimport</span> <span class="n">Tube</span></pre>
+<pre class="cython line score-0">&#xA0;<span class="">04</span>: <span class="k">from</span> <span class="nn">tube</span> <span class="k">cimport</span> <span class="n">Tube</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">05</span>: </pre>
-<pre class="cython line score-6" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">06</span>: <span class="k">cdef</span> <span class="kt">void</span> <span class="nf">foo</span><span class="p">():</span></pre>
-<pre class='cython code score-6 '>static void __pyx_f_8gaslayer_foo(void) {
-  struct __pyx_obj_4tube_4tube_Tube *__pyx_v_t = 0;
+<pre class="cython line score-15" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">06</span>: <span class="k">cpdef</span> <span class="kt">double</span> <span class="nf">foo</span><span class="p">():</span></pre>
+<pre class='cython code score-15 '>static PyObject *__pyx_pw_8gaslayer_1foo(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static double __pyx_f_8gaslayer_foo(CYTHON_UNUSED int __pyx_skip_dispatch) {
+  struct __pyx_obj_4tube_Tube *__pyx_v_t = 0;
   double __pyx_v_d;
-  double __pyx_v_dd;
+  double __pyx_r;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("foo", 0);
 /* … */
   /* function exit code */
-  goto __pyx_L0;
   __pyx_L1_error:;
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_2);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_3);
   <span class='pyx_c_api'>__Pyx_WriteUnraisable</span>("gaslayer.foo", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __pyx_r = 0;
   __pyx_L0:;
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>((PyObject *)__pyx_v_t);
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_8gaslayer_1foo(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_8gaslayer_1foo(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
+  <span class='refnanny'>__Pyx_RefNannySetupContext</span>("foo (wrapper)", 0);
+  __pyx_r = __pyx_pf_8gaslayer_foo(__pyx_self);
+
+  /* function exit code */
+  <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_8gaslayer_foo(CYTHON_UNUSED PyObject *__pyx_self) {
+  PyObject *__pyx_r = NULL;
+  <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
+  <span class='refnanny'>__Pyx_RefNannySetupContext</span>("foo", 0);
+  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
+  __pyx_t_1 = <span class='py_c_api'>PyFloat_FromDouble</span>(__pyx_f_8gaslayer_foo(0));<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 6, __pyx_L1_error)</span>
+  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_1);
+  <span class='pyx_c_api'>__Pyx_AddTraceback</span>("gaslayer.foo", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  <span class='refnanny'>__Pyx_XGIVEREF</span>(__pyx_r);
+  <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
+  return __pyx_r;
 }
 </pre><pre class="cython line score-32" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">07</span>:     <span class="k">cdef</span> <span class="kt">Tube</span> <span class="nf">t</span> <span class="o">=</span> <span class="n">Tube</span><span class="p">([</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">],[</span><span class="mf">3</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">3</span><span class="p">])</span></pre>
 <pre class='cython code score-32 '>  __pyx_t_1 = <span class='py_c_api'>PyList_New</span>(3);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 7, __pyx_L1_error)</span>
@@ -423,14 +460,16 @@ body.cython { font-family: courier; font-size: 12; }
   <span class='py_macro_api'>PyTuple_SET_ITEM</span>(__pyx_t_3, 1, __pyx_t_2);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
-  __pyx_t_2 = <span class='pyx_c_api'>__Pyx_PyObject_Call</span>(((PyObject *)__pyx_ptype_4tube_4tube_Tube), __pyx_t_3, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 7, __pyx_L1_error)</span>
+  __pyx_t_2 = <span class='pyx_c_api'>__Pyx_PyObject_Call</span>(((PyObject *)__pyx_ptype_4tube_Tube), __pyx_t_3, NULL);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 7, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_v_t = ((struct __pyx_obj_4tube_4tube_Tube *)__pyx_t_2);
+  __pyx_v_t = ((struct __pyx_obj_4tube_Tube *)__pyx_t_2);
   __pyx_t_2 = 0;
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">08</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">d</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">get_d</span><span class="p">(</span><span class="mf">4</span><span class="p">)</span></pre>
-<pre class='cython code score-0 '>  __pyx_v_d = ((struct __pyx_vtabstruct_4tube_4tube_Tube *)__pyx_v_t-&gt;__pyx_vtab)-&gt;get_d(__pyx_v_t, 4.0, 0);
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">09</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">dd</span> <span class="o">=</span> <span class="n">d</span><span class="o">*</span><span class="n">dd</span></pre>
-<pre class='cython code score-0 '>  __pyx_v_dd = (__pyx_v_d * __pyx_v_dd);
+<pre class='cython code score-0 '>  __pyx_v_d = ((struct __pyx_vtabstruct_4tube_Tube *)__pyx_v_t-&gt;__pyx_vtab)-&gt;get_d(__pyx_v_t, 4.0, 0);
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">09</span>:     <span class="k">return</span> <span class="n">d</span></pre>
+<pre class='cython code score-0 '>  __pyx_r = __pyx_v_d;
+  goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">10</span>: </pre>
+<pre class="cython line score-0">&#xA0;<span class="">11</span>: </pre>
 </div></body></html>
