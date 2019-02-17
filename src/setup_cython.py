@@ -11,20 +11,9 @@ import numpy
 from shutil import copyfile
 
 
-def compile_bicycle():
+def compile_bicycle(packages):
     true_mod_name='all'
     incl_dir = "include"
-    packages = {
-        "tube": {
-            "Extention_kwargs":  { "include_dirs":[numpy.get_include()] }
-        }, 
-        
-        "gaslayer": {
-            "Extention_kwargs":{},
-            "depends": ["tube"]
-        }    
-    }
-
     wd = os.path.abspath(__file__) # os.path.dirname(os.path.dirname(os.getcwd()))
     wd = os.path.dirname(wd)
 
@@ -75,10 +64,20 @@ def compile_bicycle():
         
 
 
-
 if __name__ == '__main__':
+    packages = {
+            "tube": {
+                "Extention_kwargs":  { "include_dirs":[numpy.get_include()] }
+            }, 
+            
+            "gaslayer": {
+                "Extention_kwargs":{},
+                "depends": ["tube"]
+            }    
+        }
+
     cleanstuff()
-    compile_bicycle()
+    compile_bicycle(packages)
     cleanstuff()
         
         # true_mod_name='all'

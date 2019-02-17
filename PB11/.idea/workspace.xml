@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6360e212-0a81-4205-a833-377c9e4fd7f2" name="Default" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="OvLayer.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/OneVelocity/OvLayer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1587">
+              <caret line="100" column="11" lean-forward="true" selection-start-line="100" selection-start-column="11" selection-end-line="100" selection-end-column="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OvAUSMplus.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/OneVelocity/OvAUSMplus.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="338">
+              <caret line="14" column="17" lean-forward="true" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OvInit.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/OneVelocity/OvInit.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OvBorder.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/OneVelocity/OvBorder.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1274">
+              <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>tau</find>
+      <find>k</find>
+      <find>m</find>
+      <find>np</find>
+      <find>psi</find>
+      <find>AUSM</find>
+      <find>exec_</find>
+      <find>get</find>
+      <find>print</find>
+    </findStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Tests/OvAnaPnMain.py" />
+        <option value="$PROJECT_DIR$/Tests/OvAndPnMain.py" />
+        <option value="$PROJECT_DIR$/Tests/OvTest.py" />
+        <option value="$PROJECT_DIR$/Pneumatics/Test.py" />
+        <option value="$PROJECT_DIR$/Tests/RaspadRazriva.py" />
+        <option value="$PROJECT_DIR$/Tests/MoveRaspad.py" />
+        <option value="$PROJECT_DIR$/Tests/Analytics.py" />
+        <option value="$PROJECT_DIR$/Tests/PneumRev.py" />
+        <option value="$PROJECT_DIR$/Tests/PnTest.py" />
+        <option value="$PROJECT_DIR$/IdealPiston/IdPistMain.py" />
+        <option value="$PROJECT_DIR$/OneVelocity/OvMain.py" />
+        <option value="$PROJECT_DIR$/IdealPiston/IdPistLayer.py" />
+        <option value="$PROJECT_DIR$/Tests/Raspad.py" />
+        <option value="$PROJECT_DIR$/Pneumatics/PnMain.py" />
+        <option value="$PROJECT_DIR$/Tests/Main.py" />
+        <option value="$PROJECT_DIR$/Tests/Dict.py" />
+        <option value="$PROJECT_DIR$/ElasticPiston/ElInit.py" />
+        <option value="$PROJECT_DIR$/TetsTime.py" />
+        <option value="$PROJECT_DIR$/Pneumatics/PnBorder.py" />
+        <option value="$PROJECT_DIR$/TestPiston.py" />
+        <option value="$PROJECT_DIR$/ElasticPiston/ElAUSMplus.py" />
+        <option value="$PROJECT_DIR$/ElasticPiston/ElPistBorder.py" />
+        <option value="$PROJECT_DIR$/OneVelocity/OvBorder.py" />
+        <option value="$PROJECT_DIR$/Tests/Pizdetc.py" />
+        <option value="$PROJECT_DIR$/Invariants/Plot.py" />
+        <option value="G:/PyBallistic8.1/Main.py" />
+        <option value="$PROJECT_DIR$/Solver.py" />
+        <option value="$PROJECT_DIR$/Test_gas_solver.py" />
+        <option value="$PROJECT_DIR$/Test_gas_powder_solver.py" />
+        <option value="$PROJECT_DIR$/Test_powd_solver.py" />
+        <option value="$PROJECT_DIR$/Pizdetc.py" />
+        <option value="$PROJECT_DIR$/OneVelocity/OvInit.py" />
+        <option value="$PROJECT_DIR$/Main.py" />
+        <option value="$PROJECT_DIR$/Invariants/Tube.py" />
+        <option value="D:/../ballistics.py" />
+        <option value="$PROJECT_DIR$/MegaTask2.py" />
+        <option value="$PROJECT_DIR$/Pneumatics/PnInit.py" />
+        <option value="$PROJECT_DIR$/Pneumatics/PnLayer.py" />
+        <option value="$PROJECT_DIR$/Tst_4Nikita.py" />
+        <option value="$PROJECT_DIR$/MegaTask_orevo.py" />
+        <option value="$PROJECT_DIR$/MegaTask.py" />
+        <option value="$PROJECT_DIR$/Invariants/Powder.py" />
+        <option value="$PROJECT_DIR$/ElasticPiston/ElPistInit.py" />
+        <option value="$PROJECT_DIR$/ElasticPiston/ElPistLayer.py" />
+        <option value="$PROJECT_DIR$/ElasticPiston/test_elPistLayer.py" />
+        <option value="$PROJECT_DIR$/IdealPiston/test_func_in.py" />
+        <option value="$PROJECT_DIR$/ElasticPiston/test_el_pist_create_layer.py" />
+        <option value="$PROJECT_DIR$/Tests/test_idPistLayer.py" />
+        <option value="$PROJECT_DIR$/OneVelocity/test_AUSMp.py" />
+        <option value="$PROJECT_DIR$/OneVelocity/OvLayer.py" />
+        <option value="$PROJECT_DIR$/OneVelocity/OvAUSMplus.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="130" />
+    <option name="width" value="1799" />
+    <option name="height" value="1105" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>Python</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>PyUnresolvedReferencesInspection</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <expand>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="PB11" type="cbb8eebc:String" user="PB11" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="PB11" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PB11" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PB11" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PB11" type="462c0819:PsiDirectoryNode" />
+              <item name="ElasticPiston" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PB11" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PB11" type="462c0819:PsiDirectoryNode" />
+              <item name="IdealPiston" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PB11" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PB11" type="462c0819:PsiDirectoryNode" />
+              <item name="Invariants" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PB11" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PB11" type="462c0819:PsiDirectoryNode" />
+              <item name="OneVelocity" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="PB11" type="b2602c69:ProjectViewProjectNode" />
+              <item name="PB11" type="462c0819:PsiDirectoryNode" />
+              <item name="Tests" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="Run All Tests&#9;null&#9;null" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\PB10" />
+      <recent name="D:\PyBallistic6\ElasticPiston" />
+      <recent name="D:\PyBallistic6" />
+      <recent name="D:\PyBallistic4\ElasticPiston" />
+      <recent name="D:\PyBallistic4\OneVelocity" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\PB11\Tests" />
+      <recent name="D:\PB11\src" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python tests.Unnamed">
+    <configuration name="Test_gas_powder_solver" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="PyBallistic" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Test_gas_powder_solver.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="Nosetests in ElasticPiston" type="tests" factoryName="Nosetests" temporary="true" nameIsGenerated="true">
+      <module name="PyBallistic" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ElasticPiston" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/ElasticPiston&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <configuration name="Nosetests in Tests" type="tests" factoryName="Nosetests" temporary="true" nameIsGenerated="true">
+      <module name="PyBallistic" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/Tests&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <configuration name="Nosetests in test_elPistLayer.py" type="tests" factoryName="Nosetests" temporary="true" nameIsGenerated="true">
+      <module name="PyBallistic" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ElasticPiston" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_regexPattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/Tests/test_elPistLayer.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <configuration name="Unittests in IdealPiston" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="PyBallistic" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/IdealPiston" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/IdealPiston&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <configuration name="Unnamed (1)" type="tests" factoryName="Unittests">
+      <module name="PyBallistic" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\mi\Anaconda3\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_pattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <configuration name="Unnamed" type="tests" factoryName="py.test">
+      <module name="PyBallistic" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\mi\Anaconda3\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+    </configuration>
+    <list>
+      <item itemvalue="Python tests.Unnamed (1)" />
+      <item itemvalue="Python tests.Unnamed" />
+      <item itemvalue="Python.Test_gas_powder_solver" />
+      <item itemvalue="Python tests.Nosetests in test_elPistLayer.py" />
+      <item itemvalue="Python tests.Nosetests in ElasticPiston" />
+      <item itemvalue="Python tests.Nosetests in Tests" />
+      <item itemvalue="Python tests.Unittests in IdealPiston" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.Nosetests in Tests" />
+        <item itemvalue="Python tests.Nosetests in test_elPistLayer.py" />
+        <item itemvalue="Python tests.Unittests in IdealPiston" />
+        <item itemvalue="Python tests.Nosetests in ElasticPiston" />
+        <item itemvalue="Python.Test_gas_powder_solver" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",SHOW_FIELDS" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6360e212-0a81-4205-a833-377c9e4fd7f2" name="Default" comment="" />
+      <created>1517773308075</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1517773308075</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="Unnamed - 2018.05.14 at 10h 52m 40s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2018.05.14 at 10h 59m 01s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2018.05.14 at 10h 59m 30s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Nosetests_in_Tests - 2018.05.14 at 11h 00m 35s.xml">
+      <configuration name="Nosetests in Tests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2018.05.14 at 11h 40m 25s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2018.05.14 at 11h 41m 20s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2018.05.14 at 11h 42m 11s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2018.05.14 at 11h 42m 57s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed_(1) - 2018.05.14 at 12h 08m 43s.xml">
+      <configuration name="Unnamed (1)" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unnamed - 2018.05.14 at 12h 08m 55s.xml">
+      <configuration name="Unnamed" configurationId="tests" />
+    </history-entry>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="-7" width="1431" height="772" extended-state="7" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49013656" visible="true" weight="0.24488355" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32928678" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.45371777" />
+      <window_info anchor="bottom" id="Version Control" order="10" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Python Console" order="8" />
+      <window_info id="Structure" order="1" sideWeight="0.50986344" side_tool="true" visible="true" weight="0.24488355" />
+      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.59028834" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection Results" order="8" weight="0.8027314" />
+      <window_info anchor="right" id="Data View" order="3" weight="0.57995737" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.4021739" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ElasticPiston/ElPistInit.py</url>
+          <option name="timeStamp" value="139" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+      <option name="time" value="140" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://G:/PyBallistic8.1/ElasticPiston/ElPistLayer.py" />
+    <entry file="file://G:/PyBallistic7.2/Main.py" />
+    <entry file="file://G:/PyBallistic7.2/Pneumatics/PnLayer.py" />
+    <entry file="file://G:/PyBallistic7.2/ElasticPiston/ElPistLayer.py" />
+    <entry file="file://G:/PyBallistic7.2/ElasticPiston/ElAUSMplus.py" />
+    <entry file="file://D:/PyBallistic8/Pneumatics/PnMain.py" />
+    <entry file="file://D:/PyBallistic8/Main.py" />
+    <entry file="file://D:/PyBallistic8/Test_gas_solver.py" />
+    <entry file="file://D:/PyBallistic8/OneVelocity/OvLayer.py" />
+    <entry file="file://D:/PyBallistic8/Pneumatics/PnLayer.py" />
+    <entry file="file://$PROJECT_DIR$/Test_gas_solver.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="8" column="24" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pneumatics/PnBorder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="15" selection-start-column="15" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Solver.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1188">
+          <caret line="54" column="31" selection-start-line="54" selection-start-column="31" selection-end-line="54" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Test_powd_solver.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="726">
+          <caret line="33" column="43" selection-start-line="33" selection-start-column="43" selection-end-line="33" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pizdetc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="498">
+          <caret line="249" column="18" lean-forward="true" selection-start-line="249" selection-start-column="18" selection-end-line="249" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pneumatics/PnAUSMplus.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Invariants/Constants.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/scipy/interpolate/interpolate.py" />
+    <entry file="file://$USER_HOME$/.PyCharmCE2017.3/system/python_stubs/-19825236/numpy/core/umath.py" />
+    <entry file="file://D:/../ballistics.py" />
+    <entry file="file://$PROJECT_DIR$/Tst_4Nikita.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5160">
+          <caret line="268" column="16" selection-start-line="268" selection-start-column="16" selection-end-line="268" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1360">
+          <caret line="68" column="37" selection-start-line="68" selection-start-column="37" selection-end-line="68" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MegaTask_orevo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="265" selection-start-line="265" selection-end-line="265" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/functional/pipeline.py" />
+    <entry file="file://$PROJECT_DIR$/MegaTask2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4820">
+          <caret line="252" column="24" selection-start-line="252" selection-start-column="24" selection-end-line="252" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Google Диск/PyBallistics/OptiSwarm/BallisticTrajectory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4220">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Invariants/Tube.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="571">
+          <caret line="65" selection-start-line="65" selection-end-line="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pneumatics/PnInit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="20" column="20" selection-start-line="20" selection-start-column="20" selection-end-line="20" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pneumatics/PnMain.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1640">
+          <caret line="105" column="35" lean-forward="true" selection-start-line="105" selection-start-column="35" selection-end-line="105" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Invariants/Powder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="840">
+          <caret line="42" column="36" selection-start-line="42" selection-start-column="36" selection-end-line="42" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MegaTask.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6720">
+          <caret line="343" column="32" selection-start-line="343" selection-start-column="32" selection-end-line="343" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ElasticPiston/ElPistBorder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="960">
+          <caret line="48" column="14" selection-start-line="48" selection-start-column="14" selection-end-line="48" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/pkgs/sympy-1.1.1-py36h96708e0_0/Lib/site-packages/sympy/utilities/runtests.py" />
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/sympy/utilities/runtests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4200">
+          <caret line="246" column="4" selection-start-line="246" selection-start-column="4" selection-end-line="246" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Test_gas_powder_solver.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="8" selection-start-line="8" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ElasticPiston/ElPistInit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pneumatics/PnLayer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="77" column="25" selection-start-line="77" selection-start-column="25" selection-end-line="77" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ElasticPiston/ElPistLayer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="74" column="11" selection-start-line="74" selection-start-column="11" selection-end-line="74" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tests/test_elPistLayer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/IdealPiston/IdPistMain.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Invariants/Plot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tests/test_func_in.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="3" column="28" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/Lib/unittest/case.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="389" column="8" selection-start-line="389" selection-start-column="8" selection-end-line="389" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OneVelocity/test_AUSMp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/IdealPiston/IdPistLayer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tests/test_idPistLayer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="130">
+          <caret line="5" column="19" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tests/test_el_pist_create_layer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OneVelocity/OvInit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OneVelocity/OvBorder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1274">
+          <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OneVelocity/OvAUSMplus.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="14" column="17" lean-forward="true" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OneVelocity/OvLayer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1587">
+          <caret line="100" column="11" lean-forward="true" selection-start-line="100" selection-start-column="11" selection-end-line="100" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
