@@ -12,8 +12,8 @@ def AUSMp(l):
     r1, u1, e1, z1 = l.get_param(l.q)
     p1 = l.p
     H1 = e1 + 0.5 * np.square(u1) + p1 / r1
-    c1 = l.get_Csound(r1, p1, z1)
-    # c1 = l.Cs
+    # c1 = l.get_Csound(r1, p1, z1)
+    c1 = l.Cs
 
     r2 = np.roll(r1, -1)
     u2 = np.roll(u1, -1)

@@ -53,7 +53,6 @@ class OvLayer(object):
 
         self.flux_left = get_flux_left  # Получение потока через левую границу
         self.flux_right = get_flux_right  # Получение потока через правую границу
-        self.t_init = solver_grid['init_const']['t_init']
 
     def init_arr_q(self):
         """
@@ -145,7 +144,6 @@ class OvLayer(object):
         l1.ds = l.ds
         l1.p = np.copy(l.p)
         l1.time = l.time
-        l1.t_init = self.t_init
         return l1
 
     def get_dQs(self):
@@ -162,7 +160,7 @@ class OvLayer(object):
         df = [self.h[i] * self.dx - (f_right[i] * S_right - f_left[i] * S_left) for i in range(len(f_right))]
         return df
 
-    def euler_step_new(self, tau, x_left, V_left, x_right, V_right, isignite=None):
+    def euler_step_new(self, tau, x_left, V_left, x_right, V_right, isignite):
         """
         Шаг вперед по времени
         :param p_right: давление справа от правой границы
@@ -171,9 +169,6 @@ class OvLayer(object):
         :param tau: шаг по времени
         :return: слой на следующем шаге
         """
-        if isignite is None:
-            isignite = self.time >= self.t_init
-
         l1 = self.clone(self)
         l1.stretch_me_new(tau, x_left, V_left, x_right, V_right)
         l1.W = l1.tube.get_W(l1.x)
