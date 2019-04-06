@@ -1,7 +1,22 @@
 import numpy as np
 import copy
-from Pneumatics.PnAUSMplus import get_f as pn_get_f
-from ElasticPiston.ElAUSMplus import get_f as el_get_f
+import os
+import sys
+wd = os.path.abspath(__file__)
+wd = os.path.dirname(os.path.dirname(wd))
+sys.path.append(wd)
+
+
+try:    
+    from Pneumatics.PnAUSMplus import get_f as pn_get_f
+except:
+    from PnAUSMplus import get_f as pn_get_f
+
+try:
+    from ElasticPiston.ElAUSMplus import get_f as el_get_f
+except:
+    from ..ElasticPiston.ElAUSMplus import get_f as el_get_f
+
 from Invariants.Constants import Constants
 from Invariants.Tube import Tube
 
@@ -208,5 +223,25 @@ class PnLayer(object):
         return l1
 
 
-
+if __name__ == "__main__":
+    from PnBorder import get_flux_left, get_flux_right
+    tube = Tube([-1, 10], [0.1, 0.1])
+    solver_grid = {
+        'n_cells': 10,
+        'xl':0,
+        'xr':1,
+        'vl':1,
+        'vr':1,
+        'consts':{
+            'gamma': 1.4,
+            'covolume': 0.0001
+        },
+        'type':'gas'
+    }
+    glayer = PnLayer(solver_grid=solver_grid, 
+        func_in=lambda x, grid: (1,2,3), 
+        get_flux_left=get_flux_left,
+        get_flux_right=get_flux_right,
+        tube=tube)
+    glayer.euler_step_new(0.1, 0,1,1,1)
 

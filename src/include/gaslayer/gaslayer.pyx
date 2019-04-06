@@ -65,7 +65,7 @@ cpdef inline double rop_to_csound(
     double gamma,
     double b):
 
-    return sqrt(p / (1/gamma * ro * (1 - b*ro)))
+    return sqrt(p / ((1/gamma) * ro * (1 - b*ro)))
 
 
 @cython.boundscheck(False)

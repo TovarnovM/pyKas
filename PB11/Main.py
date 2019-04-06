@@ -4,10 +4,11 @@ from OneVelocity.OvInit import ov_create_layer
 from ElasticPiston.ElPistInit import el_pist_create_layer
 # from Solver import solver
 # from Pizdetc import solver
-# from Test_gas_solver import solver
-from Test_powd_solver import solver
+from Test_gas_solver import solver
+# from Test_powd_solver import solver
 # from Test_gas_powder_solver import solver
 import time
+from Invariants.Tube import Tube
 
 # !!!!!!!!!!!!!!!!!!!!!!!! РАБОЧАЯ ПРОГРАММА !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -17,7 +18,7 @@ def main():
     layers = []
     for i in range(len(solver['grids'])):
         if solver['grids'][i]['type'] == 'gas':
-            layers.append(pn_create_layer(i, solver))
+            layers.append(pn_create_layer(solver['grids'][i], Tube([-1,100], [0.1, 0.1])))
         elif solver['grids'][i]['type'] == 'powder':
             layers.append(ov_create_layer(i, solver))
         elif solver['grids'][i]['type'] == 'piston':
