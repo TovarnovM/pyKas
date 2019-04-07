@@ -1,12 +1,40 @@
-import sys
 import os
+import sys
+from math import *
 wd = os.path.abspath(__file__) # os.path.dirname(os.path.dirname(os.getcwd()))
 wd = os.path.dirname(os.path.dirname(wd))
 sys.path.append(wd+"\\src\\")
-from gaslayer import foo, q_to_roue, roue_to_q_, roe_to_p, rop_to_e, AUSM_gas_, rop_to_csound
 import numpy as np
+import pytest
 from pytest import approx
-from math import *
+
+from gaslayer import (AUSM_gas_, foo, q_to_roue, roe_to_p, rop_to_csound,
+                      rop_to_e, roue_to_q_)
+
+
+
+
+def get_rnd_values(n=10000):
+    result = []
+    for _ in range(n):
+        ro = np.random.uniform(0.1, 10000) 
+        e = np.random.uniform(0.1, 100000)
+        gamma = np.random.uniform(1.01, 1.9)
+        b = np.random.uniform(0.00001, 0.0001)
+        p = roe_to_p(ro, e, gamma, b)
+        c = rop_to_csound(ro, p, gamma, b) 
+        u=np.random.uniform(-1000, 1000)
+        vbi=np.random.uniform(-1000, 1000)
+        result.append((ro, e, p, c, u, vbi, gamma, b)) 
+    return result
+
+@pytest.fixture(scope="function")
+def random_values4fluxes(request):
+    return get_rnd_values()
+
+@pytest.fixture(scope="function")
+def random_values4fluxes2(request):
+    return get_rnd_values()
 
 def test_cimport():
     a = foo()
@@ -20,54 +48,37 @@ def test_q_to_roue():
         assert u == approx(q[1]/q[0])
         assert e == approx(q[2]/q[0] - 0.5 * u * u)
 
-def test_roue_to_q_():
-    for _ in range(1000):
+def test_roue_to_q_(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b in random_values4fluxes:
         q = np.array([0,0,0.0])
-        ro, u, e = np.random.uniform(0.1, 10000), np.random.uniform(-1000, 1000), np.random.uniform(0.1, 10000)
         roue_to_q_(ro, u, e, q)
         assert ro == approx(q[0])
         assert u == approx(q[1]/q[0])
         assert e == approx(q[2]/q[0] - 0.5 * u * u)
 
-def test_roe_to_p():
-    for _ in range(1000):
-        ro, e, gamma, b = np.random.uniform(0.1, 10000), np.random.uniform(0.1, 10000), np.random.uniform(1.01, 1.9), np.random.uniform(0.00001, 0.0001)
-        p = roe_to_p(ro, e, gamma, b)
-
+def test_roe_to_p(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b in random_values4fluxes:
         e2 = rop_to_e(ro, p , gamma, b)
         assert e == approx(e2)
         assert e > 0
         assert p > 0
 
-def test_csound():
-    for _ in range(1000):
-        ro, e, gamma, b = np.random.uniform(0.1, 10000), np.random.uniform(0.1, 10000), np.random.uniform(1.01, 1.9), np.random.uniform(0.00001, 0.0001)
-        p = roe_to_p(ro, e, gamma, b)
-        c = rop_to_csound(ro, p, gamma, b)  
+def test_csound(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b in random_values4fluxes:
         assert c > 0
 
-def test_AUSM_gas_zero_flux_same_cells_f1():
-    for i in range(1000):
-        ro, e, gamma, b = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000), np.random.uniform(1.01,1.7), np.random.uniform(0.0001,0.01)
-        p = roe_to_p(ro, e, gamma, b)
-        c = rop_to_csound(ro, p, gamma, b)
-        u = np.random.uniform(-100,100)
-
-        f1, f2, f3 = AUSM_gas_python(
+def test_AUSM_gas_zero_flux_same_cells_f1(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b in random_values4fluxes:
+        f1, f2, f3 = get_fluxes_foo(
             p1=p, ro1=ro, u1=u, e1=e, c1=c,
             p2=p, ro2=ro, u2=u, e2=e, c2=c,
             vbi=u)
         assert f1 == approx(0)
 
 
-def test_AUSM_gas_zero_flux_same_cells_f2():
-    for i in range(1000):
-        ro, e, gamma, b = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000), np.random.uniform(1.01,1.7), np.random.uniform(0.0001,0.01)
-        p = roe_to_p(ro, e, gamma, b)
-        c = rop_to_csound(ro, p, gamma, b)
-        u = np.random.uniform(-100,100)
-
-        f1, f2, f3 = AUSM_gas_python(
+def test_AUSM_gas_zero_flux_same_cells_f2(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b in random_values4fluxes:
+        f1, f2, f3 = get_fluxes_foo(
             p1=p, ro1=ro, u1=u, e1=e, c1=c,
             p2=p, ro2=ro, u2=u, e2=e, c2=c,
             vbi=u)
@@ -75,205 +86,122 @@ def test_AUSM_gas_zero_flux_same_cells_f2():
         assert f2 == approx(0)
 
 
-def test_AUSM_gas_zero_flux_same_cells_f3():
-    for i in range(1000):
-        ro, e, gamma, b = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000), np.random.uniform(1.01,1.7), np.random.uniform(0.0001,0.01)
-        p = roe_to_p(ro, e, gamma, b)
-        c = rop_to_csound(ro, p, gamma, b)
-        u = np.random.uniform(-100,100)
-
-        f1, f2, f3 = AUSM_gas_python(
+def test_AUSM_gas_zero_flux_same_cells_f3(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b in random_values4fluxes:
+        f1, f2, f3 = get_fluxes_foo(
             p1=p, ro1=ro, u1=u, e1=e, c1=c,
             p2=p, ro2=ro, u2=u, e2=e, c2=c,
             vbi=u)
-
         assert f3 == approx(0)
 
-def test_AUSM_gas_zero_flux_zero_u_zero_vbi_f1():
-    for i in range(1000):
-        ro, e, gamma, b = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000), np.random.uniform(1.01,1.7), np.random.uniform(0.0001,0.01)
-        p = roe_to_p(ro, e, gamma, b)
-        c = rop_to_csound(ro, p, gamma, b)
+def test_AUSM_gas_zero_flux_zero_u_zero_vbi_f1(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b in random_values4fluxes:
         u = 0
-
-        f1, f2, f3 = AUSM_gas_python(
+        f1, f2, f3 = get_fluxes_foo(
             p1=p, ro1=ro, u1=u, e1=e, c1=c,
             p2=p, ro2=ro, u2=u, e2=e, c2=c,
             vbi=u)
 
         assert f1 == approx(0)
 
-def test_AUSM_gas_zero_flux_zero_u_zero_vbi_f2():
-    for i in range(1000):
-        ro, e, gamma, b = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000), np.random.uniform(1.01,1.7), np.random.uniform(0.0001,0.01)
-        p = roe_to_p(ro, e, gamma, b)
-        c = rop_to_csound(ro, p, gamma, b)
+def test_AUSM_gas_zero_flux_zero_u_zero_vbi_f2(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b in random_values4fluxes:
         u = 0
-
-        f1, f2, f3 = AUSM_gas_python(
+        f1, f2, f3 = get_fluxes_foo(
             p1=p, ro1=ro, u1=u, e1=e, c1=c,
             p2=p, ro2=ro, u2=u, e2=e, c2=c,
             vbi=u)
-
         assert f2 == approx(0)
 
-def test_AUSM_gas_zero_flux_zero_u_zero_vbi_f3():
-    for i in range(1000):
-        ro, e, gamma, b = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000), np.random.uniform(1.01,1.7), np.random.uniform(0.0001,0.01)
-        p = roe_to_p(ro, e, gamma, b)
-        c = rop_to_csound(ro, p, gamma, b)
+def test_AUSM_gas_zero_flux_zero_u_zero_vbi_f3(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b in random_values4fluxes:
         u = 0
-        f1, f2, f3 = AUSM_gas_python(
+        f1, f2, f3 = get_fluxes_foo(
             p1=p, ro1=ro, u1=u, e1=e, c1=c,
             p2=p, ro2=ro, u2=u, e2=e, c2=c,
             vbi=u)
         assert f3 == approx(0)
 
-def test_AUSM_gas_simmetric_flux_f1():
-    for i in range(1000):
-        ro1, e1, gamma, b = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000), np.random.uniform(1.01,1.7), np.random.uniform(0.0001,0.01)
-        p1 = roe_to_p(ro1, e1, gamma, b)
-        c1 = rop_to_csound(ro1, p1, gamma, b)
-        u1 = np.random.uniform(-100,100)
+def test_AUSM_gas_simmetric_flux_f1(random_values4fluxes, random_values4fluxes2):
+    for (ro1, e1, p1, c1, u1, vbi, gamma, b), (ro2, e2, p2, c2, u2, vbi2, gamma2, b2) in zip(random_values4fluxes, random_values4fluxes2):
+        f11, f12, f13 = get_fluxes_foo(
+            p1=p1, ro1=ro1, u1=u1, e1=e1, c1=c1,
+            p2=p2, ro2=ro2, u2=u2, e2=e2, c2=c2,
+            vbi=vbi)
+        f21, f22, f23 = get_fluxes_foo(
+            p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
+            p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
+            vbi=-vbi)
+        assert f11 == approx(-f21)
+
+def test_AUSM_gas_simmetric_flux_f2(random_values4fluxes, random_values4fluxes2):
+    for (ro1, e1, p1, c1, u1, vbi, gamma, b), (ro2, e2, p2, c2, u2, vbi2, gamma2, b2) in zip(random_values4fluxes, random_values4fluxes2):
+        f11, f12, f13 = get_fluxes_foo(
+            p1=p1, ro1=ro1, u1=u1, e1=e1, c1=c1,
+            p2=p2, ro2=ro2, u2=u2, e2=e2, c2=c2,
+            vbi=vbi)
+
+        f21, f22, f23 = get_fluxes_foo(
+            p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
+            p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
+            vbi=-vbi)
+        assert f12 == approx(-f22)
+
+def test_AUSM_gas_simmetric_flux_f3(random_values4fluxes, random_values4fluxes2):
+    for (ro1, e1, p1, c1, u1, vbi, gamma, b), (ro2, e2, p2, c2, u2, vbi2, gamma2, b2) in zip(random_values4fluxes, random_values4fluxes2):
+        f11, f12, f13 = get_fluxes_foo(
+            p1=p1, ro1=ro1, u1=u1, e1=e1, c1=c1,
+            p2=p2, ro2=ro2, u2=u2, e2=e2, c2=c2,
+            vbi=vbi)
+
+        f21, f22, f23 = get_fluxes_foo(
+            p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
+            p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
+            vbi=-vbi)
+        assert f13 == approx(-f23)
+
+def test_AUSM_gas_simmetric_flux_zero_vbi_f1(random_values4fluxes, random_values4fluxes2):
+    for (ro1, e1, p1, c1, u1, vbi, gamma, b), \
+        (ro2, e2, p2, c2, u2, vbi2, gamma2, b2) in zip(random_values4fluxes, random_values4fluxes2):
         
-        ro2, e2 = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000)
-        p2 = roe_to_p(ro2, e2, gamma, b)
-        c2 = rop_to_csound(ro2, p2, gamma, b)
-        u2 = np.random.uniform(-100,100)
-
-        vbi = np.random.uniform(-100,100)
-
-        f11, f12, f13 = AUSM_gas_python(
+        vbi = 0
+        f11, f12, f13 = get_fluxes_foo(
             p1=p1, ro1=ro1, u1=u1, e1=e1, c1=c1,
             p2=p2, ro2=ro2, u2=u2, e2=e2, c2=c2,
             vbi=vbi)
 
-        f21, f22, f23 = AUSM_gas_python(
+        f21, f22, f23 = get_fluxes_foo(
             p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
             p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
             vbi=-vbi)
         assert f11 == approx(-f21)
 
-def test_AUSM_gas_simmetric_flux_f2():
-    for i in range(1000):
-        ro1, e1, gamma, b = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000), np.random.uniform(1.01,1.7), np.random.uniform(0.0001,0.01)
-        p1 = roe_to_p(ro1, e1, gamma, b)
-        c1 = rop_to_csound(ro1, p1, gamma, b)
-        u1 = np.random.uniform(-100,100)
-
-        ro2, e2 = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000)
-        p2 = roe_to_p(ro2, e2, gamma, b)
-        c2 = rop_to_csound(ro2, p2, gamma, b)
-        u2 = np.random.uniform(-100,100)
-
-        vbi = np.random.uniform(-100,100)
-
-        f11, f12, f13 = AUSM_gas_python(
+def test_AUSM_gas_simmetric_flux_zero_vbi_f2(random_values4fluxes, random_values4fluxes2):
+    for (ro1, e1, p1, c1, u1, vbi, gamma, b), \
+        (ro2, e2, p2, c2, u2, vbi2, gamma2, b2) in zip(random_values4fluxes, random_values4fluxes2):
+        
+        vbi = 0
+        f11, f12, f13 = get_fluxes_foo(
             p1=p1, ro1=ro1, u1=u1, e1=e1, c1=c1,
             p2=p2, ro2=ro2, u2=u2, e2=e2, c2=c2,
             vbi=vbi)
 
-        f21, f22, f23 = AUSM_gas_python(
+        f21, f22, f23 = get_fluxes_foo(
             p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
             p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
             vbi=-vbi)
         assert f12 == approx(-f22)
 
-def test_AUSM_gas_simmetric_flux_f3():
-    for i in range(1000):
-        ro1, e1, gamma, b = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000), np.random.uniform(1.01,1.7), np.random.uniform(0.0001,0.01)
-        p1 = roe_to_p(ro1, e1, gamma, b)
-        c1 = rop_to_csound(ro1, p1, gamma, b)
-        u1 = np.random.uniform(-100,100)
-
-        ro2, e2 = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000)
-        p2 = roe_to_p(ro2, e2, gamma, b)
-        c2 = rop_to_csound(ro2, p2, gamma, b)
-        u2 = np.random.uniform(-100,100)
-
-        vbi = np.random.uniform(-100,100)
-
-        f11, f12, f13 = AUSM_gas_python(
-            p1=p1, ro1=ro1, u1=u1, e1=e1, c1=c1,
-            p2=p2, ro2=ro2, u2=u2, e2=e2, c2=c2,
-            vbi=vbi)
-
-        f21, f22, f23 = AUSM_gas_python(
-            p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
-            p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
-            vbi=-vbi)
-        assert f13 == approx(-f23)
-
-def test_AUSM_gas_simmetric_flux_zero_vbi_f1():
-    for i in range(1000):
-        ro1, e1, gamma, b = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000), np.random.uniform(1.01,1.7), np.random.uniform(0.0001,0.01)
-        p1 = roe_to_p(ro1, e1, gamma, b)
-        c1 = rop_to_csound(ro1, p1, gamma, b)
-        u1 = np.random.uniform(-100,100)
-
-        ro2, e2 = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000)
-        p2 = roe_to_p(ro2, e2, gamma, b)
-        c2 = rop_to_csound(ro2, p2, gamma, b)
-        u2 = np.random.uniform(-100,100)
-
+def test_AUSM_gas_simmetric_flux_zero_vbi_f3(random_values4fluxes, random_values4fluxes2):
+    for (ro1, e1, p1, c1, u1, vbi, gamma, b), \
+        (ro2, e2, p2, c2, u2, vbi2, gamma2, b2) in zip(random_values4fluxes, random_values4fluxes2):
+        
         vbi = 0
-
-        f11, f12, f13 = AUSM_gas_python(
+        f11, f12, f13 = get_fluxes_foo(
             p1=p1, ro1=ro1, u1=u1, e1=e1, c1=c1,
             p2=p2, ro2=ro2, u2=u2, e2=e2, c2=c2,
             vbi=vbi)
-
-        f21, f22, f23 = AUSM_gas_python(
-            p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
-            p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
-            vbi=-vbi)
-        assert f11 == approx(-f21)
-
-def test_AUSM_gas_simmetric_flux_zero_vbi_f2():
-    for i in range(1000):
-        ro1, e1, gamma, b = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000), np.random.uniform(1.01,1.7), np.random.uniform(0.0001,0.01)
-        p1 = roe_to_p(ro1, e1, gamma, b)
-        c1 = rop_to_csound(ro1, p1, gamma, b)
-        u1 = np.random.uniform(-100,100)
-
-        ro2, e2 = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000)
-        p2 = roe_to_p(ro2, e2, gamma, b)
-        c2 = rop_to_csound(ro2, p2, gamma, b)
-        u2 = np.random.uniform(-100,100)
-
-        vbi = 0
-
-        f11, f12, f13 = AUSM_gas_python(
-            p1=p1, ro1=ro1, u1=u1, e1=e1, c1=c1,
-            p2=p2, ro2=ro2, u2=u2, e2=e2, c2=c2,
-            vbi=vbi)
-
-        f21, f22, f23 = AUSM_gas_python(
-            p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
-            p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
-            vbi=-vbi)
-        assert f12 == approx(-f22)
-
-def test_AUSM_gas_simmetric_flux_zero_vbi_f3():
-    for i in range(1000):
-        ro1, e1, gamma, b = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000), np.random.uniform(1.01,1.7), np.random.uniform(0.0001,0.01)
-        p1 = roe_to_p(ro1, e1, gamma, b)
-        c1 = rop_to_csound(ro1, p1, gamma, b)
-        u1 = np.random.uniform(-100,100)
-
-        ro2, e2 = np.random.uniform(0.1,1000), np.random.uniform(0.1,1000)
-        p2 = roe_to_p(ro2, e2, gamma, b)
-        c2 = rop_to_csound(ro2, p2, gamma, b)
-        u2 = np.random.uniform(-100,100)
-
-        vbi = 0
-
-        f11, f12, f13 = AUSM_gas_python(
-            p1=p1, ro1=ro1, u1=u1, e1=e1, c1=c1,
-            p2=p2, ro2=ro2, u2=u2, e2=e2, c2=c2,
-            vbi=vbi)
-
-        f21, f22, f23 = AUSM_gas_python(
+        f21, f22, f23 = get_fluxes_foo(
             p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
             p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
             vbi=-vbi)
@@ -281,7 +209,11 @@ def test_AUSM_gas_simmetric_flux_zero_vbi_f3():
 
 
 
-def AUSM_gas_python(p1, ro1, u1, e1, c1, p2, ro2, u2, e2, c2, vbi):
+def get_fluxes_foo(p1, ro1, u1, e1, c1, p2, ro2, u2, e2, c2, vbi):
+    # return AUSM_gas_(p1, ro1, u1, e1, c1, p2, ro2, u2, e2, c2, vbi)
+    return AUSM_python(p1, ro1, u1, e1, c1, p2, ro2, u2, e2, c2, vbi)
+
+def AUSM_python(p1, ro1, u1, e1, c1, p2, ro2, u2, e2, c2, vbi): 
     r1=ro1
     r2=ro2
     H1 = e1 + 0.5*u1*u1 + p1/r1

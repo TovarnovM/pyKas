@@ -3,7 +3,7 @@
 
 from tube cimport Tube
 import cython
-from libc.math cimport pi, sqrt, abs
+from libc.math cimport pi, sqrt, abs, copysign
 
 
 cpdef double foo():
@@ -91,7 +91,6 @@ cpdef (double, double, double) AUSM_gas_(
     cdef double cs = 0.5*(c1+c2)
     cdef double Mr1 = (u1-vbi)/cs
     cdef double Mr2 = (u2-vbi)/cs
-    cdef double du = u2-u1
 
     # ! Vacuum solution (?)
     # uvac = 2.0*g(4)*cs - du
@@ -121,7 +120,7 @@ cpdef (double, double, double) AUSM_gas_(
     cdef double pf = P5p*phi1*p1 + P5m*phi2*p2
 
     cdef double flux1 = 0.5*(cs*Mrf*(phi1*r1+phi2*r2)-cs*abs(Mrf)*(phi2*r2-phi1*r1))
-    cdef double flux2 = 0.5*(cs*Mrf*(phi1*r1*u1+phi2*r2*u2)-cs*abs(Mrf)*(phi2*r2*u2-phi1*r1*u1)) + pf
+    cdef double flux2 = copysign(0.5*(cs*Mrf*(phi1*r1*u1+phi2*r2*u2)-cs*abs(Mrf)*(phi2*r2*u2-phi1*r1*u1)) + pf, Mrf)
     cdef double flux3 = 0.5*(cs*Mrf*(phi1*r1*H1+phi2*r2*H2)-cs*abs(Mrf)*(phi2*r2*H2-phi1*r1*H1)) + pf*vbi
 
     return flux1, flux2, flux3
