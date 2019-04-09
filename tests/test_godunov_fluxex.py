@@ -13,7 +13,7 @@ from gaslayer import rop_to_csound, rop_to_e, roe_to_p
 
 
 
-def get_rnd_values(n=10000):
+def get_rnd_values(n=1000):
     result = []
     for _ in range(n):
         roo = np.random.uniform(0.1, 1000) 
@@ -37,7 +37,9 @@ def random_values4fluxes(request):
 def random_values4fluxes2(request):
     return get_rnd_values()
 
-
+@pytest.fixture(scope="function")
+def random_values4fluxes3(request):
+    return get_rnd_values()
 
 def test_Godunov_gas_zero_flux_same_cells_f1(random_values4fluxes):
     for ro, e, p, c, u, vbi, gamma, b, e_foo in random_values4fluxes:
@@ -117,7 +119,7 @@ def test_Godunov_gas_simmetric_flux_f2(random_values4fluxes, random_values4fluxe
             p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
             p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
             vbi=-vbi, e_foo=e_foo, gamma=gamma)
-        assert f12 == approx(-f22)
+        assert f12 == approx(f22)
 
 def test_Godunov_gas_simmetric_flux_f3(random_values4fluxes, random_values4fluxes2):
     for (ro1, e1, p1, c1, u1, vbi, gamma, b, e_foo), (ro2, e2, p2, c2, u2, vbi2, gamma2, b2, e_foo2) in zip(random_values4fluxes, random_values4fluxes2):
@@ -162,7 +164,7 @@ def test_Godunov_gas_simmetric_flux_zero_vbi_f2(random_values4fluxes, random_val
             p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
             p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
             vbi=-vbi, e_foo=e_foo, gamma=gamma)
-        assert f12 == approx(-f22)
+        assert f12 == approx(f22)
 
 def test_Godunov_gas_simmetric_flux_zero_vbi_f3(random_values4fluxes, random_values4fluxes2):
     for (ro1, e1, p1, c1, u1, vbi, gamma, b, e_foo), \
@@ -178,6 +180,87 @@ def test_Godunov_gas_simmetric_flux_zero_vbi_f3(random_values4fluxes, random_val
             p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
             vbi=-vbi, e_foo=e_foo, gamma=gamma)
         assert f13 == approx(-f23)
+
+def test_Godunov_gas_simmetric_flux_TREE_cells_f1(random_values4fluxes, random_values4fluxes2, random_values4fluxes3):
+    for (ro1, e1, p1, c1, u1, vbi, gamma, b, e_foo), \
+        (ro2, e2, p2, c2, u2, vbi2, gamma2, b2, e_foo2), \
+        (ro3, e3, p3, c3, u3, vbi3, gamma3, b3, e_foo3) in zip(random_values4fluxes, random_values4fluxes2, random_values4fluxes3):
+        
+        f12_1, f12_2, f12_3 = get_fluxes_foo(
+            p1=p1, ro1=ro1, u1=u1, e1=e1, c1=c1,
+            p2=p2, ro2=ro2, u2=u2, e2=e2, c2=c2,
+            vbi=vbi, e_foo=e_foo, gamma=gamma)
+
+        f23_1, f23_2, f23_3 = get_fluxes_foo(
+            p1=p2, ro1=ro2, u1=u2, e1=e2, c1=c2, 
+            p2=p3, ro2=ro3, u2=u3, e2=e3, c2=c3,
+            vbi=vbi2, e_foo=e_foo, gamma=gamma)
+
+        f32_1, f32_2, f32_3 = get_fluxes_foo(
+            p1=p3, ro1=ro3, u1=-u3, e1=e3, c1=c3,
+            p2=p2, ro2=ro2, u2=-u2, e2=e2, c2=c2,
+            vbi=-vbi2, e_foo=e_foo, gamma=gamma)
+
+        f21_1, f21_2, f21_3 = get_fluxes_foo(
+            p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
+            p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
+            vbi=-vbi, e_foo=e_foo, gamma=gamma)
+
+        assert f23_1 - f12_1 == approx(f21_1-f32_1)
+
+def test_Godunov_gas_simmetric_flux_TREE_cells_f2(random_values4fluxes, random_values4fluxes2, random_values4fluxes3):
+    for (ro1, e1, p1, c1, u1, vbi, gamma, b, e_foo), \
+        (ro2, e2, p2, c2, u2, vbi2, gamma2, b2, e_foo2), \
+        (ro3, e3, p3, c3, u3, vbi3, gamma3, b3, e_foo3) in zip(random_values4fluxes, random_values4fluxes2, random_values4fluxes3):
+        
+        f12_1, f12_2, f12_3 = get_fluxes_foo(
+            p1=p1, ro1=ro1, u1=u1, e1=e1, c1=c1,
+            p2=p2, ro2=ro2, u2=u2, e2=e2, c2=c2,
+            vbi=vbi, e_foo=e_foo, gamma=gamma)
+
+        f23_1, f23_2, f23_3 = get_fluxes_foo(
+            p1=p2, ro1=ro2, u1=u2, e1=e2, c1=c2, 
+            p2=p3, ro2=ro3, u2=u3, e2=e3, c2=c3,
+            vbi=vbi2, e_foo=e_foo, gamma=gamma)
+
+        f32_1, f32_2, f32_3 = get_fluxes_foo(
+            p1=p3, ro1=ro3, u1=-u3, e1=e3, c1=c3,
+            p2=p2, ro2=ro2, u2=-u2, e2=e2, c2=c2,
+            vbi=-vbi2, e_foo=e_foo, gamma=gamma)
+
+        f21_1, f21_2, f21_3 = get_fluxes_foo(
+            p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
+            p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
+            vbi=-vbi, e_foo=e_foo, gamma=gamma)
+
+        assert f23_2 - f12_2 == approx(-f21_2+f32_2)
+
+def test_Godunov_gas_simmetric_flux_TREE_cells_f3(random_values4fluxes, random_values4fluxes2, random_values4fluxes3):
+    for (ro1, e1, p1, c1, u1, vbi, gamma, b, e_foo), \
+        (ro2, e2, p2, c2, u2, vbi2, gamma2, b2, e_foo2), \
+        (ro3, e3, p3, c3, u3, vbi3, gamma3, b3, e_foo3) in zip(random_values4fluxes, random_values4fluxes2, random_values4fluxes3):
+        
+        f12_1, f12_2, f12_3 = get_fluxes_foo(
+            p1=p1, ro1=ro1, u1=u1, e1=e1, c1=c1,
+            p2=p2, ro2=ro2, u2=u2, e2=e2, c2=c2,
+            vbi=vbi, e_foo=e_foo, gamma=gamma)
+
+        f23_1, f23_2, f23_3 = get_fluxes_foo(
+            p1=p2, ro1=ro2, u1=u2, e1=e2, c1=c2, 
+            p2=p3, ro2=ro3, u2=u3, e2=e3, c2=c3,
+            vbi=vbi2, e_foo=e_foo, gamma=gamma)
+
+        f32_1, f32_2, f32_3 = get_fluxes_foo(
+            p1=p3, ro1=ro3, u1=-u3, e1=e3, c1=c3,
+            p2=p2, ro2=ro2, u2=-u2, e2=e2, c2=c2,
+            vbi=-vbi2, e_foo=e_foo, gamma=gamma)
+
+        f21_1, f21_2, f21_3 = get_fluxes_foo(
+            p1=p2, ro1=ro2, u1=-u2, e1=e2, c1=c2, 
+            p2=p1, ro2=ro1, u2=-u1, e2=e1, c2=c1,
+            vbi=-vbi, e_foo=e_foo, gamma=gamma)
+
+        assert f23_3 - f12_3 == approx(f21_3-f32_3)
 
 
 

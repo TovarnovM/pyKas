@@ -17,7 +17,7 @@ def get_e_13_1(p, ro, p_0, c_0, gamma):
     Returns:
         float -- внутренняя энергия
     """
-
+    # return p*(1/ro-0.001)/(gamma-1)
     return (p+gamma*p_0)/((gamma-1)*ro)-c_0*c_0/(gamma-1)
 
 def get_p_0(ro_0, c_0, gamma):
@@ -82,7 +82,7 @@ def get_c_13_8(p, ro, p_0, gamma):
     Returns:
         float -- c - скорость звука в газе
     """
-
+    # return sqrt(p / ((1/gamma) * ro * (1 - 0.001*ro)))
     return sqrt(gamma*(p+p_0)/ro)
 
 def get_a_13_11_discharge(ro, p, P, c, p_0, gamma):
