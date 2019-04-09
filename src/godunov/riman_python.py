@@ -277,7 +277,7 @@ def mega_foo(p_1, ro_1, u_1, p_2, ro_2, u_2, p_0, kappa, eps_F=1e-2, n_iter_max=
         ro_2 {float} -- плотность справа
         u_2 {float} -- скорость потока справа
         p_0 {float} -- параметр в уравнении состояния
-        kappa {float} -- параметр в уравнеии состояния
+        kappa {float} -- параметр в уравнеии состояния (коэфф. адиабаты)
     
     Keyword Arguments:
         eps_F {float} -- точность определения решения (default: {1e-2})
@@ -373,6 +373,81 @@ def mega_foo(p_1, ro_1, u_1, p_2, ro_2, u_2, p_0, kappa, eps_F=1e-2, n_iter_max=
         return True, UD_right, UD_left, -D_2, -D_star_2, -U, -D_star_1, -D_1, R_2, R_1, P
 
 
+def get_ray_URPE(ray_W, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P, 
+                 p_1, ro_1, u_1, p_2, ro_2, u_2, p_0, c_0, kappa):
+    """ОООооо даааа =) функция получения вектора характеристик газа, испытавшего распад разрыва, на подвижной границе.
+    В начальный момент времени граница находится в точке разрыва. Скорость границы (rayW) постоянна
+    
+    Arguments:
+        ray_W    {[type]} -- скорость подвижной границы
+        UD_left    {bool} -- есть ли ударная волна слева
+        UD_right   {bool} -- есть ли ударная волна справа
+        D_1       {float} -- скорость левой границы
+        D_star_1  {float} -- скорость хвоста ВР слева (если ВР слева, если УД -- D_star_1=D_1)
+        U         {float} -- скорость контактного разрыва
+        D_star_2  {float} -- скорость хвоста ВР справа (если ВР справа, если УД -- D_star_2=D_2)
+        D_2       {float} -- скорость правой границы
+        R_1       {float} -- плотность слева контактного разрыва
+        R_2       {float} -- плотность справа контактного разрыва
+        P         {float} -- давление в зоне контактного разрыва
+        p_1       {float} -- давление невозмущенного потока слева (левее D_1)
+        ro_1      {float} -- плотность невозмущенного потока слева (левее D_1)
+        u_1       {float} -- скорость невозмущенного потока слева (левее D_1)
+        p_2       {float} -- давление невозмущенного потока справа (правее D_2)
+        ro_2      {float} -- плотность невозмущенного потока справа (правее D_2)
+        u_2       {float} -- скорость невозмущенного потока справа (правее D_2)
+        p_0       {float} -- параметр в уравнении состояния
+        c_0       {float} -- параметр в уравнении состояния
+        kappa     {float} -- параметр в уравнеии состояния (коэфф. адиабаты)
+    
+    Returns:
+        tuple(float, float, float, float) -- вектор характеристик потока. 
+               U,     R,     P,     E       (скорость, плотность, давление, внутр. энергия)
+    """
+
+
+    resU,resR,resP,resE = 0,0,0,0
+    if D_star_1 < ray_W <= U:
+        resR = R_1
+        resP = P
+        resU = U
+        resE = get_e_13_1(P, R_1, p_0, c_0, kappa)
+    elif U < ray_W <= D_star_2:
+        resR = R_2
+        resP = P
+        resU = U
+        resE = get_e_13_1(P, R_2, p_0, c_0, kappa)
+    elif (not UD_left) and (D_1 < ray_W <= D_star_1):
+        k = (u_1 - U)/(D_1 - D_star_1)
+        b = u_1 - k*D_1
+        resU = k*ray_W+b
+        c1 = get_c_13_8(p_1, ro_1, p_0, kappa)
+        # u = 2/(kappa+1)*(c1+x/t)
+        resR = ro_1*pow(1-0.5*(kappa-1)*(resU-u_1)/c1, 2/(kappa-1))
+        resP = p_1*pow(1-0.5*(kappa-1)*(resU-u_1)/c1, 2*kappa/(kappa-1))
+        resE = get_e_13_1(resP, resR, p_0, c_0, kappa)
+    elif (not UD_right) and (D_star_2 < ray_W <= D_2):
+        k = (u_2 - U)/(D_2 - D_star_2)
+        b = u_2 - k*D_2
+        resU = k*ray_W+b
+        c1 = get_c_13_8(p_2, ro_2, p_0, kappa)
+        resR = ro_2*pow(1-0.5*(kappa-1)*(u_2-resU)/c1, 2/(kappa-1))
+        resP = p_2*pow(1-0.5*(kappa-1)*(u_2-resU)/c1, 2*kappa/(kappa-1))
+        resE = get_e_13_1(resP, resR, p_0, c_0, kappa)    
+    elif ray_W > D_2:
+        resR=ro_2
+        resP=p_2
+        resU=u_2
+        resE=get_e_13_1(p_2, ro_2, p_0, c_0, kappa)
+    elif ray_W <= D_1:
+        resR=ro_1
+        resP=p_1
+        resU=u_1
+        resE=get_e_13_1(p_1, ro_1, p_0, c_0, kappa)
+    return resU, resR, resP, resE
+
+
+
 def plot_rays(show=True, **init_cond):
     import matplotlib.pyplot as plt
     suc, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P = mega_foo(**init_cond)
@@ -424,69 +499,15 @@ def get_distrs_to_time(t, **init_cond):
     xs = np.linspace(x1,x2,n)
     ros, ps, us, es, ms = [],[],[],[],[]
     for x in xs:
-        if x <= t*D_1:
-            ros.append(ro_1)
-            ps.append(p_1)
-            us.append(u_1)
-            es.append(get_e_13_1(p_1, ro_1, p_0, c_0, kappa))
-            c1 = get_c_13_8(p_1, ro_1, p_0, kappa)
-            ms.append(u_1/c1)
-            continue
-        if (not UD_left) and (D_1*t < x <= D_star_1*t):
-            k = (u_1 - U)/(D_1*t - D_star_1*t)
-            b = u_1 - k*D_1*t
-            u = k*x+b
-            c1 = get_c_13_8(p_1, ro_1, p_0, kappa)
-            # u = 2/(kappa+1)*(c1+x/t)
-            ro = ro_1*pow(1-0.5*(kappa-1)*(u-u_1)/c1, 2/(kappa-1))
-            p = p_1*pow(1-0.5*(kappa-1)*(u-u_1)/c1, 2*kappa/(kappa-1))
-            e = get_e_13_1(p, ro, p_0, c_0, kappa)
-            ros.append(ro)
-            ps.append(p)
-            us.append(u)
-            es.append(e)
-            c1=get_c_13_8(p, ro, p_0, kappa)
-            ms.append(u/c1)
-            continue
-        if D_star_1*t < x <= U*t:
-            ros.append(R_1)
-            ps.append(P)
-            us.append(U)
-            es.append(get_e_13_1(P, R_1, p_0, c_0, kappa))
-            c1=get_c_13_8(P, R_1, p_0, kappa)
-            ms.append(U/c1)
-            continue
-        if U*t < x <= D_star_2*t:
-            ros.append(R_2)
-            ps.append(P)
-            us.append(U)
-            es.append(get_e_13_1(P, R_2, p_0, c_0, kappa))
-            c1=get_c_13_8(P, R_2, p_0, kappa)
-            ms.append(U/c1)
-            continue
-        if (not UD_right) and (D_star_2*t < x <= D_2*t):
-            k = (u_2 - U)/(D_2*t - D_star_2*t)
-            b = u_2 - k*D_2*t
-            u = k*x+b
-            c1 = get_c_13_8(p_2, ro_2, p_0, kappa)
-            ro = ro_2*pow(1-0.5*(kappa-1)*(u_2-u)/c1, 2/(kappa-1))
-            p = p_2*pow(1-0.5*(kappa-1)*(u_2-u)/c1, 2*kappa/(kappa-1))
-            e = get_e_13_1(p, ro, p_0, c_0, kappa)
-            ros.append(ro)
-            ps.append(p)
-            us.append(u)
-            es.append(e)
-            c1=get_c_13_8(p, ro, p_0, kappa)
-            ms.append(u/c1)
-            continue
-        if x > t*D_2:
-            ros.append(ro_2)
-            ps.append(p_2)
-            us.append(u_2)
-            es.append(get_e_13_1(p_2, ro_2, p_0, c_0, kappa))
-            c1=get_c_13_8(p_2, ro_2, p_0, kappa)
-            ms.append(u_2/c1)
-            continue
+        rayW = x/t
+        u,ro,p,e = get_ray_URPE(rayW, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P,
+                               p_1, ro_1, u_1, p_2, ro_2, u_2, p_0, c_0, kappa )
+        ros.append(ro)
+        ps.append(p)
+        us.append(u)
+        es.append(e)
+        c1 = get_c_13_8(p, ro, p_0, kappa)
+        ms.append(u/c1)
     xs = xs + x0
     return {
         'xs': xs,
