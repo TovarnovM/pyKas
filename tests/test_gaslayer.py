@@ -246,7 +246,7 @@ def AUSM_python(p1, ro1, u1, e1, c1, p2, ro2, u2, e2, c2, vbi):
     pf = P5p*p1 + P5m*p2
 
     flux1 = 0.5*cs*(Mrf*(r1+r2)-abs(Mrf)*(r2-r1))
-    flux2 = copysign(0.5*cs*(Mrf*(r1*u1+r2*u2)-abs(Mrf)*(r2*u2-r1*u1)) + pf, Mrf)
+    flux2 = 0.5*cs*(Mrf*(r1*u1+r2*u2)-abs(Mrf)*(r2*u2-r1*u1)) + pf
     flux3 = 0.5*cs*(Mrf*(r1*H1+r2*H2)-abs(Mrf)*(r2*H2-r1*H1)) + pf*vbi
 
     return flux1, flux2, flux3

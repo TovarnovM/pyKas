@@ -3,37 +3,38 @@ from math import *
 import numpy as np
 
 
-def get_e_13_1(p, ro, p_0, c_0, kappa):
+def get_e_13_1(p, ro, p_0, c_0, gamma):
     """Уравнение состояния
-    
+    (формула 13.1 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
+
     Arguments:
         p {float} -- давление газа
         ro {float} -- плотность газа
         p_0 {float} -- параметр в уравнении состояния
         c_0 {float} -- еще один параметр там же
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         float -- внутренняя энергия
     """
 
-    return (p+kappa*p_0)/((kappa-1)*ro)-c_0*c_0/(kappa-1)
+    return (p+gamma*p_0)/((gamma-1)*ro)-c_0*c_0/(gamma-1)
 
-def get_p_0(ro_0, c_0, kappa):
+def get_p_0(ro_0, c_0, gamma):
     """Нахождение параметра в уравнении состояния p_0 по его другой "постановке" через плотность(?)
     
     Arguments:
         ro_0 {float} -- параметр в уравнеии состояния (плотность kind of)
         c_0 {float} -- параметр в уравнеии состояния
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         float -- p_0 - параметр в уравнеии состояния
     """
 
-    return ro_0*c_0*c_0/kappa
+    return ro_0*c_0*c_0/gamma
 
-def get_R_13_2(ro, p, P, p_0, kappa):
+def get_R_13_2(ro, p, P, p_0, gamma):
     """Адиабата Гюгонио (формула 13.2 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
     Arguments:
@@ -41,17 +42,17 @@ def get_R_13_2(ro, p, P, p_0, kappa):
         p {float} -- давление газа перед фронтом УВ
         P {float} -- давление газа за фронтом УВ
         p_0 {float} -- параметр в уравнеии состояния
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         float -- R - плотность газа за фронтом УВ
     """
 
-    chsl = (kappa+1)*(P+p_0)+(kappa-1)*(p+p_0)
-    znam = (kappa-1)*(P+p_0)+(kappa+1)*(p+p_0)
+    chsl = (gamma+1)*(P+p_0)+(gamma-1)*(p+p_0)
+    znam = (gamma-1)*(P+p_0)+(gamma+1)*(p+p_0)
     return ro*chsl/znam
 
-def get_a_13_4_shock(ro, p, P, p_0, kappa):
+def get_a_13_4_shock(ro, p, P, p_0, gamma):
     """Получить массовую скорость для ударной волны 
     (формула 13.4 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -60,15 +61,15 @@ def get_a_13_4_shock(ro, p, P, p_0, kappa):
         p {float} -- давление газа перед фронтом УВ
         P {float} -- давление газа за фронтом УВ
         p_0 {float} -- параметр в уравнеии состояния
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         float -- a - массовую скорость для ударной волны
     """
 
-    return sqrt(ro*(0.5*(kappa+1)*(P+p_0) + 0.5*(kappa-1)*(p+p_0)))
+    return sqrt(ro*(0.5*(gamma+1)*(P+p_0) + 0.5*(gamma-1)*(p+p_0)))
 
-def get_c_13_8(p, ro, p_0, kappa):
+def get_c_13_8(p, ro, p_0, gamma):
     """Получить скорость звука в газе
     (формула 13.8 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -76,15 +77,15 @@ def get_c_13_8(p, ro, p_0, kappa):
         p {float} -- давление газа
         ro {float} -- плотность газа
         p_0 {float} -- параметр в уравнеии состояния
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         float -- c - скорость звука в газе
     """
 
-    return sqrt(kappa*(p+p_0)/ro)
+    return sqrt(gamma*(p+p_0)/ro)
 
-def get_a_13_11_discharge(ro, p, P, p_0, kappa):
+def get_a_13_11_discharge(ro, p, P, c, p_0, gamma):
     """Получить массовую скорость для волны разряжения
     (формула 13.11 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -92,20 +93,21 @@ def get_a_13_11_discharge(ro, p, P, p_0, kappa):
         ro {float} -- плотность газа перед фронтом волны разряжения
         p {float} -- давление газа перед фронтом волны разряжения
         P {float} -- давление газа за фронтом волны разряжения
+        c {float} -- скорость звука перед фронтом волны разряжения
         p_0 {float} -- параметр в уравнеии состояния
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         float -- a - массовую скорость для волны разряжения
     """
-    c = get_c_13_8(p, ro, p_0, kappa)
+    # c = get_c_13_8(p, ro, p_0, gamma)
     chsl = 1 - (P+p_0)/(p+p_0)
-    znam = 1 - pow((P+p_0)/(p+p_0), 0.5*(kappa-1)/kappa)
+    znam = 1 - pow((P+p_0)/(p+p_0), 0.5*(gamma-1)/gamma)
     if abs(znam)<1e-13:
         return 0
-    return 0.5*(kappa-1)*ro*c/kappa*chsl/znam
+    return 0.5*(gamma-1)*ro*c/gamma*chsl/znam
 
-def get_f_13_16(P, p_k, ro_k, p_0, kappa):
+def get_f_13_16(P, p_k, ro_k, c_k, p_0, gamma):
     """
     (формула 13.16 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -113,22 +115,23 @@ def get_f_13_16(P, p_k, ro_k, p_0, kappa):
         P {float} -- давление в месте контактного разрыва
         p_k {float} -- давление невозмущенного газа
         ro_k {float} -- плотность невозмущенного газа
+        c_k {float} -- скорость звука в невозмущенном газе
         p_0 {float} -- параметр в уравнеии состояния
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         float -- формула 13.16
     """
 
     pi_k = (P+p_0)/(p_k+p_0)
-    c_k = get_c_13_8(p=p_k, ro=ro_k, p_0=p_0, kappa=kappa)
+    # c_k = get_c_13_8(p=p_k, ro=ro_k, p_0=p_0, gamma=gamma)
     if P >= p_k:
-        znam = ro_k*c_k*sqrt((kappa+1)*pi_k*0.5/kappa+(kappa-1)*0.5/kappa)
+        znam = ro_k*c_k*sqrt((gamma+1)*pi_k*0.5/gamma+(gamma-1)*0.5/gamma)
         return (P-p_k)/znam
     else:
-        return 2/(kappa-1)*c_k*(pow(pi_k, 0.5*(kappa-1)/kappa)-1)
+        return 2/(gamma-1)*c_k*(pow(pi_k, 0.5*(gamma-1)/gamma)-1)
 
-def get_df_13_17(P, p_k, ro_k, p_0, kappa):
+def get_df_13_17(P, p_k, ro_k, c_k, p_0, gamma):
     """
     Производная формулы 13.16
     (формула 13.17 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
@@ -137,24 +140,25 @@ def get_df_13_17(P, p_k, ro_k, p_0, kappa):
         P {float} -- давление в месте контактного разрыва
         p_k {float} -- давление невозмущенного газа
         ro_k {float} -- плотность невозмущенного газа
+        c_k {float} -- скорость звука в невозмущенном газе
         p_0 {float} -- параметр в уравнеии состояния
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         float -- формула 13.17
     """
     pi_k = (P+p_0)/(p_k+p_0)
-    c_k = get_c_13_8(p=p_k, ro=ro_k, p_0=p_0, kappa=kappa)
+    # c_k = get_c_13_8(p=p_k, ro=ro_k, p_0=p_0, gamma=gamma)
     if P >= p_k:
-        chsl = (kappa+1)*pi_k+(3*kappa-1)
-        znam = 4*kappa*ro_k*c_k*sqrt(pow((kappa+1)*pi_k*0.5/kappa+(kappa-1)*0.5/kappa, 3))
+        chsl = (gamma+1)*pi_k+(3*gamma-1)
+        znam = 4*gamma*ro_k*c_k*sqrt(pow((gamma+1)*pi_k*0.5/gamma+(gamma-1)*0.5/gamma, 3))
         return chsl/znam
     else:
-        chsl = c_k*pow(pi_k, 0.5*(kappa-1)/kappa)
-        znam = kappa*(P+p_0)
+        chsl = c_k*pow(pi_k, 0.5*(gamma-1)/gamma)
+        znam = gamma*(P+p_0)
         return chsl/znam
 
-def get_ddf_13_18(P, p_k, ro_k, p_0, kappa):
+def get_ddf_13_18(P, p_k, ro_k, c_k, p_0, gamma):
     """
     Вторая производная формулы 13.16
     (формула 13.18 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
@@ -163,24 +167,25 @@ def get_ddf_13_18(P, p_k, ro_k, p_0, kappa):
         P {float} -- давление в месте контактного разрыва
         p_k {float} -- давление невозмущенного газа
         ro_k {float} -- плотность невозмущенного газа
+        c_k {float} -- скорость звука в невозмущенном газе
         p_0 {float} -- параметр в уравнеии состояния
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         float -- формула 13.18
     """
     pi_k = (P+p_0)/(p_k+p_0)
-    c_k = get_c_13_8(p=p_k, ro=ro_k, p_0=p_0, kappa=kappa)
+    # c_k = get_c_13_8(p=p_k, ro=ro_k, p_0=p_0, gamma=gamma)
     if P >= p_k:
-        chsl = (kappa+1)*((kappa+1)*pi_k+(7*kappa-1))
-        znam = 16*kappa*ro_k*ro_k*pow(c_k, 3)*sqrt(pow((kappa+1)*pi_k*0.5/kappa+(kappa-1)*0.5/kappa, 5))
+        chsl = (gamma+1)*((gamma+1)*pi_k+(7*gamma-1))
+        znam = 16*gamma*ro_k*ro_k*pow(c_k, 3)*sqrt(pow((gamma+1)*pi_k*0.5/gamma+(gamma-1)*0.5/gamma, 5))
         return -chsl/znam
     else:
-        chsl = (kappa+1)*c_k*pow(pi_k, 0.5*(kappa-1)/kappa)
-        znam = 2*kappa*kappa*(P+p_0)*(P+p_0)
+        chsl = (gamma+1)*c_k*pow(pi_k, 0.5*(gamma-1)/gamma)
+        znam = 2*gamma*gamma*(P+p_0)*(P+p_0)
         return -chsl/znam
 
-def get_F_13_15(P, p_1, ro_1, p_2, ro_2, p_0, kappa):
+def get_F_13_15(P, p_1, ro_1, c_1, p_2, ro_2, c_2, p_0, gamma):
     """Уравнение для давления в зоне контактного разрыва
     (формула 13.15 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -188,19 +193,21 @@ def get_F_13_15(P, p_1, ro_1, p_2, ro_2, p_0, kappa):
         P {float} -- давление в месте контактного разрыва
         p_1 {float} -- давление невозмущенного газа слева от контактного разрыва (p_1 < p_2)
         ro_1 {float} -- плотность невозмущенного газа слева от контактного разрыва
+        c_1 {float} -- скорость звука в газе слева от контактного разрыва
         p_2 {float} -- давление невозмущенного газа справа от контактного разрыва (p_1 < p_2)
         ro_2 {float} -- плотность невозмущенного газа справа от контактного разрыва
+        c_2 {float} -- скорость звука в газе справа от контактного разрыва
         p_0 {float} -- параметр в уравнеии состояния
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         float -- u_1-u_2  -  разница скоростей газовых потоков
     """
 
-    return get_f_13_16(P=P, p_k=p_1, ro_k=ro_1, p_0=p_0, kappa=kappa)+\
-           get_f_13_16(P=P, p_k=p_2, ro_k=ro_2, p_0=p_0, kappa=kappa)
+    return get_f_13_16(P=P, p_k=p_1, ro_k=ro_1, c_k=c_1, p_0=p_0, gamma=gamma)+\
+           get_f_13_16(P=P, p_k=p_2, ro_k=ro_2, c_k=c_2, p_0=p_0, gamma=gamma)
 
-def get_dF_13_15(P, p_1, ro_1, p_2, ro_2, p_0, kappa):
+def get_dF_13_15(P, p_1, ro_1, c_1, p_2, ro_2, c_2, p_0, gamma):
     """Производная уравнения 13.15 для давления в зоне контактного разрыва
     (формула 13.17 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -208,18 +215,20 @@ def get_dF_13_15(P, p_1, ro_1, p_2, ro_2, p_0, kappa):
         P {float} -- давление в месте контактного разрыва
         p_1 {float} -- давление невозмущенного газа слева от контактного разрыва (p_1 < p_2)
         ro_1 {float} -- плотность невозмущенного газа слева от контактного разрыва
+        c_1 {float} -- скорость звука в газе слева от контактного разрыва
         p_2 {float} -- давление невозмущенного газа справа от контактного разрыва (p_1 < p_2)
         ro_2 {float} -- плотность невозмущенного газа справа от контактного разрыва
+        c_2 {float} -- скорость звука в газе справа от контактного разрыва
         p_0 {float} -- параметр в уравнеии состояния
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         float -- (u_1-u_2)'  - производная разницы скоростей газовых потоков
     """
-    return get_df_13_17(P=P, p_k=p_1, ro_k=ro_1, p_0=p_0, kappa=kappa)+\
-           get_df_13_17(P=P, p_k=p_2, ro_k=ro_2, p_0=p_0, kappa=kappa)
+    return get_df_13_17(P=P, p_k=p_1, ro_k=ro_1, c_k=c_1, p_0=p_0, gamma=gamma)+\
+           get_df_13_17(P=P, p_k=p_2, ro_k=ro_2, c_k=c_2, p_0=p_0, gamma=gamma)
 
-def get_ddF_13_15(P, p_1, ro_1, p_2, ro_2, p_0, kappa):
+def get_ddF_13_15(P, p_1, ro_1, c_1, p_2, ro_2, c_2, p_0, gamma):
     """Вторая производная уравнения 13.15 для давления в зоне контактного разрыва
     (формула 13.18 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -227,18 +236,20 @@ def get_ddF_13_15(P, p_1, ro_1, p_2, ro_2, p_0, kappa):
         P {float} -- давление в месте контактного разрыва
         p_1 {float} -- давление невозмущенного газа слева от контактного разрыва (p_1 < p_2)
         ro_1 {float} -- плотность невозмущенного газа слева от контактного разрыва
+        c_1 {float} -- скорость звука в газе слева от контактного разрыва
         p_2 {float} -- давление невозмущенного газа справа от контактного разрыва (p_1 < p_2)
         ro_2 {float} -- плотность невозмущенного газа справа от контактного разрыва
+        c_2 {float} -- скорость звука в газе справа от контактного разрыва
         p_0 {float} -- параметр в уравнеии состояния
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         float -- (u_1-u_2)''  - вторая производная разницы скоростей газовых потоков
     """
-    return get_ddf_13_18(P=P, p_k=p_1, ro_k=ro_1, p_0=p_0, kappa=kappa)+\
-           get_ddf_13_18(P=P, p_k=p_2, ro_k=ro_2, p_0=p_0, kappa=kappa)
+    return get_ddf_13_18(P=P, p_k=p_1, ro_k=ro_1, c_k=c_1, p_0=p_0, gamma=gamma)+\
+           get_ddf_13_18(P=P, p_k=p_2, ro_k=ro_2, c_k=c_2, p_0=p_0, gamma=gamma)
 
-def get_Us_13_22(p_1, p_2, ro_1, c_1, c_2, p_0, kappa):
+def get_Us_13_22(p_1, p_2, ro_1, c_1, c_2, p_0, gamma):
     """Значения функции get_F_13_15 (значения разницы скоростей газовых потоков) в точках P = -p_0, p_1, p_2, 
     для определения конфигурации, возникающих при распаде разрыва.
     (формула 13.22 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
@@ -250,7 +261,7 @@ def get_Us_13_22(p_1, p_2, ro_1, c_1, c_2, p_0, kappa):
         c_1 {float} -- скорость звука в невозмущенном газе слева от контактного разрыва
         c_2 {float} -- скорость звука в невозмущенном газе справа от контактного разрыва
         p_0 {float} -- параметр в уравнеии состояния
-        kappa {float} -- коэфф. адиабаты
+        gamma {float} -- коэфф. адиабаты
     
     Returns:
         tuple(float, float, float) -- (U_уд, U_раз, U_вак) - критические значения разницы скоростей газовых потоков, 
@@ -261,23 +272,25 @@ def get_Us_13_22(p_1, p_2, ro_1, c_1, c_2, p_0, kappa):
                 4) U_вак > u_1 - u_2          -- возникает область вакуума  
     """
 
-    U_ud = (p_2-p_1)/sqrt(ro_1*((kappa+1)*(p_2+p_0)/2 + (kappa-1)*(p_1+p_0)/2))
-    U_raz = -2*c_2/(kappa-1) * (1 - pow((p_1+p_0)/(p_2+p_0), 0.5*(kappa-1)/kappa))
-    U_vak = -2*c_1/(kappa-1) - 2*c_2/(kappa-1)
+    U_ud = (p_2-p_1)/sqrt(ro_1*((gamma+1)*(p_2+p_0)/2 + (gamma-1)*(p_1+p_0)/2))
+    U_raz = -2*c_2/(gamma-1) * (1 - pow((p_1+p_0)/(p_2+p_0), 0.5*(gamma-1)/gamma))
+    U_vak = -2*c_1/(gamma-1) - 2*c_2/(gamma-1)
     return U_ud, U_raz, U_vak
 
-def mega_foo(p_1, ro_1, u_1, p_2, ro_2, u_2, p_0, kappa, eps_F=1e-2, n_iter_max=100, **kwargs):
+def mega_foo(p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2, p_0, gamma, eps_F=1e-5, n_iter_max=100, **kwargs):
     """Функция определения параметров газового потока в задаче Римана о распаде разрыва
     
     Arguments:
         p_1 {float} -- давление слева
         ro_1 {float} -- плотность слева
         u_1 {float} -- скорость потока слева
+        c_1 {float} -- скорость звука в невозмущенном газе слева от контактного разрыва
         p_2 {float} -- давление справа
         ro_2 {float} -- плотность справа
         u_2 {float} -- скорость потока справа
+        c_2 {float} -- скорость звука в невозмущенном газе справа от контактного разрыва
         p_0 {float} -- параметр в уравнении состояния
-        kappa {float} -- параметр в уравнеии состояния (коэфф. адиабаты)
+        gamma {float} -- параметр в уравнеии состояния (коэфф. адиабаты)
     
     Keyword Arguments:
         eps_F {float} -- точность определения решения (default: {1e-2})
@@ -304,9 +317,10 @@ def mega_foo(p_1, ro_1, u_1, p_2, ro_2, u_2, p_0, kappa, eps_F=1e-2, n_iter_max=
         p_1, p_2 = p_2, p_1
         ro_1, ro_2 = ro_2, ro_1
         u_1, u_2 = -u_2, -u_1
-    c_1 = get_c_13_8(p=p_1, ro=ro_1, p_0=p_0, kappa=kappa)
-    c_2 = get_c_13_8(p=p_2, ro=ro_2, p_0=p_0, kappa=kappa)
-    U_ud, U_raz, U_vak = get_Us_13_22(p_1, p_2, ro_1, c_1, c_2, p_0, kappa)
+        c_1, c_2 = c_2, c_1
+    # c_1 = get_c_13_8(p=p_1, ro=ro_1, p_0=p_0, gamma=gamma)
+    # c_2 = get_c_13_8(p=p_2, ro=ro_2, p_0=p_0, gamma=gamma)
+    U_ud, U_raz, U_vak = get_Us_13_22(p_1, p_2, ro_1, c_1, c_2, p_0, gamma)
     if u_1-u_2 < U_vak:
         print('Вакуум !!')
         return False, 0,0,0,0,0,0,0,0,0,0
@@ -315,13 +329,13 @@ def mega_foo(p_1, ro_1, u_1, p_2, ro_2, u_2, p_0, kappa, eps_F=1e-2, n_iter_max=
 
     P = (p_1*ro_2*c_2+p_2*ro_1*c_1 + (u_1-u_2)*ro_1*c_1*ro_2*c_2)/(ro_1*c_1+ro_2*c_2)
     if P < p_1:
-        P = (p_1+p_0)*pow((u_1-u_2-U_vak)/(U_raz-U_vak), 2*kappa/(kappa-1)) - p_0
+        P = (p_1+p_0)*pow((u_1-u_2-U_vak)/(U_raz-U_vak), 2*gamma/(gamma-1)) - p_0
     for i in range(n_iter_max):
-        F = get_F_13_15(P, p_1, ro_1, p_2, ro_2, p_0, kappa) - (u_1-u_2)
+        F = get_F_13_15(P, p_1, ro_1, c_1, p_2, ro_2, c_2, p_0, gamma) - (u_1-u_2)
         if abs(F) < eps_F:
             break
-        dF = get_dF_13_15(P, p_1, ro_1, p_2, ro_2, p_0, kappa)
-        ddF =get_ddF_13_15(P, p_1, ro_1, p_2, ro_2, p_0, kappa)
+        dF = get_dF_13_15(P, p_1, ro_1, c_1, p_2, ro_2, c_2, p_0, gamma)
+        ddF =get_ddF_13_15(P, p_1, ro_1, c_1, p_2, ro_2, c_2, p_0, gamma)
 
         P = P - (F/dF)*(1+0.5*F*ddF/(dF*dF))
     else:
@@ -330,51 +344,51 @@ def mega_foo(p_1, ro_1, u_1, p_2, ro_2, u_2, p_0, kappa, eps_F=1e-2, n_iter_max=
     
     # 2 уданрые волны
     if u_1-u_2 > U_ud:
-        a_1 = get_a_13_4_shock(ro_1, p_1, P, p_0, kappa)
-        a_2 = get_a_13_4_shock(ro_2, p_2, P, p_0, kappa)
+        a_1 = get_a_13_4_shock(ro_1, p_1, P, p_0, gamma)
+        a_2 = get_a_13_4_shock(ro_2, p_2, P, p_0, gamma)
     # УД слева, ВР справа
     elif U_raz < u_1-u_2 <= U_ud:
-        a_1 = get_a_13_4_shock(ro_1, p_1, P, p_0, kappa)
-        a_2 = get_a_13_11_discharge(ro_2, p_2, P, p_0, kappa)
+        a_1 = get_a_13_4_shock(ro_1, p_1, P, p_0, gamma)
+        a_2 = get_a_13_11_discharge(ro_2, p_2, P, c_2, p_0, gamma)
     # 2 ВР
     else:
-        a_1 = get_a_13_11_discharge(ro_1, p_1, P, p_0, kappa)
-        a_2 = get_a_13_11_discharge(ro_2, p_2, P, p_0, kappa)
+        a_1 = get_a_13_11_discharge(ro_1, p_1, P, c_1, p_0, gamma)
+        a_2 = get_a_13_11_discharge(ro_2, p_2, P, c_2, p_0, gamma)
 
     # 13.14 скорость контактного разрыва
     # U = (a_1*u_1+a_2*u_2+p_1-p_2)/(a_1+a_2)
-    U=0.5*(u_1 - get_f_13_16(P,p_1,ro_1,p_0,kappa) + u_2 + get_f_13_16(P,p_2,ro_2,p_0,kappa))
+    U=0.5*(u_1 - get_f_13_16(P,p_1,ro_1,c_1,p_0,gamma) + u_2 + get_f_13_16(P,p_2,ro_2,c_2,p_0,gamma))
     # УД слева
     UD_left = u_1-u_2 > U_raz
     if UD_left:
         D_1 = u_1 - a_1/ro_1
-        R_1 = get_R_13_2(ro_1, p_1, P, p_0, kappa)
+        R_1 = get_R_13_2(ro_1, p_1, P, p_0, gamma)
         D_star_1 = D_1
     else:
         D_1 = u_1 - c_1
-        c_star_1 = c_1 + 0.5*(kappa-1)*(u_1 - U)
+        c_star_1 = c_1 + 0.5*(gamma-1)*(u_1 - U)
         D_star_1 = U - c_star_1
-        R_1 = kappa*(P+p_0)/pow(c_star_1, 2)
+        R_1 = gamma*(P+p_0)/pow(c_star_1, 2)
 
     # УД справа
     UD_right = u_1-u_2 > U_ud
     if UD_right:
         D_2 = u_2 + a_2/ro_2
-        R_2 = get_R_13_2(ro_2, p_2, P, p_0, kappa)
+        R_2 = get_R_13_2(ro_2, p_2, P, p_0, gamma)
         D_star_2 = D_2
     else:
         D_2 = u_2 + c_2
-        c_star_2 = c_2 - 0.5*(kappa-1)*(u_2 - U)
+        c_star_2 = c_2 - 0.5*(gamma-1)*(u_2 - U)
         D_star_2 = U + c_star_2
-        R_2 = kappa*(P+p_0)/pow(c_star_2, 2)
+        R_2 = gamma*(P+p_0)/pow(c_star_2, 2)
     if not reverse:
         return True, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P
     else:
         return True, UD_right, UD_left, -D_2, -D_star_2, -U, -D_star_1, -D_1, R_2, R_1, P
 
 
-def get_ray_URPE(ray_W, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P, 
-                 p_1, ro_1, u_1, p_2, ro_2, u_2, p_0, c_0, kappa):
+def get_ray_URP(ray_W, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P, 
+                 p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2, gamma):
     """ОООооо даааа =) функция получения вектора характеристик газа, испытавшего распад разрыва, на подвижной границе.
     В начальный момент времени граница находится в точке разрыва. Скорость границы (rayW) постоянна
     
@@ -393,64 +407,58 @@ def get_ray_URPE(ray_W, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1,
         p_1       {float} -- давление невозмущенного потока слева (левее D_1)
         ro_1      {float} -- плотность невозмущенного потока слева (левее D_1)
         u_1       {float} -- скорость невозмущенного потока слева (левее D_1)
+        c_1       {float} -- скорость звука в невозмущенном газе слева от контактного разрыва
         p_2       {float} -- давление невозмущенного потока справа (правее D_2)
         ro_2      {float} -- плотность невозмущенного потока справа (правее D_2)
         u_2       {float} -- скорость невозмущенного потока справа (правее D_2)
-        p_0       {float} -- параметр в уравнении состояния
-        c_0       {float} -- параметр в уравнении состояния
-        kappa     {float} -- параметр в уравнеии состояния (коэфф. адиабаты)
+        c_2       {float} -- скорость звука в невозмущенном газе справа от контактного разрыва
+        gamma     {float} -- параметр в уравнеии состояния (коэфф. адиабаты)
     
     Returns:
-        tuple(float, float, float, float) -- вектор характеристик потока. 
-               U,     R,     P,     E       (скорость, плотность, давление, внутр. энергия)
+        tuple(float, float, float) -- вектор характеристик потока. 
+               U,     R,     P      (скорость, плотность, давление, внутр. энергия)
     """
 
-
-    resU,resR,resP,resE = 0,0,0,0
+    resU,resR,resP = 0,0,0
     if D_star_1 < ray_W <= U:
         resR = R_1
         resP = P
         resU = U
-        resE = get_e_13_1(P, R_1, p_0, c_0, kappa)
     elif U < ray_W <= D_star_2:
         resR = R_2
         resP = P
         resU = U
-        resE = get_e_13_1(P, R_2, p_0, c_0, kappa)
     elif (not UD_left) and (D_1 < ray_W <= D_star_1):
         k = (u_1 - U)/(D_1 - D_star_1)
         b = u_1 - k*D_1
         resU = k*ray_W+b
-        c1 = get_c_13_8(p_1, ro_1, p_0, kappa)
-        # u = 2/(kappa+1)*(c1+x/t)
-        resR = ro_1*pow(1-0.5*(kappa-1)*(resU-u_1)/c1, 2/(kappa-1))
-        resP = p_1*pow(1-0.5*(kappa-1)*(resU-u_1)/c1, 2*kappa/(kappa-1))
-        resE = get_e_13_1(resP, resR, p_0, c_0, kappa)
+        resR = ro_1*pow(1-0.5*(gamma-1)*(resU-u_1)/c_1, 2/(gamma-1))
+        resP = p_1*pow(1-0.5*(gamma-1)*(resU-u_1)/c_1, 2*gamma/(gamma-1))
     elif (not UD_right) and (D_star_2 < ray_W <= D_2):
         k = (u_2 - U)/(D_2 - D_star_2)
         b = u_2 - k*D_2
         resU = k*ray_W+b
-        c1 = get_c_13_8(p_2, ro_2, p_0, kappa)
-        resR = ro_2*pow(1-0.5*(kappa-1)*(u_2-resU)/c1, 2/(kappa-1))
-        resP = p_2*pow(1-0.5*(kappa-1)*(u_2-resU)/c1, 2*kappa/(kappa-1))
-        resE = get_e_13_1(resP, resR, p_0, c_0, kappa)    
+        resR = ro_2*pow(1-0.5*(gamma-1)*(u_2-resU)/c_2, 2/(gamma-1))
+        resP = p_2*pow(1-0.5*(gamma-1)*(u_2-resU)/c_2, 2*gamma/(gamma-1))
     elif ray_W > D_2:
         resR=ro_2
         resP=p_2
         resU=u_2
-        resE=get_e_13_1(p_2, ro_2, p_0, c_0, kappa)
     elif ray_W <= D_1:
         resR=ro_1
         resP=p_1
         resU=u_1
-        resE=get_e_13_1(p_1, ro_1, p_0, c_0, kappa)
-    return resU, resR, resP, resE
+    return resU, resR, resP
 
 
 
 def plot_rays(show=True, **init_cond):
     import matplotlib.pyplot as plt
-    suc, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P = mega_foo(**init_cond)
+
+    c_1 = get_c_13_8(p=init_cond['p_1'], ro=init_cond['ro_1'], p_0=init_cond['p_0'], gamma=init_cond['gamma'])
+    c_2 = get_c_13_8(p=init_cond['p_2'], ro=init_cond['ro_2'], p_0=init_cond['p_0'], gamma=init_cond['gamma'])
+
+    suc, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P = mega_foo(c_1=c_1, c_2=c_2, **init_cond)
     print(UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P)
 
     line_l = init_cond.get('line_l', 1)
@@ -486,13 +494,16 @@ def plot_rays(show=True, **init_cond):
         plt.show()
 
 def get_distrs_to_time(t, **init_cond):
-    suc, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P = mega_foo(**init_cond)
+    c_1 = get_c_13_8(p=init_cond['p_1'], ro=init_cond['ro_1'], p_0=init_cond['p_0'], gamma=init_cond['gamma'])
+    c_2 = get_c_13_8(p=init_cond['p_2'], ro=init_cond['ro_2'], p_0=init_cond['p_0'], gamma=init_cond['gamma'])
+
+    suc, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P = mega_foo(c_1=c_1, c_2=c_2, **init_cond)
     x0 = init_cond.get('x0', 0)
     n = init_cond.get('n', 0)
     c_0 = init_cond.get('c_0', 0)
-    p_1, ro_1, u_1, p_2, ro_2, u_2, p_0, kappa = \
+    p_1, ro_1, u_1, p_2, ro_2, u_2, p_0, gamma = \
         init_cond['p_1'], init_cond['ro_1'], init_cond['u_1'], \
-        init_cond['p_2'], init_cond['ro_2'], init_cond['u_2'], init_cond['p_0'], init_cond['kappa']
+        init_cond['p_2'], init_cond['ro_2'], init_cond['u_2'], init_cond['p_0'], init_cond['gamma']
     width = t*D_2 - t*D_1
     x1 = t*D_1 - 0.15*width
     x2 = t*D_2 + 0.15*width
@@ -500,13 +511,14 @@ def get_distrs_to_time(t, **init_cond):
     ros, ps, us, es, ms = [],[],[],[],[]
     for x in xs:
         rayW = x/t
-        u,ro,p,e = get_ray_URPE(rayW, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P,
-                               p_1, ro_1, u_1, p_2, ro_2, u_2, p_0, c_0, kappa )
+        u,ro,p = get_ray_URP(rayW, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P,
+                               p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2, gamma )
         ros.append(ro)
         ps.append(p)
         us.append(u)
+        e = get_e_13_1(p, ro, p_0, c_0, gamma)
         es.append(e)
-        c1 = get_c_13_8(p, ro, p_0, kappa)
+        c1 = get_c_13_8(p, ro, p_0, gamma)
         ms.append(u/c1)
     xs = xs + x0
     return {
@@ -583,12 +595,12 @@ def get_init_conds_4_tsts():
             'ro_2': ro_2,      # плотность справа    
             'u_2' : u_2,          # скорость справа        
             'p_0' : 0,          # параметр в ур-ии состояния        
-            'kappa' : 1.4,      # параметр в ур-ии состояния          
+            'gamma' : 1.4,      # параметр в ур-ии состояния          
             'c_0' : 0,          # параметр в ур-ии состояния     
             'eps_F':1e-6,       # точность определения решения           
             'n_iter_max':100,   # максимальное количество итераций при определении решения              
             'x0' : 0.5,         # положение разрыва в момент t=0        
-            'ts': [0.15],        # времена, в которых нужно построить графики распределения параметров         
+            'ts': [t],        # времена, в которых нужно построить графики распределения параметров         
             'n': 10000          # кол-во точек, в которых ищутся параметры волны разрежения         
         } 
 
@@ -603,7 +615,7 @@ if __name__ == "__main__":
     #     'ro_2': 0.125,      # плотность справа    
     #     'u_2' : 0,          # скорость справа        
     #     'p_0' : 0,          # параметр в ур-ии состояния        
-    #     'kappa' : 1.4,      # параметр в ур-ии состояния          
+    #     'gamma' : 1.4,      # параметр в ур-ии состояния          
     #     'c_0' : 0,          # параметр в ур-ии состояния     
     #     'eps_F':1e-3,       # точность определения решения           
     #     'n_iter_max':100,   # максимальное количество итераций при определении решения              
@@ -618,3 +630,4 @@ if __name__ == "__main__":
             plot_distrs(**ic)
         except Exception as e:
             print(i+1, e)
+            raise e
