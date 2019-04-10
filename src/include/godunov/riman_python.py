@@ -387,6 +387,31 @@ def mega_foo(p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2, p_0, gamma, eps_F=1e-5, n
         return True, UD_right, UD_left, -D_2, -D_star_2, -U, -D_star_1, -D_1, R_2, R_1, P
 
 
+def border_wall_URP(left_border, vbi, p, ro, u, c, \
+             p_0, gamma, eps_F=1e-5, n_iter_max=37, **kwargs):
+    
+    p_1, p_2 = p, p
+    ro_1, ro_2 = ro, ro
+    c_1, c_2 = c, c
+    if left_border:
+        u_2 = u 
+        u_1 = - u + 2*vbi
+    else:
+        u_1 = u 
+        u_2 = -u + 2*vbi
+
+    suc, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P = mega_foo(p_1, ro_1, u_1, c_1, \
+             p_2, ro_2, u_2, c_1, \
+             p_0, gamma, eps_F, n_iter_max) 
+
+    if not suc:
+        return vbi,ro,p 
+    
+    return get_ray_URP(vbi, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P,
+                         p_1=p_1, ro_1=ro_1, u_1=u_1, c_1=c_1, p_2=p_2, ro_2=ro_2, u_2=u_2, c_2=c_2, gamma=gamma)
+
+
+
 def get_ray_URP(ray_W, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P, 
                  p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2, gamma):
     """ОООооо даааа =) функция получения вектора характеристик газа, испытавшего распад разрыва, на подвижной границе.

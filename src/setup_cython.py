@@ -74,7 +74,7 @@ if __name__ == '__main__':
                 
             } ,          
             "gaslayer": {
-                "Extention_kwargs":{},
+                "Extention_kwargs":{"include_dirs":[numpy.get_include()]},
                 "depends": ["tube", "godunov"]
             },
      

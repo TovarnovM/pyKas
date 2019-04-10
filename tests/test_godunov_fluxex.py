@@ -8,7 +8,7 @@ sys.path.append(wd+"\\src")
 import numpy as np
 import pytest
 from pytest import approx
-from godunov_python import Godunov_fluxes_python, Godunov_fluxes_cython
+from godunov_python import Godunov_fluxes_python, Godunov_fluxes_cython, flux_wall_border,flux_wall_border_cython
 from gaslayer import rop_to_csound, rop_to_e, roe_to_p
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
@@ -20,6 +20,9 @@ def get_fluxes_foo(**kwargs):
     return Godunov_fluxes_cython(**kwargs)
     # return Godunov_fluxes_python(**kwargs)
 
+def get_fluxes_border_foo(**kwargs):
+    return flux_wall_border_cython(**kwargs)
+    # return flux_wall_border(**kwargs)
 
 
 def get_rnd_values(n=1000):
@@ -104,6 +107,91 @@ def test_Godunov_gas_zero_flux_zero_u_zero_vbi_f3(random_values4fluxes):
             p2=p, ro2=ro, u2=u, e2=e, c2=c,
             vbi=u, e_foo=e_foo, gamma=gamma)
         assert f3 == approx(0)
+
+def test_Godunov_gas_border_wall_vbiZero_f1(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b, e_foo in random_values4fluxes:
+        f1, f2, f3 = get_fluxes_border_foo(
+            p=p, ro=ro, u=u, c=c,
+            left_border=True,
+            vbi=0, e_foo=e_foo, gamma=gamma)
+
+        assert f1 == approx(0, abs=1e-5)
+        f1, f2, f3 = get_fluxes_border_foo(
+            p=p, ro=ro, u=u, c=c,
+            left_border=False,
+            vbi=0, e_foo=e_foo, gamma=gamma)
+        assert f1 == approx(0, abs=1e-5)
+
+
+def test_Godunov_gas_border_wall_vbiZero_f2(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b, e_foo in random_values4fluxes:
+        f11, f12, f13 = get_fluxes_border_foo(
+            p=p, ro=ro, u=u, c=c,
+            left_border=True,
+            vbi=0, e_foo=e_foo, gamma=gamma)
+
+        f21, f22, f23 = get_fluxes_border_foo(
+            p=p, ro=ro, u=-u, c=c,
+            left_border=False,
+            vbi=0, e_foo=e_foo, gamma=gamma)
+        assert f22 == approx(f12, abs=1e-5)
+
+def test_Godunov_gas_border_wall_vbiZero_f3(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b, e_foo in random_values4fluxes:
+        f1, f2, f3 = get_fluxes_border_foo(
+            p=p, ro=ro, u=u, c=c,
+            left_border=True,
+            vbi=0, e_foo=e_foo, gamma=gamma)
+
+        assert f3 == approx(0, abs=1e-5)
+        f1, f2, f3 = get_fluxes_border_foo(
+            p=p, ro=ro, u=u, c=c,
+            left_border=False,
+            vbi=0, e_foo=e_foo, gamma=gamma)
+
+        assert f3 == approx(0, abs=1e-5)
+
+
+def test_Godunov_gas_border_wall_f1(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b, e_foo in random_values4fluxes:
+        f1, f2, f3 = get_fluxes_border_foo(
+            p=p, ro=ro, u=u, c=c,
+            left_border=True,
+            vbi=vbi, e_foo=e_foo, gamma=gamma)
+
+        assert f1 == approx(0, abs=1e-5)
+        f1, f2, f3 = get_fluxes_border_foo(
+            p=p, ro=ro, u=u, c=c,
+            left_border=False,
+            vbi=vbi, e_foo=e_foo, gamma=gamma)
+
+        assert f1 == approx(0, abs=1e-5)
+
+def test_Godunov_gas_border_wall_f2(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b, e_foo in random_values4fluxes:
+        f11, f12, f13 = get_fluxes_border_foo(
+            p=p, ro=ro, u=u, c=c,
+            left_border=True,
+            vbi=u, e_foo=e_foo, gamma=gamma)
+
+        f21, f22, f23 = get_fluxes_border_foo(
+            p=p, ro=ro, u=u, c=c,
+            left_border=False,
+            vbi=u, e_foo=e_foo, gamma=gamma)
+        assert f22 == approx(f12, abs=1e-5)
+
+def test_Godunov_gas_border_wall_f3(random_values4fluxes):
+    for ro, e, p, c, u, vbi, gamma, b, e_foo in random_values4fluxes:
+        f11, f12, f13 = get_fluxes_border_foo(
+            p=p, ro=ro, u=u, c=c,
+            left_border=True,
+            vbi=vbi, e_foo=e_foo, gamma=gamma)
+
+        f21, f22, f23 = get_fluxes_border_foo(
+            p=p, ro=ro, u=-u, c=c,
+            left_border=False,
+            vbi=-vbi, e_foo=e_foo, gamma=gamma)
+        assert f23 == approx(-f13, abs=1e-5)
 
 def test_Godunov_gas_simmetric_flux_f1(random_values4fluxes, random_values4fluxes2):
     for (ro1, e1, p1, c1, u1, vbi, gamma, b, e_foo), (ro2, e2, p2, c2, u2, vbi2, gamma2, b2, e_foo2) in zip(random_values4fluxes, random_values4fluxes2):

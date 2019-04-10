@@ -37,6 +37,9 @@ cpdef MegaFooResult mega_foo_cython(double p_1, double ro_1, double u_1, double 
              double p_2, double ro_2, double u_2, double c_2, \
              double p_0, double gamma, double eps_F=*, int n_iter_max=*)
 
+cpdef (double, double, double) border_wall_URP(bint left_border, double vbi, double p, double ro, double u, double c, \
+             double p_0, double gamma, double eps_F=*, int n_iter_max=*)
+
 cpdef (bint, bint, bint, double, double, double, double, double, double, double, double) \
     mega_foo(double p_1, double ro_1, double u_1, double c_1, \
              double p_2, double ro_2, double u_2, double c_2, \
