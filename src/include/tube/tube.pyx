@@ -1,5 +1,5 @@
 # distutils: language=c++
-# cython: language_level=3
+# cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True
 
 
 # cimport numpy as cnp

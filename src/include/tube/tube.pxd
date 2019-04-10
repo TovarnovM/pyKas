@@ -1,5 +1,5 @@
 # distutils: language=c++
-# cython: language_level=3
+# cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True
 
 cdef class InterpXY:
     cdef public double[:] xs, ys, ks, bs

@@ -369,7 +369,7 @@ body.cython { font-family: courier; font-size: 12; }
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   if (<span class='py_c_api'>PyDict_SetItem</span>(__pyx_d, __pyx_n_s_test, __pyx_t_1) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 1, __pyx_L1_error)</span>
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
-</pre><pre class="cython line score-0">&#xA0;<span class="">002</span>: <span class="c"># cython: language_level=3</span></pre>
+</pre><pre class="cython line score-0">&#xA0;<span class="">002</span>: <span class="c"># cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">003</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">004</span>: <span class="k">from</span> <span class="nn">tube</span> <span class="k">cimport</span> <span class="n">Tube</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">005</span>: <span class="k">import</span> <span class="nn">cython</span></pre>
@@ -615,8 +615,8 @@ static PyObject *__pyx_pf_8gaslayer_2roue_to_q_(CYTHON_UNUSED PyObject *__pyx_se
 </pre><pre class="cython line score-0">&#xA0;<span class="">030</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">031</span>: <span class="nd">@cython</span><span class="o">.</span><span class="n">boundscheck</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">032</span>: <span class="nd">@cython</span><span class="o">.</span><span class="n">wraparound</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span></pre>
-<pre class="cython line score-14" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">033</span>: <span class="k">cpdef</span> <span class="kr">inline</span> (<span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="kt">double</span>) <span class="nf">q_to_roue</span><span class="p">(</span><span class="n">double</span><span class="p">[:]</span> <span class="n">q</span><span class="p">):</span></pre>
-<pre class='cython code score-14 '>static PyObject *__pyx_pw_8gaslayer_5q_to_roue(PyObject *__pyx_self, PyObject *__pyx_arg_q); /*proto*/
+<pre class="cython line score-12" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">033</span>: <span class="k">cpdef</span> <span class="kr">inline</span> (<span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="kt">double</span>) <span class="nf">q_to_roue</span><span class="p">(</span><span class="n">double</span><span class="p">[:]</span> <span class="n">q</span><span class="p">):</span></pre>
+<pre class='cython code score-12 '>static PyObject *__pyx_pw_8gaslayer_5q_to_roue(PyObject *__pyx_self, PyObject *__pyx_arg_q); /*proto*/
 static CYTHON_INLINE __pyx_ctuple_double__and_double__and_double __pyx_f_8gaslayer_q_to_roue(__Pyx_memviewslice __pyx_v_q, CYTHON_UNUSED int __pyx_skip_dispatch) {
   double __pyx_v_ro;
   double __pyx_v_u;
@@ -626,9 +626,6 @@ static CYTHON_INLINE __pyx_ctuple_double__and_double__and_double __pyx_f_8gaslay
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("q_to_roue", 0);
 /* … */
   /* function exit code */
-  __pyx_L1_error:;
-  <span class='pyx_c_api'>__Pyx_WriteUnraisable</span>("gaslayer.q_to_roue", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __Pyx_pretend_to_initialize(&amp;__pyx_r);
   __pyx_L0:;
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
@@ -683,46 +680,31 @@ static PyObject *__pyx_pf_8gaslayer_4q_to_roue(CYTHON_UNUSED PyObject *__pyx_sel
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">034</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">ro</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span></pre>
 <pre class='cython code score-0 '>  __pyx_t_1 = 0;
   __pyx_v_ro = (*((double *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_1 * __pyx_v_q.strides[0]) )));
-</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">035</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">u</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">q</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span></pre>
-<pre class='cython code score-5 '>  __pyx_t_2 = 1;
-  __pyx_t_3 = (*((double *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_2 * __pyx_v_q.strides[0]) )));
-  __pyx_t_4 = 0;
-  __pyx_t_5 = (*((double *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_4 * __pyx_v_q.strides[0]) )));
-  if (unlikely(__pyx_t_5 == 0)) {
-    <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-    <span class='error_goto'>__PYX_ERR(0, 35, __pyx_L1_error)</span>
-  }
-  __pyx_v_u = (__pyx_t_3 / __pyx_t_5);
-</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">036</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">e</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="mf">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">q</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">u</span></pre>
-<pre class='cython code score-5 '>  __pyx_t_6 = 2;
-  __pyx_t_5 = (*((double *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_6 * __pyx_v_q.strides[0]) )));
-  __pyx_t_7 = 0;
-  __pyx_t_3 = (*((double *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_7 * __pyx_v_q.strides[0]) )));
-  if (unlikely(__pyx_t_3 == 0)) {
-    <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-    <span class='error_goto'>__PYX_ERR(0, 36, __pyx_L1_error)</span>
-  }
-  __pyx_v_e = ((__pyx_t_5 / __pyx_t_3) - ((0.5 * __pyx_v_u) * __pyx_v_u));
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">035</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">u</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">q</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span></pre>
+<pre class='cython code score-0 '>  __pyx_t_2 = 1;
+  __pyx_t_3 = 0;
+  __pyx_v_u = ((*((double *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_2 * __pyx_v_q.strides[0]) ))) / (*((double *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_3 * __pyx_v_q.strides[0]) ))));
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">036</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">e</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="mf">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">q</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">u</span> <span class="o">*</span> <span class="n">u</span></pre>
+<pre class='cython code score-0 '>  __pyx_t_4 = 2;
+  __pyx_t_5 = 0;
+  __pyx_v_e = (((*((double *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_4 * __pyx_v_q.strides[0]) ))) / (*((double *) ( /* dim=0 */ (__pyx_v_q.data + __pyx_t_5 * __pyx_v_q.strides[0]) )))) - ((0.5 * __pyx_v_u) * __pyx_v_u));
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">037</span>:     <span class="k">return</span> <span class="n">ro</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">e</span></pre>
-<pre class='cython code score-0 '>  __pyx_t_8.f0 = __pyx_v_ro;
-  __pyx_t_8.f1 = __pyx_v_u;
-  __pyx_t_8.f2 = __pyx_v_e;
-  __pyx_r = __pyx_t_8;
+<pre class='cython code score-0 '>  __pyx_t_6.f0 = __pyx_v_ro;
+  __pyx_t_6.f1 = __pyx_v_u;
+  __pyx_t_6.f2 = __pyx_v_e;
+  __pyx_r = __pyx_t_6;
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">038</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">039</span>: <span class="nd">@cython</span><span class="o">.</span><span class="n">boundscheck</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">040</span>: <span class="nd">@cython</span><span class="o">.</span><span class="n">wraparound</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span></pre>
-<pre class="cython line score-87" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">041</span>: <span class="k">cpdef</span> <span class="kr">inline</span> <span class="kt">double</span> <span class="nf">roe_to_p</span><span class="p">(</span></pre>
-<pre class='cython code score-87 '>static PyObject *__pyx_pw_8gaslayer_7roe_to_p(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+<pre class="cython line score-85" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">041</span>: <span class="k">cpdef</span> <span class="kr">inline</span> <span class="kt">double</span> <span class="nf">roe_to_p</span><span class="p">(</span></pre>
+<pre class='cython code score-85 '>static PyObject *__pyx_pw_8gaslayer_7roe_to_p(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static CYTHON_INLINE double __pyx_f_8gaslayer_roe_to_p(double __pyx_v_ro, double __pyx_v_e, double __pyx_v_gamma, double __pyx_v_b, CYTHON_UNUSED int __pyx_skip_dispatch) {
   double __pyx_r;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("roe_to_p", 0);
 /* … */
   /* function exit code */
-  __pyx_L1_error:;
-  <span class='pyx_c_api'>__Pyx_WriteUnraisable</span>("gaslayer.roe_to_p", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_r = 0;
   __pyx_L0:;
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
@@ -837,30 +819,21 @@ static PyObject *__pyx_pf_8gaslayer_6roe_to_p(CYTHON_UNUSED PyObject *__pyx_self
 <pre class="cython line score-0">&#xA0;<span class="">044</span>:     <span class="n">double</span> <span class="n">gamma</span><span class="p">,</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">045</span>:     <span class="n">double</span> <span class="n">b</span><span class="p">):</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">046</span>: </pre>
-<pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">047</span>:     <span class="k">return</span> <span class="p">(</span><span class="n">gamma</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="o">*</span><span class="n">e</span><span class="o">*</span><span class="n">ro</span><span class="o">/</span><span class="p">(</span><span class="mf">1</span><span class="o">-</span><span class="n">b</span><span class="o">*</span><span class="n">ro</span><span class="p">)</span></pre>
-<pre class='cython code score-5 '>  __pyx_t_1 = (((__pyx_v_gamma - 1.0) * __pyx_v_e) * __pyx_v_ro);
-  __pyx_t_2 = (1.0 - (__pyx_v_b * __pyx_v_ro));
-  if (unlikely(__pyx_t_2 == 0)) {
-    <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-    <span class='error_goto'>__PYX_ERR(0, 47, __pyx_L1_error)</span>
-  }
-  __pyx_r = (__pyx_t_1 / __pyx_t_2);
+<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">047</span>:     <span class="k">return</span> <span class="p">(</span><span class="n">gamma</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="o">*</span><span class="n">e</span><span class="o">*</span><span class="n">ro</span><span class="o">/</span><span class="p">(</span><span class="mf">1</span><span class="o">-</span><span class="n">b</span><span class="o">*</span><span class="n">ro</span><span class="p">)</span></pre>
+<pre class='cython code score-0 '>  __pyx_r = ((((__pyx_v_gamma - 1.0) * __pyx_v_e) * __pyx_v_ro) / (1.0 - (__pyx_v_b * __pyx_v_ro)));
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">048</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">049</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">050</span>: <span class="nd">@cython</span><span class="o">.</span><span class="n">boundscheck</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">051</span>: <span class="nd">@cython</span><span class="o">.</span><span class="n">wraparound</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span></pre>
-<pre class="cython line score-87" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">052</span>: <span class="k">cpdef</span> <span class="kr">inline</span> <span class="kt">double</span> <span class="nf">rop_to_e</span><span class="p">(</span></pre>
-<pre class='cython code score-87 '>static PyObject *__pyx_pw_8gaslayer_9rop_to_e(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+<pre class="cython line score-85" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">052</span>: <span class="k">cpdef</span> <span class="kr">inline</span> <span class="kt">double</span> <span class="nf">rop_to_e</span><span class="p">(</span></pre>
+<pre class='cython code score-85 '>static PyObject *__pyx_pw_8gaslayer_9rop_to_e(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static CYTHON_INLINE double __pyx_f_8gaslayer_rop_to_e(double __pyx_v_ro, double __pyx_v_p, double __pyx_v_gamma, double __pyx_v_b, CYTHON_UNUSED int __pyx_skip_dispatch) {
   double __pyx_r;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("rop_to_e", 0);
 /* … */
   /* function exit code */
-  __pyx_L1_error:;
-  <span class='pyx_c_api'>__Pyx_WriteUnraisable</span>("gaslayer.rop_to_e", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_r = 0;
   __pyx_L0:;
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
@@ -975,33 +948,20 @@ static PyObject *__pyx_pf_8gaslayer_8rop_to_e(CYTHON_UNUSED PyObject *__pyx_self
 <pre class="cython line score-0">&#xA0;<span class="">055</span>:     <span class="n">double</span> <span class="n">gamma</span><span class="p">,</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">056</span>:     <span class="n">double</span> <span class="n">b</span><span class="p">):</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">057</span>: </pre>
-<pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">058</span>:     <span class="k">return</span> <span class="n">p</span><span class="o">*</span><span class="p">(</span><span class="mf">1</span><span class="o">/</span><span class="n">ro</span><span class="o">-</span><span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span></pre>
-<pre class='cython code score-10 '>  if (unlikely(__pyx_v_ro == 0)) {
-    <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-    <span class='error_goto'>__PYX_ERR(0, 58, __pyx_L1_error)</span>
-  }
-  __pyx_t_1 = (__pyx_v_p * ((1.0 / __pyx_v_ro) - __pyx_v_b));
-  __pyx_t_2 = (__pyx_v_gamma - 1.0);
-  if (unlikely(__pyx_t_2 == 0)) {
-    <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-    <span class='error_goto'>__PYX_ERR(0, 58, __pyx_L1_error)</span>
-  }
-  __pyx_r = (__pyx_t_1 / __pyx_t_2);
+<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">058</span>:     <span class="k">return</span> <span class="n">p</span><span class="o">*</span><span class="p">(</span><span class="mf">1</span><span class="o">/</span><span class="n">ro</span><span class="o">-</span><span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">gamma</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span></pre>
+<pre class='cython code score-0 '>  __pyx_r = ((__pyx_v_p * ((1.0 / __pyx_v_ro) - __pyx_v_b)) / (__pyx_v_gamma - 1.0));
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">059</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">060</span>: <span class="nd">@cython</span><span class="o">.</span><span class="n">boundscheck</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">061</span>: <span class="nd">@cython</span><span class="o">.</span><span class="n">wraparound</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span></pre>
-<pre class="cython line score-87" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">062</span>: <span class="k">cpdef</span> <span class="kr">inline</span> <span class="kt">double</span> <span class="nf">rop_to_csound</span><span class="p">(</span></pre>
-<pre class='cython code score-87 '>static PyObject *__pyx_pw_8gaslayer_11rop_to_csound(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+<pre class="cython line score-85" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">062</span>: <span class="k">cpdef</span> <span class="kr">inline</span> <span class="kt">double</span> <span class="nf">rop_to_csound</span><span class="p">(</span></pre>
+<pre class='cython code score-85 '>static PyObject *__pyx_pw_8gaslayer_11rop_to_csound(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static CYTHON_INLINE double __pyx_f_8gaslayer_rop_to_csound(double __pyx_v_ro, double __pyx_v_p, double __pyx_v_gamma, double __pyx_v_b, CYTHON_UNUSED int __pyx_skip_dispatch) {
   double __pyx_r;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("rop_to_csound", 0);
 /* … */
   /* function exit code */
-  __pyx_L1_error:;
-  <span class='pyx_c_api'>__Pyx_WriteUnraisable</span>("gaslayer.rop_to_csound", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_r = 0;
   __pyx_L0:;
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
@@ -1116,24 +1076,15 @@ static PyObject *__pyx_pf_8gaslayer_10rop_to_csound(CYTHON_UNUSED PyObject *__py
 <pre class="cython line score-0">&#xA0;<span class="">065</span>:     <span class="n">double</span> <span class="n">gamma</span><span class="p">,</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">066</span>:     <span class="n">double</span> <span class="n">b</span><span class="p">):</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">067</span>: </pre>
-<pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">068</span>:     <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="p">((</span><span class="mf">1</span><span class="o">/</span><span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="n">ro</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1</span> <span class="o">-</span> <span class="n">b</span><span class="o">*</span><span class="n">ro</span><span class="p">)))</span></pre>
-<pre class='cython code score-10 '>  if (unlikely(__pyx_v_gamma == 0)) {
-    <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-    <span class='error_goto'>__PYX_ERR(0, 68, __pyx_L1_error)</span>
-  }
-  __pyx_t_1 = (((1.0 / __pyx_v_gamma) * __pyx_v_ro) * (1.0 - (__pyx_v_b * __pyx_v_ro)));
-  if (unlikely(__pyx_t_1 == 0)) {
-    <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-    <span class='error_goto'>__PYX_ERR(0, 68, __pyx_L1_error)</span>
-  }
-  __pyx_r = sqrt((__pyx_v_p / __pyx_t_1));
+<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">068</span>:     <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="p">((</span><span class="mf">1</span><span class="o">/</span><span class="n">gamma</span><span class="p">)</span> <span class="o">*</span> <span class="n">ro</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1</span> <span class="o">-</span> <span class="n">b</span><span class="o">*</span><span class="n">ro</span><span class="p">)))</span></pre>
+<pre class='cython code score-0 '>  __pyx_r = sqrt((__pyx_v_p / (((1.0 / __pyx_v_gamma) * __pyx_v_ro) * (1.0 - (__pyx_v_b * __pyx_v_ro)))));
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">069</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">070</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">071</span>: <span class="nd">@cython</span><span class="o">.</span><span class="n">boundscheck</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">072</span>: <span class="nd">@cython</span><span class="o">.</span><span class="n">wraparound</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span></pre>
-<pre class="cython line score-196" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">073</span>: <span class="k">cpdef</span> (<span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="kt">double</span>) <span class="nf">AUSM_gas_</span><span class="p">(</span></pre>
-<pre class='cython code score-196 '>static PyObject *__pyx_pw_8gaslayer_13AUSM_gas_(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+<pre class="cython line score-194" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">073</span>: <span class="k">cpdef</span> (<span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="kt">double</span>) <span class="nf">AUSM_gas_</span><span class="p">(</span></pre>
+<pre class='cython code score-194 '>static PyObject *__pyx_pw_8gaslayer_13AUSM_gas_(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static __pyx_ctuple_double__and_double__and_double __pyx_f_8gaslayer_AUSM_gas_(double __pyx_v_p1, double __pyx_v_ro1, double __pyx_v_u1, double __pyx_v_e1, double __pyx_v_c1, double __pyx_v_p2, double __pyx_v_ro2, double __pyx_v_u2, double __pyx_v_e2, double __pyx_v_c2, double __pyx_v_vbi, CYTHON_UNUSED int __pyx_skip_dispatch) {
   double __pyx_v_r1;
   double __pyx_v_r2;
@@ -1158,9 +1109,6 @@ static __pyx_ctuple_double__and_double__and_double __pyx_f_8gaslayer_AUSM_gas_(d
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("AUSM_gas_", 0);
 /* … */
   /* function exit code */
-  __pyx_L1_error:;
-  <span class='pyx_c_api'>__Pyx_WriteUnraisable</span>("gaslayer.AUSM_gas_", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __Pyx_pretend_to_initialize(&amp;__pyx_r);
   __pyx_L0:;
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
@@ -1363,35 +1311,17 @@ static PyObject *__pyx_pf_8gaslayer_12AUSM_gas_(CYTHON_UNUSED PyObject *__pyx_se
 <pre class='cython code score-0 '>  __pyx_v_r1 = __pyx_v_ro1;
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">087</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">r2</span><span class="o">=</span><span class="n">ro2</span></pre>
 <pre class='cython code score-0 '>  __pyx_v_r2 = __pyx_v_ro2;
-</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">088</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">H1</span> <span class="o">=</span> <span class="n">e1</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">u1</span><span class="o">*</span><span class="n">u1</span> <span class="o">+</span> <span class="n">p1</span><span class="o">/</span><span class="n">r1</span></pre>
-<pre class='cython code score-5 '>  if (unlikely(__pyx_v_r1 == 0)) {
-    <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-    <span class='error_goto'>__PYX_ERR(0, 88, __pyx_L1_error)</span>
-  }
-  __pyx_v_H1 = ((__pyx_v_e1 + ((0.5 * __pyx_v_u1) * __pyx_v_u1)) + (__pyx_v_p1 / __pyx_v_r1));
-</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">089</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">H2</span> <span class="o">=</span> <span class="n">e2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">u2</span><span class="o">*</span><span class="n">u2</span> <span class="o">+</span> <span class="n">p2</span><span class="o">/</span><span class="n">r2</span></pre>
-<pre class='cython code score-5 '>  if (unlikely(__pyx_v_r2 == 0)) {
-    <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-    <span class='error_goto'>__PYX_ERR(0, 89, __pyx_L1_error)</span>
-  }
-  __pyx_v_H2 = ((__pyx_v_e2 + ((0.5 * __pyx_v_u2) * __pyx_v_u2)) + (__pyx_v_p2 / __pyx_v_r2));
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">088</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">H1</span> <span class="o">=</span> <span class="n">e1</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">u1</span><span class="o">*</span><span class="n">u1</span> <span class="o">+</span> <span class="n">p1</span><span class="o">/</span><span class="n">r1</span></pre>
+<pre class='cython code score-0 '>  __pyx_v_H1 = ((__pyx_v_e1 + ((0.5 * __pyx_v_u1) * __pyx_v_u1)) + (__pyx_v_p1 / __pyx_v_r1));
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">089</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">H2</span> <span class="o">=</span> <span class="n">e2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">u2</span><span class="o">*</span><span class="n">u2</span> <span class="o">+</span> <span class="n">p2</span><span class="o">/</span><span class="n">r2</span></pre>
+<pre class='cython code score-0 '>  __pyx_v_H2 = ((__pyx_v_e2 + ((0.5 * __pyx_v_u2) * __pyx_v_u2)) + (__pyx_v_p2 / __pyx_v_r2));
 </pre><pre class="cython line score-0">&#xA0;<span class="">090</span>: </pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">091</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">cs</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">c1</span><span class="o">+</span><span class="n">c2</span><span class="p">)</span></pre>
 <pre class='cython code score-0 '>  __pyx_v_cs = (0.5 * (__pyx_v_c1 + __pyx_v_c2));
-</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">092</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">Mr1</span> <span class="o">=</span> <span class="p">(</span><span class="n">u1</span><span class="o">-</span><span class="n">vbi</span><span class="p">)</span><span class="o">/</span><span class="n">cs</span></pre>
-<pre class='cython code score-5 '>  __pyx_t_1 = (__pyx_v_u1 - __pyx_v_vbi);
-  if (unlikely(__pyx_v_cs == 0)) {
-    <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-    <span class='error_goto'>__PYX_ERR(0, 92, __pyx_L1_error)</span>
-  }
-  __pyx_v_Mr1 = (__pyx_t_1 / __pyx_v_cs);
-</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">093</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">Mr2</span> <span class="o">=</span> <span class="p">(</span><span class="n">u2</span><span class="o">-</span><span class="n">vbi</span><span class="p">)</span><span class="o">/</span><span class="n">cs</span></pre>
-<pre class='cython code score-5 '>  __pyx_t_1 = (__pyx_v_u2 - __pyx_v_vbi);
-  if (unlikely(__pyx_v_cs == 0)) {
-    <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-    <span class='error_goto'>__PYX_ERR(0, 93, __pyx_L1_error)</span>
-  }
-  __pyx_v_Mr2 = (__pyx_t_1 / __pyx_v_cs);
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">092</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">Mr1</span> <span class="o">=</span> <span class="p">(</span><span class="n">u1</span><span class="o">-</span><span class="n">vbi</span><span class="p">)</span><span class="o">/</span><span class="n">cs</span></pre>
+<pre class='cython code score-0 '>  __pyx_v_Mr1 = ((__pyx_v_u1 - __pyx_v_vbi) / __pyx_v_cs);
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">093</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">Mr2</span> <span class="o">=</span> <span class="p">(</span><span class="n">u2</span><span class="o">-</span><span class="n">vbi</span><span class="p">)</span><span class="o">/</span><span class="n">cs</span></pre>
+<pre class='cython code score-0 '>  __pyx_v_Mr2 = ((__pyx_v_u2 - __pyx_v_vbi) / __pyx_v_cs);
 </pre><pre class="cython line score-0">&#xA0;<span class="">094</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">095</span>:     <span class="c"># ! Vacuum solution (?)</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">096</span>:     <span class="c"># uvac = 2.0*g(4)*cs - du</span></pre>
@@ -1402,20 +1332,15 @@ static PyObject *__pyx_pf_8gaslayer_12AUSM_gas_(CYTHON_UNUSED PyObject *__pyx_se
 <pre class="cython line score-0">&#xA0;<span class="">101</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">102</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">M4p</span><span class="p">,</span> <span class="nf">P5p</span><span class="p">,</span> <span class="nf">M4m</span><span class="p">,</span> <span class="nf">P5m</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">103</span>:     <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Mr1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">1.0</span> <span class="p">:</span></pre>
-<pre class='cython code score-0 '>  __pyx_t_2 = ((fabs(__pyx_v_Mr1) &gt;= 1.0) != 0);
-  if (__pyx_t_2) {
+<pre class='cython code score-0 '>  __pyx_t_1 = ((fabs(__pyx_v_Mr1) &gt;= 1.0) != 0);
+  if (__pyx_t_1) {
 /* … */
     goto __pyx_L3;
   }
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">104</span>:         <span class="n">M4p</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">Mr1</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">Mr1</span><span class="p">))</span></pre>
 <pre class='cython code score-0 '>    __pyx_v_M4p = (0.5 * (__pyx_v_Mr1 + fabs(__pyx_v_Mr1)));
-</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">105</span>:         <span class="n">P5p</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">Mr1</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">Mr1</span><span class="p">))</span><span class="o">/</span><span class="n">Mr1</span></pre>
-<pre class='cython code score-5 '>    __pyx_t_1 = (0.5 * (__pyx_v_Mr1 + fabs(__pyx_v_Mr1)));
-    if (unlikely(__pyx_v_Mr1 == 0)) {
-      <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-      <span class='error_goto'>__PYX_ERR(0, 105, __pyx_L1_error)</span>
-    }
-    __pyx_v_P5p = (__pyx_t_1 / __pyx_v_Mr1);
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">105</span>:         <span class="n">P5p</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">Mr1</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">Mr1</span><span class="p">))</span><span class="o">/</span><span class="n">Mr1</span></pre>
+<pre class='cython code score-0 '>    __pyx_v_P5p = ((0.5 * (__pyx_v_Mr1 + fabs(__pyx_v_Mr1))) / __pyx_v_Mr1);
 </pre><pre class="cython line score-0">&#xA0;<span class="">106</span>:     <span class="k">else</span><span class="p">:</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">107</span>:         <span class="n">M4p</span> <span class="o">=</span> <span class="mf">0.25</span><span class="o">*</span><span class="p">((</span><span class="n">Mr1</span><span class="o">+</span><span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Mr1</span><span class="o">+</span><span class="mf">1.0</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">+</span><span class="mf">2.0</span><span class="o">*</span><span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">Mr1</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Mr1</span><span class="o">-</span><span class="mf">1.0</span><span class="p">))</span></pre>
 <pre class='cython code score-0 '>  /*else*/ {
@@ -1426,20 +1351,15 @@ static PyObject *__pyx_pf_8gaslayer_12AUSM_gas_(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_L3:;
 </pre><pre class="cython line score-0">&#xA0;<span class="">109</span>: </pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">110</span>:     <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Mr2</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">1.0</span><span class="p">:</span></pre>
-<pre class='cython code score-0 '>  __pyx_t_2 = ((fabs(__pyx_v_Mr2) &gt;= 1.0) != 0);
-  if (__pyx_t_2) {
+<pre class='cython code score-0 '>  __pyx_t_1 = ((fabs(__pyx_v_Mr2) &gt;= 1.0) != 0);
+  if (__pyx_t_1) {
 /* … */
     goto __pyx_L4;
   }
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">111</span>:         <span class="n">M4m</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">Mr2</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">Mr2</span><span class="p">))</span></pre>
 <pre class='cython code score-0 '>    __pyx_v_M4m = (0.5 * (__pyx_v_Mr2 - fabs(__pyx_v_Mr2)));
-</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">112</span>:         <span class="n">P5m</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">Mr2</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">Mr2</span><span class="p">))</span><span class="o">/</span><span class="n">Mr2</span></pre>
-<pre class='cython code score-5 '>    __pyx_t_1 = (0.5 * (__pyx_v_Mr2 - fabs(__pyx_v_Mr2)));
-    if (unlikely(__pyx_v_Mr2 == 0)) {
-      <span class='py_c_api'>PyErr_SetString</span>(PyExc_ZeroDivisionError, "float division");
-      <span class='error_goto'>__PYX_ERR(0, 112, __pyx_L1_error)</span>
-    }
-    __pyx_v_P5m = (__pyx_t_1 / __pyx_v_Mr2);
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">112</span>:         <span class="n">P5m</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">Mr2</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">Mr2</span><span class="p">))</span><span class="o">/</span><span class="n">Mr2</span></pre>
+<pre class='cython code score-0 '>    __pyx_v_P5m = ((0.5 * (__pyx_v_Mr2 - fabs(__pyx_v_Mr2))) / __pyx_v_Mr2);
 </pre><pre class="cython line score-0">&#xA0;<span class="">113</span>:     <span class="k">else</span><span class="p">:</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">114</span>:         <span class="n">M4m</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.25</span><span class="o">*</span><span class="p">((</span><span class="n">Mr2</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Mr2</span><span class="o">-</span><span class="mf">1.0</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">+</span><span class="mf">2.0</span><span class="o">*</span><span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">Mr2</span><span class="o">+</span><span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Mr2</span><span class="o">+</span><span class="mf">1.0</span><span class="p">))</span></pre>
 <pre class='cython code score-0 '>  /*else*/ {
@@ -1466,10 +1386,10 @@ static PyObject *__pyx_pf_8gaslayer_12AUSM_gas_(CYTHON_UNUSED PyObject *__pyx_se
 <pre class='cython code score-0 '>  __pyx_v_flux3 = ((0.5 * (((__pyx_v_cs * __pyx_v_Mrf) * (((__pyx_v_phi1 * __pyx_v_r1) * __pyx_v_H1) + ((__pyx_v_phi2 * __pyx_v_r2) * __pyx_v_H2))) - ((__pyx_v_cs * fabs(__pyx_v_Mrf)) * (((__pyx_v_phi2 * __pyx_v_r2) * __pyx_v_H2) - ((__pyx_v_phi1 * __pyx_v_r1) * __pyx_v_H1))))) + (__pyx_v_pf * __pyx_v_vbi));
 </pre><pre class="cython line score-0">&#xA0;<span class="">125</span>: </pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">126</span>:     <span class="k">return</span> <span class="n">flux1</span><span class="p">,</span> <span class="n">flux2</span><span class="p">,</span> <span class="n">flux3</span></pre>
-<pre class='cython code score-0 '>  __pyx_t_3.f0 = __pyx_v_flux1;
-  __pyx_t_3.f1 = __pyx_v_flux2;
-  __pyx_t_3.f2 = __pyx_v_flux3;
-  __pyx_r = __pyx_t_3;
+<pre class='cython code score-0 '>  __pyx_t_2.f0 = __pyx_v_flux1;
+  __pyx_t_2.f1 = __pyx_v_flux2;
+  __pyx_t_2.f2 = __pyx_v_flux3;
+  __pyx_r = __pyx_t_2;
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">127</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">128</span>: <span class="k">cdef</span> <span class="k">class</span> <span class="nf">GasLayer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span></pre>
