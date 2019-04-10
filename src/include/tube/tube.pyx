@@ -1,7 +1,5 @@
 # distutils: language=c++
-# cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True
-
-
+# cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True, initializedcheck=False
 # cimport numpy as cnp
 from copy import deepcopy
 import cython
@@ -55,8 +53,6 @@ cdef class InterpXY(object):
     def __str__(self):
         return repr(self)
     
-    @cython.boundscheck(False)
-    @cython.wraparound(False)   
     cpdef double get_v(self, double x):
         """
         double get_v(self, double x):
@@ -71,21 +67,20 @@ cdef class InterpXY(object):
         self.n = n
         return self.ks[n] * tt + self.bs[n]
 
-    @cython.boundscheck(False)
-    @cython.wraparound(False)
+    cpdef void fill_vs(self, double[:] xs, double[:] vs):
+        cdef size_t i
+        for i in range(xs.shape[0]):
+            vs[i] = self.get_v(xs[i])
+
     cpdef double[:] get_vs(self, double[:] xs):
         """
         double[:] get_vs(self, double[:] xs)
         Возвращает интерполированные значения функции в точках 'x'
         """
-        cdef double[:] res = np.empty(len(xs), dtype=np.double)
-        cdef size_t i
-        for i in range(len(res)):
-            res[i] = self.get_v(xs[i])
-        return res
+        cdef double[:] result = np.empty(len(xs), dtype=np.double)
+        self.fill_vs(xs, result)
+        return result
         
-    @cython.boundscheck(False)
-    @cython.wraparound(False)
     cdef int set_n(self, double t):
         cdef int n = self.n
         if n < 0:
@@ -123,10 +118,9 @@ cdef class InterpXY(object):
         n = minw
         return n
     
-    @cython.boundscheck(False)
-    @cython.wraparound(False)
+
     cdef void sync_ks_bs(self):
-        self.length = len(self.xs)
+        self.length = self.xs.shape[0]
         cdef size_t i
         for i in range(self.length):
             self.ks[i] = (self.ys[i + 1] - self.ys[i]) / (self.xs[i + 1] - self.xs[i])
@@ -180,6 +174,9 @@ cdef class Tube(object):
         """
         return self.d.get_v(x)
     
+    cpdef void fill_ds(self, double[:] xs, double[:] ds):
+        self.d.fill_vs(xs, ds)
+
     cpdef double[:] get_ds(self, double[:] xs=None):
         """
         double[:] get_ds(self, double[:] xs=None)
@@ -196,9 +193,18 @@ cdef class Tube(object):
         Возвращает координаты 'xs' точек из конструктора
         """
         return np.array(self.d.xs)
-    
-    @cython.boundscheck(False)
-    @cython.wraparound(False)    
+
+
+    cpdef void fill_dsdx(self, double[:] xs, double[:] dsdx):
+        cdef size_t i
+        cdef double dx, si ,si1
+        si = self.s.get_v(xs[0])
+        for i in range(dsdx.shape[0]):
+            si1  = self.s.get_v(xs[i+1])
+            dx = xs[i+1] - xs[i]
+            dsdx[i] = (si1-si)/dx
+            si = si1
+
     cpdef double[:] get_dsdx(self, double[:] xs):
         """
         double[:] get_dsdx(self, double[:] xs)
@@ -206,34 +212,31 @@ cdef class Tube(object):
         НО это производные (Sx_i+1 - Sx_i)/dx, а не самой трубы. 
         Так же len(result) == len(xs) - 1
         """
-        cdef double[:] res = np.empty(len(xs)-1, dtype=np.double)
-        cdef size_t i
-        cdef double dx, si ,si1
-        si = self.s.get_v(xs[0])
-        for i in range(len(res)):
-            si1  = self.s.get_v(xs[i+1])
-            dx = xs[i+1] - xs[i]
-            res[i] = (si1-si)/dx
-            si = si1
-        return res
+        cdef double[:] dsdx = np.empty(xs.shape[0]-1, dtype=np.double)
+        self.fill_dsdx(xs, dsdx)
+        return dsdx
     
-    @cython.boundscheck(False)
-    @cython.wraparound(False)      
+    cpdef void fill_W(self, double[:] xs, double[:] W):
+        cdef size_t i
+        cdef double wi ,wi1
+        wi = self.w.get_v(xs[0])
+        for i in range(W.shape[0]):
+            wi1  = self.w.get_v(xs[i+1])
+            W[i] = wi1 - wi
+            wi = wi1        
+
     cpdef double[:] get_W(self, double[:] xs):
         """
         double[:] get_W(self, double[:] xs)
         метод возвращает объемы трубы, находящиеся между точками
         len(result) == len(xs) - 1
         """
-        cdef double[:] res = np.empty(len(xs)-1, dtype=np.double)
-        cdef size_t i
-        cdef double wi ,wi1
-        wi = self.w.get_v(xs[0])
-        for i in range(len(res)):
-            wi1  = self.w.get_v(xs[i+1])
-            res[i] = wi1 - wi
-            wi = wi1
+        cdef double[:] res = np.empty(xs.shape[0]-1, dtype=np.double)
+        self.fill_W(xs, res)
         return res  
+
+    cpdef void fill_S(self, double[:] xs, double[:] S):
+        self.s.fill_vs(xs, S)
         
     cpdef double[:] get_S(self, double[:] xs):
         """

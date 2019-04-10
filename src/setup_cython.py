@@ -69,20 +69,22 @@ if __name__ == '__main__':
             "tube": {
                 "Extention_kwargs":  { "include_dirs":[numpy.get_include()] }
             }, 
-            
-            "gaslayer": {
-                "Extention_kwargs":{},
-                "depends": ["tube"]
-            },
             "godunov": {
                 "Extention_kwargs":{}
                 
-            }     
+            } ,          
+            "gaslayer": {
+                "Extention_kwargs":{},
+                "depends": ["tube", "godunov"]
+            },
+     
         }
 
-    cleanstuff()
-    compile_bicycle(packages)
-    cleanstuff()
+    try:
+        cleanstuff()
+        compile_bicycle(packages)
+    finally:
+        cleanstuff()
         
         # true_mod_name='all'
         # extentions = [

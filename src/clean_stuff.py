@@ -20,6 +20,8 @@ def cleanstuff(remove_build=True, remove_cpp=True, rename_pyd=True):
     if remove_cpp:
         for file_cpp in multiple_file_types('*.cpp', "*.c"):
             try:
+                if 'src' not in os.path.abspath(file_cpp):
+                    continue
                 print(f"Try remove '{file_cpp}' file...", end=' ')
                 os.remove(file_cpp)
                 print("Done")

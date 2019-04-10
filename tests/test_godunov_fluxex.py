@@ -8,8 +8,17 @@ sys.path.append(wd+"\\src")
 import numpy as np
 import pytest
 from pytest import approx
-from godunov_python import Godunov_fluxes_python
+from godunov_python import Godunov_fluxes_python, Godunov_fluxes_cython
 from gaslayer import rop_to_csound, rop_to_e, roe_to_p
+
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+def get_fluxes_foo(**kwargs):
+    # return Godunov_gas_(p1, ro1, u1, e1, c1, p2, ro2, u2, e2, c2, vbi)
+    return Godunov_fluxes_cython(**kwargs)
+    # return Godunov_fluxes_python(**kwargs)
 
 
 
@@ -264,9 +273,7 @@ def test_Godunov_gas_simmetric_flux_TREE_cells_f3(random_values4fluxes, random_v
 
 
 
-def get_fluxes_foo(**kwargs):
-    # return Godunov_gas_(p1, ro1, u1, e1, c1, p2, ro2, u2, e2, c2, vbi)
-    return Godunov_fluxes_python(**kwargs)
+
 
     
 

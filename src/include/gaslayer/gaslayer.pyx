@@ -1,9 +1,12 @@
 # distutils: language=c++
-# cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True
+# cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True, initializedcheck=False
 
 from tube cimport Tube
 import cython
-from libc.math cimport pi, sqrt, abs, copysign
+from libc.math cimport pi, sqrt, abs, copysign, abs
+from godunov cimport get_e_13_1, get_p_13_1, get_c_13_8, mega_foo_cython, get_ray_URP
+import numpy as np
+# cimport numpy as np
 
 
 cpdef double foo():
@@ -16,8 +19,6 @@ cpdef double foo():
     cdef double d = t.get_d(4)
     return d
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
 cpdef inline void roue_to_q_(
     double ro,
     double u,
@@ -28,16 +29,14 @@ cpdef inline void roue_to_q_(
     q[1] = ro * u
     q[2] = ro * (e + 0.5 * u * u)
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
+
 cpdef inline (double, double, double) q_to_roue(double[:] q):
     cdef double ro = q[0]
     cdef double u = q[1] / q[0]
     cdef double e = q[2] / q[0] - 0.5 * u * u
     return ro, u, e
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
+
 cpdef inline double roe_to_p(
     double ro,
     double e,
@@ -47,8 +46,7 @@ cpdef inline double roe_to_p(
     return (gamma-1)*e*ro/(1-b*ro)
 
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
+
 cpdef inline double rop_to_e(
     double ro,
     double p,
@@ -57,8 +55,7 @@ cpdef inline double rop_to_e(
 
     return p*(1/ro-b)/(gamma-1)
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
+
 cpdef inline double rop_to_csound(
     double ro,
     double p,
@@ -68,8 +65,7 @@ cpdef inline double rop_to_csound(
     return sqrt(p / ((1/gamma) * ro * (1 - b*ro)))
 
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
+
 cpdef (double, double, double) AUSM_gas_(
     double p1, 
     double ro1, 
@@ -125,8 +121,91 @@ cpdef (double, double, double) AUSM_gas_(
 
     return flux1, flux2, flux3
 
-cdef class GasLayer(object):
-    def __init__(self):
-        pass
 
+cdef class GasEOS(object):
+    def __init__(self, gamma, kappa=0.0, p_0=0.0, c_0=0.0, kind=1):
+        self.gamma = gamma
+        self.kappa = kappa
+        self.p_0 = p_0
+        self.c_0 = c_0
+        self.kind = kind
+
+    cpdef double get_e(self, double ro, double p):
+        if self.kind == 1:
+            return rop_to_e(ro, p, self.gamma, self.kappa)
+        else:
+            return get_e_13_1(p, ro, self.p_0, self.c_0, self.gamma)
+
+    cpdef double get_p(self, double ro, double e):
+        if self.kind == 1:
+            return roe_to_p(ro, e, self.gamma, self.kappa)
+        else:
+            return get_p_13_1(e, ro, self.p_0, self.c_0, self.gamma)
+
+    cpdef double get_csound(self, double ro, double p):
+        if self.kind == 1:
+            return rop_to_csound(ro, p, self.gamma, self.kappa)
+        else:
+            return get_c_13_8(p, ro, self.p_0, self.gamma)
+
+
+cdef class GasLayer(object):
+    def __init__(self, n_cells, tube, gasEOS):
+        self.tube = tube
+        self.gasEOS = gasEOS
+        self.time = 0
+
+        self.xs_cells = np.zeros(n_cells, dtype=np.double)
+        self.xs_borders = np.zeros(n_cells+1, dtype=np.double)
+        self.Vs_borders = np.zeros(n_cells+1, dtype=np.double)
+
+        self.S = np.zeros(n_cells+1, dtype=np.double)
+
+        self.ds = np.zeros(n_cells, dtype=np.double)
+        self.W = np.zeros(n_cells, dtype=np.double)
+
+        self.ps = np.zeros(n_cells, dtype=np.double)
+        self.ros = np.zeros(n_cells, dtype=np.double)
+        self.us = np.zeros(n_cells, dtype=np.double)
+        self.es = np.zeros(n_cells, dtype=np.double)
+
+        self.flux1 = np.zeros(n_cells+1, dtype=np.double)
+        self.flux2 = np.zeros(n_cells+1, dtype=np.double)
+        self.flux3 = np.zeros(n_cells+1, dtype=np.double)
+
+        self.q1 = np.zeros(n_cells, dtype=np.double)
+        self.q2 = np.zeros(n_cells, dtype=np.double)
+        self.q3 = np.zeros(n_cells, dtype=np.double)
+
+    cpdef GasLayer copy(self):
+        cdef GasLayer res = GasLayer(self.n_cells, self.tube, self.gasEOS)
+        res.time = self.time
+
+        res.xs_cells[:] = self.xs_cells
+        res.xs_borders[:] = self.xs_borders
+        res.Vs_borders[:] = self.Vs_borders
+
+        res.S[:] = self.S 
+
+        res.ds[:] = self.ds
+        res.W[:] = self.W
+
+        res.ps[:] = self.ps
+        res.ros[:] = self.ros
+        res.us[:] = self.us
+        res.es[:] = self.es
+
+        res.flux1[:] = self.flux1
+        res.flux2[:] = self.flux2
+        res.flux3[:] = self.flux3
+
+        res.q1[:] = self.q1
+        res.q2[:] = self.q2
+        res.q3[:] = self.q3
+        return res
+
+
+    def init_with_foo(self):
+        pass
     
+

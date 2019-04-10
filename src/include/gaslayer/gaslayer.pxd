@@ -1,5 +1,7 @@
 # distutils: language=c++
-# cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True
+# cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True, initializedcheck=False
+
+from tube cimport Tube
 
 cpdef double foo()
 
@@ -42,5 +44,23 @@ cpdef (double, double, double) AUSM_gas_(
     double c2,
     double vbi)
 
+    
+cdef class GasEOS:
+    cdef public double gamma, kappa, p_0, c_0
+    cdef public int kind 
+    cpdef double get_e(self, double ro, double p)
+    cpdef double get_p(self, double ro, double e)
+    cpdef double get_csound(self, double ro, double p)  
+
 cdef class GasLayer:
-    cdef public double[:] xs_cells, xs_borders, ps, ros, us, es
+    cdef public double[:] xs_cells, xs_borders, Vs_borders, \
+        ps, ros, us, es, \
+        flux1, flux2, flux3, \
+        q1, q2, q3, \
+        ds, S, W
+
+    cdef public Tube tube
+    cdef public GasEOS gasEOS
+    cdef public time
+    cpdef GasLayer copy(self)
+
