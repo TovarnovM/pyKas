@@ -254,6 +254,14 @@ cdef class GridStrecher(object):
         for i in range(vel0_fill.shape[0]):
             vel0_fill[i] = (xs1[i] - xs0[i])/tau
 
+    cpdef void fill_xs_cells(self, double[:] xs_borders, double[:] xs_fill):
+        cdef size_t i
+        for i in range(xs_fill.shape[0]):
+            xs_fill[i] = (xs_borders[i+1] + xs_borders[i])/2
+
+    cpdef void smooth_arr(self, double[:] xs, double[:] vs, double[:] vs_smoothed, double window_part=0.1):
+        pass
+
     
 
 
