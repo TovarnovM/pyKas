@@ -34,6 +34,15 @@ cdef class InterpXY(object):
         self.sync_ks_bs()
         self.n = 0
 
+    cpdef void set_length(self, int length):
+        if length == self.length:
+            return
+        self.length = length
+        self.xs = np.zeros(length, dtype=np.double)
+        self.ys = np.zeros(length, dtype=np.double)
+        self.ks = np.zeros(length, dtype=np.double)
+        self.bs = np.zeros(length, dtype=np.double)
+
     def __call__(self, x):
         """
         Возвращает интерполированное(-ые) значение(-ия) функции в точке(-ах) 'x'

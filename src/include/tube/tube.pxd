@@ -3,13 +3,14 @@
 
 cdef class InterpXY:
     cdef public double[:] xs, ys, ks, bs
-    cdef int length, n 
+    cdef public int length, n 
     cpdef double get_v(self, double x)
     cpdef void fill_vs(self, double[:] xs, double[:] vs)
     cpdef double[:] get_vs(self, double[:] xs)
     cdef int set_n(self, double t)
     cdef void sync_ks_bs(self)
-
+    cpdef void set_length(self, int length)
+    
 cdef class Tube:
     cdef InterpXY d, s, w, w_reverse
     cpdef double get_d(self, double x)

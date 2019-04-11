@@ -1,7 +1,7 @@
 # distutils: language=c++
 # cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True, initializedcheck=False
 
-from tube cimport Tube
+from tube cimport Tube, InterpXY
 
 cpdef double foo()
 
@@ -70,7 +70,9 @@ cdef class GasFluxCalculator:
 
 cdef class GridStrecher:
     cdef public int strech_type
-    cdef public double[:] bufarr
+    cdef public double[:] bufarr,bufarr_border
+    cdef public InterpXY interp_integr
+    cpdef bint evaluate(self, double tau, GasLayer layer)
     cpdef void init_regular(self, double v1, double v2, double[:] vs)
     cpdef void fill_euler_vel0_regular(self, double tau, double[:] xs0, double[:] xs1, double[:] vel0_fill)
     cpdef void fill_xs_cells(self, double[:] xs_borders, double[:] xs_fill)
@@ -87,6 +89,7 @@ cdef class GasLayer:
     cdef public GasEOS gasEOS
     cdef public double time
     cdef public GasFluxCalculator flux_calculator
+    cdef public GridStrecher grid_strecher
     cpdef GasLayer copy(self)
     cpdef void init_ropue_fromfoo(self, foo_ropu)
     cpdef void init_SsdW(self)

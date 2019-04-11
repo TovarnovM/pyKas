@@ -1,7 +1,7 @@
 # distutils: language=c++
 # cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True, initializedcheck=False
 
-from tube cimport Tube
+from tube cimport Tube, InterpXY
 import cython
 from libc.math cimport pi, sqrt, abs, copysign, abs
 from godunov cimport get_e_13_1, get_p_13_1, get_c_13_8, mega_foo_cython, \
@@ -264,6 +264,16 @@ cdef class GridStrecher(object):
     def __init__(self, strech_type=1):
         self.strech_type = strech_type
         self.bufarr = np.zeros(7)
+        self.bufarr_border = np.zeros(7)
+        self.interp_integr = InterpXY([1,2,3], [1,2,3])
+
+    cpdef bint evaluate(self, double tau, GasLayer layer):
+        cdef size_t i
+        for i in range(layer.xs_borders.shape[0]):
+            layer.xs_borders[i] = layer.xs_borders[i] + tau * layer.Vs_borders[i]
+            if i > 0 and layer.xs_borders[i]-layer.xs_borders[i-1] <= 1e-12:
+                return False
+        return True
 
     cpdef void init_regular(self, double v1, double v2, double[:] vs):
         cdef int n = vs.shape[0]
@@ -283,17 +293,37 @@ cdef class GridStrecher(object):
             xs_fill[i] = (xs_borders[i+1] + xs_borders[i])/2
 
     cpdef void smooth_arr(self, double[:] xs, double[:] vs, double[:] vs_smoothed, double window_part=0.1):
-        pass
+        if self.interp_integr.length != vs.shape[0]:
+            self.interp_integr.set_length(vs.shape[0])
+        cdef size_t i
+        self.interp_integr.xs[:] = xs 
+        self.interp_integr.ys[0] = 0 
+        for i in range(1, xs.shape[0]):
+            self.interp_integr.ys[i] = self.interp_integr.ys[i-1] + (xs[i] - xs[i-1])*0.5*(vs[i]+vs[i-1])     
+        self.interp_integr.sync_ks_bs()
+
+        cdef double window = window_part * (xs[xs.shape[0]-1] - xs[0])
+        cdef double left, right
+        for i in range(vs_smoothed.shape[0]):
+            left = xs[i] - window
+            if left < xs[0]:
+                left = xs[0]
+            right =  xs[i] + window
+            if right > xs[xs.shape[0]-1]:
+                right = xs[xs.shape[0]-1]
+            vs_smoothed[i] = (self.interp_integr.get_v(right) - self.interp_integr.get_v(left))/(right-left)
+        
 
     
 
 
 cdef class GasLayer(object):
-    def __init__(self, n_cells, Tube tube, GasEOS gasEOS, GasFluxCalculator flux_calculator):
+    def __init__(self, n_cells, Tube tube, GasEOS gasEOS, GasFluxCalculator flux_calculator, GridStrecher grid_strecher):
         self.tube = tube
         self.gasEOS = gasEOS
         self.time = 0
         self.flux_calculator = flux_calculator
+        self.grid_strecher = grid_strecher
         
         self.xs_cells = np.zeros(n_cells, dtype=np.double)
         self.xs_borders = np.zeros(n_cells+1, dtype=np.double)
@@ -323,7 +353,7 @@ cdef class GasLayer(object):
         self.q3 = np.zeros(n_cells, dtype=np.double)
 
     cpdef GasLayer copy(self):
-        cdef GasLayer res = GasLayer(self.n_cells, self.tube, self.gasEOS, self.flux_calculator)
+        cdef GasLayer res = GasLayer(self.n_cells, self.tube, self.gasEOS, self.flux_calculator, self.grid_strecher)
         res.time = self.time
 
         res.xs_cells[:] = self.xs_cells
@@ -393,6 +423,12 @@ cdef class GasLayer(object):
             self.us[i] = u
             self.es[i] = e
             self.cs[i] = self.gasEOS.get_csound(ro, p)
+
+    # cpdef GasLayer euler_step(self, double tau, GasLayer layer_dq=None, GasLayer):
+    #     if layer_dq is None:
+    #         layer_dq = self
+    #     cdef GasLayer layer_res = self.clone()
+    #     layer_res.grid_strecher.evaluate(tau, layer_res)
 
     # cpdef init_fluxes_AUSM()
     
