@@ -12,14 +12,14 @@ from tube import Tube
 from gaslayer import GasLayer, GasEOS, GridStrecher, GasFluxCalculator
 
 def test_adapt():
-    n = 1000
     gs = GridStrecher()
+    n = 100#np.random.randint(10,100)
     for i in range(1000):
         n = np.random.randint(10,1000)
-        x1 = np.random.uniform(-1000,2000)
+        xx1 = np.random.uniform(-1000,2000)
         l = np.random.uniform(0.001, 2000)
-        xs = np.linspace(x1, x1+l, n)
-        xs_borders = np.linspace(x1, x1+l, n+1)
+        xs = np.linspace(xx1, xx1+l, n)
+        xs_borders = np.linspace(xx1, xx1+l, n+1)
 
         ys = 100000*np.sin(xs)  
         xs_adapted = np.zeros_like(xs_borders)
@@ -74,4 +74,5 @@ def _plot2():
     plt.show()
 
 if __name__ == "__main__":
+    _plot()
     _plot2()

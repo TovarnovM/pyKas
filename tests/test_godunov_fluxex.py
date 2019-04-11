@@ -191,7 +191,7 @@ def test_Godunov_gas_border_wall_f3(random_values4fluxes):
             p=p, ro=ro, u=-u, c=c,
             left_border=False,
             vbi=-vbi, e_foo=e_foo, gamma=gamma)
-        assert f23 == approx(-f13, abs=1e-5)
+        assert f23 == approx(-f13, abs=1e-3)
 
 def test_Godunov_gas_simmetric_flux_f1(random_values4fluxes, random_values4fluxes2):
     for (ro1, e1, p1, c1, u1, vbi, gamma, b, e_foo), (ro2, e2, p2, c2, u2, vbi2, gamma2, b2, e_foo2) in zip(random_values4fluxes, random_values4fluxes2):

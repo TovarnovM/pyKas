@@ -38,6 +38,7 @@ cdef class InterpXY(object):
         if length == self.length:
             return
         self.length = length
+        self.n = 0
         self.xs = np.zeros(length, dtype=np.double)
         self.ys = np.zeros(length, dtype=np.double)
         self.ks = np.zeros(length, dtype=np.double)

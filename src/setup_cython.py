@@ -85,7 +85,7 @@ if __name__ == '__main__':
         compile_bicycle(packages)
     finally:
         cleanstuff()
-        pass
+        # pass
         # true_mod_name='all'
         # extentions = [
         #     Extension("tube", ["include\\tube\\tube.pyx"] ,include_dirs=[numpy.get_include()]),
