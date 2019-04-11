@@ -87,7 +87,7 @@ def test_AUSM_gas_zero_flux_same_cells_f2(random_values4fluxes):
             p2=p, ro2=ro, u2=u, e2=e, c2=c,
             vbi=u)
 
-        assert f2 == approx(0)
+        assert f2 == approx(p)
 
 
 def test_AUSM_gas_zero_flux_same_cells_f3(random_values4fluxes):
@@ -96,7 +96,7 @@ def test_AUSM_gas_zero_flux_same_cells_f3(random_values4fluxes):
             p1=p, ro1=ro, u1=u, e1=e, c1=c,
             p2=p, ro2=ro, u2=u, e2=e, c2=c,
             vbi=u)
-        assert f3 == approx(0)
+        assert f3 == approx(p*u)
 
 def test_AUSM_gas_zero_flux_zero_u_zero_vbi_f1(random_values4fluxes):
     for ro, e, p, c, u, vbi, gamma, b in random_values4fluxes:
@@ -115,7 +115,7 @@ def test_AUSM_gas_zero_flux_zero_u_zero_vbi_f2(random_values4fluxes):
             p1=p, ro1=ro, u1=u, e1=e, c1=c,
             p2=p, ro2=ro, u2=u, e2=e, c2=c,
             vbi=u)
-        assert f2 == approx(0)
+        assert f2 == approx(p)
 
 def test_AUSM_gas_zero_flux_zero_u_zero_vbi_f3(random_values4fluxes):
     for ro, e, p, c, u, vbi, gamma, b in random_values4fluxes:

@@ -265,7 +265,8 @@ cdef class GridStrecher(object):
         self.strech_type = strech_type
         self.bufarr = np.zeros(7)
         self.bufarr_border = np.zeros(7)
-        self.interp_integr = InterpXY([1,2,3], [1,2,3])
+        self.interp_smooth = InterpXY([1,2,3], [1,2,3])
+        self.interp_adapt = InterpXY([1,2,3,4], [1,2,3,4])
 
     cpdef bint evaluate(self, double tau, GasLayer layer):
         cdef size_t i
@@ -293,14 +294,14 @@ cdef class GridStrecher(object):
             xs_fill[i] = (xs_borders[i+1] + xs_borders[i])/2
 
     cpdef void smooth_arr(self, double[:] xs, double[:] vs, double[:] vs_smoothed, double window_part=0.1):
-        if self.interp_integr.length != vs.shape[0]:
-            self.interp_integr.set_length(vs.shape[0])
+        if self.interp_smooth.length != vs.shape[0]:
+            self.interp_smooth.set_length(vs.shape[0])
         cdef size_t i
-        self.interp_integr.xs[:] = xs 
-        self.interp_integr.ys[0] = 0 
+        self.interp_smooth.xs[:] = xs 
+        self.interp_smooth.ys[0] = 0 
         for i in range(1, xs.shape[0]):
-            self.interp_integr.ys[i] = self.interp_integr.ys[i-1] + (xs[i] - xs[i-1])*0.5*(vs[i]+vs[i-1])     
-        self.interp_integr.sync_ks_bs()
+            self.interp_smooth.ys[i] = self.interp_smooth.ys[i-1] + (xs[i] - xs[i-1])*0.5*(vs[i]+vs[i-1])     
+        self.interp_smooth.sync_ks_bs()
 
         cdef double window = window_part * (xs[xs.shape[0]-1] - xs[0])
         cdef double left, right
@@ -311,10 +312,30 @@ cdef class GridStrecher(object):
             right =  xs[i] + window
             if right > xs[xs.shape[0]-1]:
                 right = xs[xs.shape[0]-1]
-            vs_smoothed[i] = (self.interp_integr.get_v(right) - self.interp_integr.get_v(left))/(right-left)
+            vs_smoothed[i] = (self.interp_smooth.get_v(right) - self.interp_smooth.get_v(left))/(right-left)
         
 
-    
+    cpdef void adaptine_borders(self, double[:] xs_borders, double[:] vs, double[:] xs_adapt):
+        if self.interp_adapt.length != xs_borders.shape[0]:
+            self.interp_adapt.set_length(xs_borders.shape[0])
+        cdef size_t i
+        cdef double xl, xr, yl, yr, li
+        self.interp_adapt.xs[0] = 0
+        self.interp_adapt.ys[:] = xs_borders
+        for i in range(1, xs_borders.shape[0]-1):
+            xl = xs_borders[i-1]
+            yl = vs[i-1]
+            xr = xs_borders[i]
+            yr = vs[i]
+            li = sqrt((xr-xl)**2+(yr-yl)**2)
+            self.interp_adapt.xs[i] = self.interp_adapt.xs[i-1] + li
+        i=xs_borders.shape[0]-1
+        self.interp_adapt.xs[i] = self.interp_adapt.xs[i-1] + (xs_borders[i]-xs_borders[i-1])
+        self.interp_adapt.sync_ks_bs()
+
+        li = (self.interp_adapt.xs[i] - self.interp_adapt.xs[0])/(xs_borders.shape[0]-1)
+        for i in range(xs_adapt.shape[0]):
+            xs_adapt[i] = self.interp_adapt.get_v(i*li)
 
 
 cdef class GasLayer(object):

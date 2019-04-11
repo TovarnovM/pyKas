@@ -71,12 +71,13 @@ cdef class GasFluxCalculator:
 cdef class GridStrecher:
     cdef public int strech_type
     cdef public double[:] bufarr,bufarr_border
-    cdef public InterpXY interp_integr
+    cdef public InterpXY interp_smooth, interp_adapt
     cpdef bint evaluate(self, double tau, GasLayer layer)
     cpdef void init_regular(self, double v1, double v2, double[:] vs)
     cpdef void fill_euler_vel0_regular(self, double tau, double[:] xs0, double[:] xs1, double[:] vel0_fill)
     cpdef void fill_xs_cells(self, double[:] xs_borders, double[:] xs_fill)
     cpdef void smooth_arr(self, double[:] xs, double[:] vs, double[:] vs_smoothed, double window_part=*)
+    cpdef void adaptine_borders(self, double[:] xs_borders, double[:] vs, double[:] xs_adapt)
 
 cdef class GasLayer:
     cdef public double[:] xs_cells, xs_borders, Vs_borders, \

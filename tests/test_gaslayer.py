@@ -25,8 +25,9 @@ def gasEOS(request):
     return GasEOS(1.4, 0.01)
 
 @pytest.fixture(scope="function")
-def gasLayer(request, tube, gasEOS, flux_calculator):
-    return GasLayer(n_cells=7, tube=tube, gasEOS=gasEOS, flux_calculator=flux_calculator)
+def gasLayer(request, tube, gasEOS, flux_calculator, grid_strecher):
+    return GasLayer(n_cells=7, tube=tube, gasEOS=gasEOS, 
+        flux_calculator=flux_calculator, grid_strecher=grid_strecher)
 
 @pytest.fixture(scope="function")
 def gasLayer2(request, gasLayer):
