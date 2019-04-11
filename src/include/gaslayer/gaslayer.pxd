@@ -60,11 +60,12 @@ cdef class GasEOS:
     cpdef double get_csound(self, double ro, double p)  
 
 cdef class GasFluxCalculator:
-    cdef public int flux_type, left_border_type, right_border_type
-    cpdef void fill_fluxes_Godunov(self, double[:] Vs_borders, double[:] ps, double[:] ros, \
+    cdef public int flux_type, left_border_type, right_border_type, n_iter_max
+    cdef public double epsF
+    cpdef void fill_fluxes_Ds_Godunov(self, double[:] Vs_borders, double[:] ps, double[:] ros, \
             double[:] us, double[:] cs, GasEOS gasEOS, \
-            double[:] flux1, double[:] flux2, double[:] flux3)
-    cpdef void fill_fluxes(self, GasLayer layer)
+            double[:] flux1, double[:] flux2, double[:] flux3, double[:] D_left, double[:] D_right)
+    cpdef void fill_fluxes_Ds(self, GasLayer layer)
 
 
 cdef class GridStrecher:
@@ -77,7 +78,7 @@ cdef class GridStrecher:
 
 cdef class GasLayer:
     cdef public double[:] xs_cells, xs_borders, Vs_borders, \
-        ps, ros, us, es, cs, \
+        ps, ros, us, es, cs, taus, D_left, D_right, \
         flux1, flux2, flux3, \
         q1, q2, q3, \
         ds, S, W

@@ -29,15 +29,21 @@ cpdef  double get_ddF_13_15(double P, double p_1, double ro_1, double c_1, doubl
 
 cpdef (double, double, double) get_Us_13_22(double p_1, double p_2, double ro_1, double c_1, double c_2, double p_0, double gamma)
 
-cdef class MegaFooResult(object):
+cdef class MegaFooResult:
     cdef public bint suc, UD_left, UD_right
     cdef public double D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P
+
+cdef class Border_URPDD_Result:
+    cdef public double rU,rR,rP,D_1,D_2
 
 cpdef MegaFooResult mega_foo_cython(double p_1, double ro_1, double u_1, double c_1, \
              double p_2, double ro_2, double u_2, double c_2, \
              double p_0, double gamma, double eps_F=*, int n_iter_max=*)
 
-cpdef (double, double, double) border_wall_URP(bint left_border, double vbi, double p, double ro, double u, double c, \
+cpdef Border_URPDD_Result border_wall_URPDD_result(bint left_border, double vbi, double p, double ro, double u, double c, \
+             double p_0, double gamma, double eps_F=*, int n_iter_max=*)
+
+cpdef (double, double, double, double, double) border_wall_URPDD(bint left_border, double vbi, double p, double ro, double u, double c, \
              double p_0, double gamma, double eps_F=*, int n_iter_max=*)
 
 cpdef (bint, bint, bint, double, double, double, double, double, double, double, double) \
@@ -46,7 +52,7 @@ cpdef (bint, bint, bint, double, double, double, double, double, double, double,
              double p_0, double gamma, double eps_F=*, int n_iter_max=*)
 
 cpdef (double, double, double) get_ray_URP( \
-    double ray_W, double UD_left, double UD_right, double D_1, double D_star_1, double U, \
+    double ray_W, bint UD_left, bint UD_right, double D_1, double D_star_1, double U, \
     double D_star_2, double D_2, double R_1, double R_2, double P, \
     double p_1, double ro_1, double u_1, double c_1, \
     double p_2, double ro_2, double u_2, double c_2, double gamma)

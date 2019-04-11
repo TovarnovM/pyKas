@@ -310,10 +310,27 @@ cpdef MegaFooResult mega_foo_cython(double p_1, double ro_1, double u_1, double 
     res.P = P
     return res
 
-cpdef (double, double, double) border_wall_URP(bint left_border, double vbi, double p, double ro, double u, double c, \
-             double p_0, double gamma, double eps_F=1e-5, int n_iter_max=37):
+cdef class Border_URPDD_Result:
+    pass
+
+cpdef Border_URPDD_Result border_wall_URPDD_result(bint left_border, double vbi, double p, double ro, double u, double c, \
+             double p_0, double gamma, double eps_F=1e-6, int n_iter_max=13):
+    cdef double rU,rR,rP,D_1,D_2 
+    rU,rR,rP,D_1,D_2= border_wall_URPDD(left_border,vbi,p, ro, u, c, \
+             p_0, gamma, eps_F, n_iter_max)
+    cdef Border_URPDD_Result res = Border_URPDD_Result()
+    res.rU = rU
+    res.rR =rR
+    res.rP=rP
+    res.D_1=D_1
+    res.D_2=D_2
+    return res
+
+cpdef (double, double, double, double, double) border_wall_URPDD(bint left_border, double vbi, double p, double ro, double u, double c, \
+             double p_0, double gamma, double eps_F=1e-6, int n_iter_max=13):
     
-    cdef double p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2
+    cdef double p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2, rU,rR,rP,D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P
+    cdef bint suc, UD_left, UD_right
     p_1, p_2 = p, p
     ro_1, ro_2 = ro, ro
     c_1, c_2 = c, c
@@ -328,10 +345,11 @@ cpdef (double, double, double) border_wall_URP(bint left_border, double vbi, dou
              p_2, ro_2, u_2, c_2, \
              p_0, gamma, eps_F, n_iter_max)  
     if not suc:
-        return vbi,ro,p 
+        return vbi,ro,p,D_1,D_2 
     
-    return get_ray_URP(vbi, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P,
+    rU,rR,rP=get_ray_URP(vbi, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P,
                          p_1=p_1, ro_1=ro_1, u_1=u_1, c_1=c_1, p_2=p_2, ro_2=ro_2, u_2=u_2, c_2=c_2, gamma=gamma)
+    return rU,rR,rP,D_1,D_2
 
 cpdef (bint, bint, bint, double, double, double, double, double, double, double, double) \
     mega_foo(double p_1, double ro_1, double u_1, double c_1, \
@@ -450,7 +468,7 @@ cpdef (bint, bint, bint, double, double, double, double, double, double, double,
 
 
 cpdef (double, double, double) get_ray_URP( \
-    double ray_W, double UD_left, double UD_right, double D_1, double D_star_1, double U, \
+    double ray_W, bint UD_left, bint UD_right, double D_1, double D_star_1, double U, \
     double D_star_2, double D_2, double R_1, double R_2, double P, \
     double p_1, double ro_1, double u_1, double c_1, \
     double p_2, double ro_2, double u_2, double c_2, double gamma):

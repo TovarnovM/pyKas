@@ -4,7 +4,8 @@
 from tube cimport Tube
 import cython
 from libc.math cimport pi, sqrt, abs, copysign, abs
-from godunov cimport get_e_13_1, get_p_13_1, get_c_13_8, mega_foo_cython, get_ray_URP, MegaFooResult, border_wall_URP
+from godunov cimport get_e_13_1, get_p_13_1, get_c_13_8, mega_foo_cython, \
+                     get_ray_URP, MegaFooResult, border_wall_URPDD_result, Border_URPDD_Result
 import numpy as np
 cimport numpy as np
 
@@ -166,26 +167,36 @@ cdef class GasFluxCalculator(object):
         self.flux_type = flux_type
         self.left_border_type = left_border_type
         self.right_border_type = right_border_type
+        self.epsF=1e-6
+        self.n_iter_max = 7
 
-    cpdef void fill_fluxes(self, GasLayer layer):
+    cpdef void fill_fluxes_Ds(self, GasLayer layer):
         if self.flux_type == 1:
             self.fill_fluxes_Godunov(layer.Vs_borders, layer.ps, layer.ros, layer.us, layer.cs, layer.gasEOS,\
-                layer.flux1, layer.flux2, layer.flux3)
+                layer.flux1, layer.flux2, layer.flux3, layer.D_left, layer.D_right)
 
-    cpdef void fill_fluxes_Godunov(self, double[:] Vs_borders, double[:] ps, double[:] ros, \
+    cpdef void fill_fluxes_Ds_Godunov(self, double[:] Vs_borders, double[:] ps, double[:] ros, \
             double[:] us, double[:] cs, GasEOS gasEOS, \
-            double[:] flux1, double[:] flux2, double[:] flux3):
+            double[:] flux1, double[:] flux2, double[:] flux3, double[:] D_left, double[:] D_right):
         cdef size_t i
         cdef double p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2
         cdef MegaFooResult mfres
-        cdef double rayU, rayR, rayP, rayE, ray_W, M_j, J_j, E_j
+        cdef double rayU, rayR, rayP, rayE, ray_W, M_j, J_j, E_j, D_1, D_2
+        cdef Border_URPDD_Result border_res
 
         p_1 = ps[0]
         ro_1 = ros[0] 
         u_1 = us[0] 
         c_1 = cs[0] 
         ray_W = Vs_borders[0]
-        rayU, rayR, rayP = border_wall_URP(True, ray_W, p_1, ro_1, u_1, c_1, gasEOS.p_0, gasEOS.gamma)
+        
+        border_res = border_wall_URPDD_result(True, ray_W, p_1, ro_1, u_1, c_1, gasEOS.p_0, gasEOS.gamma, self.epsF, self.n_iter_max)
+        rayU = border_res.rU 
+        rayR=border_res.rR 
+        rayP=border_res.rP 
+        D_1 = border_res.D_1 
+        D_2 = border_res.D_2 
+        
         rayE = gasEOS.get_e(rayR, rayP)
 
         M_j = rayR * (rayU - ray_W)
@@ -195,6 +206,7 @@ cdef class GasFluxCalculator(object):
         flux1[0] = M_j
         flux2[0] = J_j
         flux3[0] = E_j
+        D_left[0] = D_2
         for i in range(1, ps.shape[0]):
             p_1 = ps[i-1]
             ro_1 = ros[i-1] 
@@ -220,6 +232,8 @@ cdef class GasFluxCalculator(object):
             flux1[i] = M_j
             flux2[i] = J_j
             flux3[i] = E_j
+            D_right[i-1] = D_1
+            D_left[i] = D_2 
 
         i=ps.shape[0]-1
         ray_W = Vs_borders[i+1]
@@ -227,7 +241,15 @@ cdef class GasFluxCalculator(object):
         ro_1 = ros[i] 
         u_1 = us[i] 
         c_1 = cs[i] 
-        rayU, rayR, rayP = border_wall_URP(False, ray_W, p_1, ro_1, u_1, c_1, gasEOS.p_0, gasEOS.gamma)
+
+        border_res = border_wall_URPDD_result(False, ray_W, p_1, ro_1, u_1, c_1, gasEOS.p_0, gasEOS.gamma, self.epsF, self.n_iter_max)
+        
+        rayU = border_res.rU 
+        rayR=border_res.rR 
+        rayP=border_res.rP 
+        D_1 = border_res.D_1 
+        D_2 = border_res.D_2 
+
         rayE = gasEOS.get_e(rayR, rayP)
         M_j = rayR * (rayU - ray_W)
         J_j = rayP + M_j * rayU
@@ -236,6 +258,7 @@ cdef class GasFluxCalculator(object):
         flux1[i+1] = M_j
         flux2[i+1] = J_j
         flux3[i+1] = E_j
+        D_right[i] = D_1
 
 cdef class GridStrecher(object):
     def __init__(self, strech_type=1):
@@ -287,6 +310,9 @@ cdef class GasLayer(object):
         self.es = np.zeros(n_cells, dtype=np.double)
         self.cs = np.zeros(n_cells, dtype=np.double)
 
+        self.taus = np.zeros(n_cells, dtype=np.double)
+        self.D_left = np.zeros(n_cells, dtype=np.double)
+        self.D_right = np.zeros(n_cells, dtype=np.double)
 
         self.flux1 = np.zeros(n_cells+1, dtype=np.double)
         self.flux2 = np.zeros(n_cells+1, dtype=np.double)
@@ -314,6 +340,10 @@ cdef class GasLayer(object):
         res.us[:] = self.us
         res.es[:] = self.es
         res.cs[:] = self.cs
+
+        res.taus[:] = self.taus
+        res.D_left[:] = self.D_left
+        res.D_right[:] = self.D_right
 
         res.flux1[:] = self.flux1
         res.flux2[:] = self.flux2

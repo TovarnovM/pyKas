@@ -5,7 +5,7 @@ wd = os.path.dirname(os.path.dirname(wd))
 sys.path.append(wd)
 from godunov import mega_foo as mega_foo_cython
 from godunov import get_ray_URP as get_ray_URP_cython
-from godunov import border_wall_URP as border_wall_URP_cython
+from godunov import border_wall_URPDD as border_wall_URP_cython
 import numpy as np
 from riman_python import get_F_13_15, get_ray_URP, mega_foo, border_wall_URP
 
@@ -45,7 +45,7 @@ def flux_wall_border(left_border, p, ro, u, c, vbi, gamma, e_foo, **kwargs):
     return M_j, J_j, E_j    
 
 def flux_wall_border_cython(left_border, p, ro, u, c, vbi, gamma, e_foo, **kwargs):
-    rayU,rayR,rayP = \
+    rayU,rayR,rayP,*rest = \
         border_wall_URP_cython(
             p=p, ro=ro, u=u, c=c, 
             vbi=vbi, left_border=left_border, 
