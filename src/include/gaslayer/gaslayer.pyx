@@ -170,10 +170,33 @@ cdef class GasFluxCalculator(object):
         self.epsF=1e-6
         self.n_iter_max = 7
 
-    cpdef void fill_fluxes_Ds(self, GasLayer layer):
+    cpdef void fill_fluxes_taus(self, GasLayer layer):
         if self.flux_type == 1:
-            self.fill_fluxes_Godunov(layer.Vs_borders, layer.ps, layer.ros, layer.us, layer.cs, layer.gasEOS,\
-                layer.flux1, layer.flux2, layer.flux3, layer.D_left, layer.D_right)
+            self.fill_fluxes_Ds_Godunov(layer.Vs_borders, layer.ps, layer.ros, layer.us, layer.cs, layer.gasEOS,\
+                layer.fluxes[0], layer.fluxes[1], layer.fluxes[2], layer.D_left, layer.D_right)
+            self.fill_taus_Godunov(layer.xs_borders, layer.Vs_borders, layer.D_left, layer.D_right, layer.taus)
+
+    cpdef void fill_taus_Godunov(self, double[:] xs_borders, double[:] Vs_borders, double[:] D_left, double[:] D_right, double[:] taus):
+        cdef size_t i
+        cdef double dx, v_otn_left, v_otn_right, tau_left, tau_right
+        for i in range(taus.shape[0]):
+            dx = xs_borders[i+1] - xs_borders[i]
+            v_otn_left = Vs_borders[i+1] - D_left[i]
+            if v_otn_left < 1e-12:
+                tau_left = 999
+            else:
+                tau_left = dx / v_otn_left
+            
+            v_otn_right = D_right[i] - Vs_borders[i] 
+            if v_otn_right < 1e-12:
+                tau_right = 999
+            else:
+                tau_right = dx / tau_right
+            if tau_left < tau_right:
+                taus[i] = tau_left
+            else:
+                taus[i] = tau_right
+            
 
     cpdef void fill_fluxes_Ds_Godunov(self, double[:] Vs_borders, double[:] ps, double[:] ros, \
             double[:] us, double[:] cs, GasEOS gasEOS, \
@@ -261,10 +284,12 @@ cdef class GasFluxCalculator(object):
         D_right[i] = D_1
 
 cdef class GridStrecher(object):
-    def __init__(self, strech_type=1):
+    def __init__(self, strech_type=1, st2_window_part=0.1, st2_adapt_prop=0.05):
         self.strech_type = strech_type
+        self.st2_window_part = st2_window_part
+        self.st2_adapt_prop = st2_adapt_prop
         self.bufarr = np.zeros(7)
-        self.bufarr_border = np.zeros(7)
+        self.bufarr_border = np.zeros(8)
         self.interp_smooth = InterpXY([1,2,3], [1,2,3])
         self.interp_adapt = InterpXY([1,2,3,4], [1,2,3,4])
 
@@ -274,6 +299,7 @@ cdef class GridStrecher(object):
             layer.xs_borders[i] = layer.xs_borders[i] + tau * layer.Vs_borders[i]
             if i > 0 and layer.xs_borders[i]-layer.xs_borders[i-1] <= 1e-12:
                 return False
+        self.fill_xs_cells(layer.xs_borders, layer.xs_cells)
         return True
 
     cpdef void init_regular(self, double v1, double v2, double[:] vs):
@@ -282,6 +308,44 @@ cdef class GridStrecher(object):
         cdef size_t i
         for i in range(vs.shape[0]):
             vs[i] = v1 + i*dv
+
+    cpdef bint sync_layers(self, GasLayer layer0, GasLayer layer1, double tau, double v_left, double v_right):
+        layer1.time = layer0.time + tau
+        self.fill_Vs_borders_proportional(v_left, v_right, layer1.xs_borders, layer1.Vs_borders)
+        cdef bint suc = self.evaluate(tau, layer1)
+        if not suc:
+            return False
+        if self.strech_type == 2:
+            self.strech_layer_adaptive(layer1)
+        cdef size_t i
+        for i in range(layer0.Vs_borders.shape[0]):
+            layer0.Vs_borders[i] = (layer1.xs_borders[i] - layer0.xs_borders[i])/tau
+        return True
+
+    cpdef void strech_layer_adaptive(self, GasLayer layer):
+        if self.bufarr.shape[0] != layer.xs.shape[0]:
+            self.bufarr = np.zeros(layer.xs.shape[0])
+        if self.bufarr_border.shape[0] != layer.xs_borders.shape[0]:
+            self.bufarr_border = np.zeros(layer.xs_borders.shape[0])
+        self.smooth_arr(layer.xs, layer.ps, self.bufarr, self.st2_window_part)
+        self.adaptine_borders(layer.xs_borders, self.bufarr, self.bufarr_border)
+        cdef size_t i
+        cdef double old_x, adapt_x
+        for i in range(1, layer.xs_borders.shape[0]-1):
+            old_x = layer.xs_borders[i]
+            adapt_x = self.bufarr_border[i]
+            layer.xs_borders[i] = old_x + self.st2_adapt_prop*(adapt_x-old_x)
+        self.fill_xs_cells(layer.xs_borders, layer.xs_cells)
+
+
+    cpdef void fill_Vs_borders_proportional(self, double v_left, double v_right, double[:] xs_borders, double[:] Vs_borders):
+        cdef size_t i
+        cdef double dV = v_right - v_left
+        cdef double mnj = dV/(xs_borders[xs_borders.shape[0]-1]-xs_borders[0])
+        Vs_borders[0] = v_left
+        for i in range(1, Vs_borders.shape[0]-1):
+            Vs_borders[i] = v_left + mnj * (xs_borders[i]-xs_borders[i-1])
+        Vs_borders[Vs_borders.shape[0]-1] = v_right
 
     cpdef void fill_euler_vel0_regular(self, double tau, double[:] xs0, double[:] xs1, double[:] vel0_fill):
         cdef size_t i
@@ -339,7 +403,9 @@ cdef class GridStrecher(object):
 
 
 cdef class GasLayer(object):
-    def __init__(self, n_cells, Tube tube, GasEOS gasEOS, GasFluxCalculator flux_calculator, GridStrecher grid_strecher):
+    def __init__(self, n_cells, Tube tube, GasEOS gasEOS, GasFluxCalculator flux_calculator, GridStrecher grid_strecher, int n_qs):
+        self.n_cells = n_cells
+        self.n_qs = n_qs
         self.tube = tube
         self.gasEOS = gasEOS
         self.time = 0
@@ -365,16 +431,14 @@ cdef class GasLayer(object):
         self.D_left = np.zeros(n_cells, dtype=np.double)
         self.D_right = np.zeros(n_cells, dtype=np.double)
 
-        self.flux1 = np.zeros(n_cells+1, dtype=np.double)
-        self.flux2 = np.zeros(n_cells+1, dtype=np.double)
-        self.flux3 = np.zeros(n_cells+1, dtype=np.double)
+        self.fluxes = np.zeros((n_cells+1, n_qs), dtype=np.double)
 
-        self.q1 = np.zeros(n_cells, dtype=np.double)
-        self.q2 = np.zeros(n_cells, dtype=np.double)
-        self.q3 = np.zeros(n_cells, dtype=np.double)
+        self.qs = np.zeros((n_cells, n_qs), dtype=np.double)
+
+        self.hs = np.zeros((n_cells, n_qs), dtype=np.double)
 
     cpdef GasLayer copy(self):
-        cdef GasLayer res = GasLayer(self.n_cells, self.tube, self.gasEOS, self.flux_calculator, self.grid_strecher)
+        cdef GasLayer res = GasLayer(self.n_cells, self.tube, self.gasEOS, self.flux_calculator, self.grid_strecher, self.n_qs)
         res.time = self.time
 
         res.xs_cells[:] = self.xs_cells
@@ -396,26 +460,27 @@ cdef class GasLayer(object):
         res.D_left[:] = self.D_left
         res.D_right[:] = self.D_right
 
-        res.flux1[:] = self.flux1
-        res.flux2[:] = self.flux2
-        res.flux3[:] = self.flux3
-
-        res.q1[:] = self.q1
-        res.q2[:] = self.q2
-        res.q3[:] = self.q3
+        res.fluxes[:] = self.fluxes
+        res.qs[:] = self.qs
+        res.hs[:] = self.hs
         return res
 
 
-    cpdef void init_ropue_fromfoo(self, foo_ropu):
+    cpdef void init_ropue_fromfoo(self, foo_ropu, bint init_q=True,  bint init_SsdW=True):
+        self.grid_strecher.fill_xs_cells(self.xs_borders, self.xs_cells)
         cdef size_t i
         cdef double x
         cdef GasEOS eos = self.gasEOS
         cdef double ro, p, u, e
         for i in range(self.n_cells):
-            ro, p, u = foo_ropu(self.xs[i])
+            ro, p, u = foo_ropu(self.xs_cells[i], self)
             self.ros[i], self.ps[i], self.us[i] = ro, p, u
             self.es[i] = eos.get_e(ro, p)
             self.cs[i] = eos.get_csound(ro, p)
+        if init_q:
+            self.init_q()
+        if init_SsdW:
+            self.init_SsdW()
     
     cpdef void init_SsdW(self):
         self.tube.fill_S(self.xs_borders, self.S)
@@ -425,25 +490,74 @@ cdef class GasLayer(object):
     cpdef void init_q(self):
         cdef size_t i
         cdef size_t n = self.ros.shape[0]
-        cdef double q1, q2, q3
         for i in range(n):
             q1, q2, q3 = roue_to_q(self.ros[i], self.us[i], self.es[i])
-            self.q1[i] = q1
-            self.q2[i] = q2 
-            self.q3[i] = q3
+            self.qs[0, i] = q1
+            self.qs[1, i] = q2 
+            self.qs[2, i] = q3
 
     cpdef void init_ropue(self):
         cdef size_t i
         cdef size_t n = self.ros.shape[0]
         cdef double ro, p, u, e
         for i in range(n):
-            ro, u, e = q123_to_roue(self.q1[i], self.q2[i], self.q3[i])
+            ro, u, e = q123_to_roue(self.qs[0, i], self.qs[1, i], self.qs[2, i])
             p = self.gasEOS.get_p(ro, e)
             self.ros[i] = ro
             self.ps[i] = p
             self.us[i] = u
             self.es[i] = e
             self.cs[i] = self.gasEOS.get_csound(ro, p)
+        
+    cpdef void init_h(self):
+        cdef size_t i
+        for i in range(self.hs.shape[1]):
+            self.hs[0, i] = 0
+            self.hs[1, i] = self.p[i] * self.ds[i] 
+            self.hs[2, i] = 0
+
+    cpdef double get_tau_min(self):
+        cdef size_t i
+        cdef double tau_min = self.taus[0]
+        for i in range(1, self.taus.shape[0]):
+            if self.taus[i] < tau_min:
+                tau_min = self.taus[i]
+        return tau_min
+
+    cpdef void init_taus_acustic(self):
+        cdef size_t i
+        for i in range(self.taus.shape[0]):
+            self.taus[i] = (self.xs_borders[i+1] - self.xs_borders[i])/(abs(self.us[i])+self.cs[i])
+
+    cpdef void fill_fluxes_taus(self):
+        pass
+
+    cpdef GasLayer step_Godunov_simple(self, double v_left, double v_right, double courant, bint init_taus_acustic):
+        if init_taus_acustic:
+            self.init_taus_acustic()
+        cdef double tau = self.get_tau_min() * courant   
+        self.init_h()
+        cpdef GasLayer layer1 = self.clone() 
+        self.grid_strecher.sync_layers(self, layer1, tau, v_left, v_right)
+        layer1.init_SsdW()
+        self.flux_calculator.fill_fluxes_taus(self)
+        layer1.taus[:] = self.taus
+        cdef size_t i, j
+        cdef double dx
+        for i in range(layer1.xs_cells.shape[0]):
+            dx = self.xs_borders[i+1] - self.xs_borders[i]
+            for j in range(layer1.n_qs):
+                layer1.qs[j, i] = (self.qs[j, i]*self.W[i] - tau*(self.S[i+1]*self.fluxes[j, i] - self.S[i+1]*self.fluxes[j, i]) + tau*self.hs[j, i]*dx)/layer1.W[i]
+            
+        layer1.init_ropue()
+        return layer1
+        
+    def to_dict(self):
+        return {
+            'time': self.time,
+
+        }
+        # layer1.grid_strecher.
 
     # cpdef GasLayer euler_step(self, double tau, GasLayer layer_dq=None, GasLayer):
     #     if layer_dq is None:
