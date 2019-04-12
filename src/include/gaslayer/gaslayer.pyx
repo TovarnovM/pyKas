@@ -530,7 +530,7 @@ cdef class GasLayer(object):
             self.taus[i] = (self.xs_borders[i+1] - self.xs_borders[i])/(abs(self.us[i])+self.cs[i])
 
     cpdef void fill_fluxes_taus(self):
-        pass
+        self.flux_calculator.fill_fluxes_taus(self)
 
     cpdef GasLayer step_Godunov_simple(self, double v_left, double v_right, double courant, bint init_taus_acustic):
         if init_taus_acustic:
@@ -540,7 +540,9 @@ cdef class GasLayer(object):
         cpdef GasLayer layer1 = self.clone() 
         self.grid_strecher.sync_layers(self, layer1, tau, v_left, v_right)
         layer1.init_SsdW()
-        self.flux_calculator.fill_fluxes_taus(self)
+        self.fill_fluxes_taus()
+        if self.get_tau_min() < tau:
+            return self.step_Godunov_simple(v_left, v_right, courant, False)
         layer1.taus[:] = self.taus
         cdef size_t i, j
         cdef double dx
@@ -555,17 +557,52 @@ cdef class GasLayer(object):
     def to_dict(self):
         return {
             'time': self.time,
+            'n_qs': self.n_qs,
+            'xs_cells': np.array(self.xs_cells),
+            'xs_borders': np.array(self.xs_borders),
+            'Vs_borders': np.array(self.Vs_borders),
+            'ps': np.array(self.ps),
+            'ros': np.array(self.ros),
+            'us': np.array(self.us),
+            'es': np.array(self.es),
+            'cs': np.array(self.cs),
+            'taus': np.array(self.taus),
+            'D_left': np.array(self.D_left),
+            'D_right': np.array(self.D_right),
+            'ds': np.array(self.ds),
+            'S': np.array(self.S),
+            'W': np.array(self.W),
 
-        }
-        # layer1.grid_strecher.
+            'qs':np.array(self.qs),
+            'hs':np.array(self.hs),
+            'fluxes':np.array(self.fluxes)
+       }
+    def from_dict(self, d):
+        self.time = d['time']
+        self.n_cells = d['xs_cells'].shape[0] 
+        self.n_qs = d['n_qs']
+        self.xs_cells[:] = d['xs_cells']
+        self.xs_borders[:] = d['xs_borders']
+        self.Vs_borders[:] = d['Vs_borders']
 
-    # cpdef GasLayer euler_step(self, double tau, GasLayer layer_dq=None, GasLayer):
-    #     if layer_dq is None:
-    #         layer_dq = self
-    #     cdef GasLayer layer_res = self.clone()
-    #     layer_res.grid_strecher.evaluate(tau, layer_res)
+        self.S[:] = d['S'] 
 
-    # cpdef init_fluxes_AUSM()
+        self.ds[:] = d['ds']
+        self.W[:] = d['W']
+
+        self.ps[:] = d['ps']
+        self.ros[:] = d['ros']
+        self.us[:] = d['us']
+        self.es[:] = d['es']
+        self.cs[:] = d['cs']
+
+        self.taus[:] = d['taus']
+        self.D_left[:] = d['D_left']
+        self.D_right[:] = d['D_right']
+
+        self.fluxes[:] = d['fluxes']
+        self.qs[:] = d['qs']
+        self.hs[:] = d['hs']
     
     
 
