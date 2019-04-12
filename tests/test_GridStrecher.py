@@ -107,7 +107,7 @@ def _plot3():
     x1 = 0
     x2 = 1
     def init_foo(x, *args):
-        if x <= 10.5:
+        if x <= 0.5:
             return d['ro_1'], d['p_1'], d['u_1']
         return d['ro_2'], d['p_2'], d['u_2']
     
@@ -115,7 +115,7 @@ def _plot3():
     grid_strecher = GridStrecher(strech_type=1,st2_window_part=0.05, st2_adapt_prop=0.1)
     gas_flux_calculator = GasFluxCalculator()
     tube = Tube([0,1], [0.1, 0.1])
-    n_cells = 1000
+    n_cells = 200
     layer = GasLayer(n_cells, tube=tube, gasEOS=gas_eos, flux_calculator=gas_flux_calculator, grid_strecher=grid_strecher, n_qs=3)
     layer.xs_borders[:] = np.linspace(x1, x2, n_cells+1)
     layer.init_ropue_fromfoo(init_foo)
@@ -144,7 +144,7 @@ def _plot3():
         # d['ts'][0] = 0.001
         # layer.time = 0.01
         # break
-        layer1 = layer.step_Godunov_simple(1,1,0.5,False)
+        layer1 = layer.step_Godunov_simple(0,0,0.5,False)
         if layer1 == layer:
             break
         # layer1 = layer.step_Godunov_corrector2(layer1, 0, 0)

@@ -137,6 +137,13 @@ cpdef (double, double, double) AUSM_gas_(
 
 
 cdef class GasEOS(object):
+    """Класс для описания уравонений состояний газов и т.д. Поддерживает различные представления
+    Абеля, и из книги Годунова
+
+    Предоставляет методы определения внутр. энергии, давления и скорости звука
+    self.kind == 1   - уравнение состояния Абеля
+    self.kind == 2   - из книги Годунова
+    """
     def __init__(self, gamma, kappa=0.0, p_0=0.0, c_0=0.0, kind=1):
         self.gamma = gamma
         self.kappa = kappa
@@ -163,7 +170,21 @@ cdef class GasEOS(object):
             return get_c_13_8(p, ro, self.p_0, self.gamma)
 
 cdef class GasFluxCalculator(object):
+    """Класс для расчета потоков через 2 соседние ячейки. Так же предоставляет методы для граничных условий
+
+    Поддерживает расчет потоков по точному Римановскому солверу.
+    self.flux_type == 1
+    """
+    
     def __init__(self, flux_type=1, left_border_type=1, right_border_type=1):
+        """Конструктор класса
+        
+        Keyword Arguments:
+            flux_type {int} -- тип солвера 1-Точный Римановский солвер (default: {1})
+            left_border_type {int} -- Тип правой стенки 1-непроницаемая стенка (default: {1})
+            right_border_type {int} -- -- (default: {1})
+        """
+
         self.flux_type = flux_type
         self.left_border_type = left_border_type
         self.right_border_type = right_border_type
@@ -171,6 +192,9 @@ cdef class GasFluxCalculator(object):
         self.n_iter_max = 7
 
     cpdef void fill_fluxes_taus(self, GasLayer layer):
+        """Основной метод для зполнения в GasLayer'e массивов с потоками и временами прохождения возмущений в ячейках с учетом движения узлов
+        """
+
         if self.flux_type == 1:
             self.fill_fluxes_Ds_Godunov(layer.Vs_borders, layer.ps, layer.ros, layer.us, layer.cs, layer.gasEOS,\
                 layer.fluxes[0], layer.fluxes[1], layer.fluxes[2], layer.D_left, layer.D_right)
@@ -296,6 +320,14 @@ cpdef inline double max2(double a, double b):
         return b
 
 cdef class GridStrecher(object):
+    """Класс дял управления координатами и скоростями одномерных сеток
+
+    self.strech_type == 1 - обычная равномерная сетка
+                     == 2 - адаптивная сетка (еще не совсем гуд)
+
+    st2_window_part, st2_adapt_prop - параметры для адаптивной сетки
+    """
+
     def __init__(self, strech_type=1, st2_window_part=0.1, st2_adapt_prop=1):
         self.strech_type = strech_type
         self.st2_window_part = st2_window_part

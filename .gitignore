@@ -4,3 +4,4 @@ env_pykas/
 *.ipynb_checkpoints*
 *build*
 .vscode
+*.pyd
