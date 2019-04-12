@@ -593,7 +593,8 @@ def plot_distrs(**init_cond):
         plot_one_t(t, col, init_cond.get('lw', 2))
     plt.subplot(231)
     plot_rays(show=False, **init_cond)
-    plt.show()
+    if(init_cond.get('show', True)):
+        plt.show()
 
 def get_init_conds_4_tsts():
     # из статьи ОДНОМЕРНЫЕ ЗАДАЧИ ГАЗОВОЙ ДИНАМИКИ И ИХ РЕШЕНИЕ  ПРИ ПОМОЩИ РАЗНОСТНЫХ СХЕМ ВЫСОКОЙ  РАЗРЕШАЮЩЕЙ СПОСОБНОСТИ 

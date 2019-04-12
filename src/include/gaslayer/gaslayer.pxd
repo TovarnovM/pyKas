@@ -51,6 +51,9 @@ cpdef (double, double, double) AUSM_gas_(
     double c2,
     double vbi)
 
+cpdef inline double min2(double a, double b)
+
+cpdef inline double max2(double a, double b)
     
 cdef class GasEOS:
     cdef public double gamma, kappa, p_0, c_0
@@ -80,7 +83,7 @@ cdef class GridStrecher:
     cpdef void smooth_arr(self, double[:] xs, double[:] vs, double[:] vs_smoothed, double window_part=*)
     cpdef void adaptine_borders(self, double[:] xs_borders, double[:] vs, double[:] xs_adapt)
     cpdef void fill_Vs_borders_proportional(self, double v_left, double v_right, double[:] xs_borders, double[:] Vs_borders)
-    cpdef void strech_layer_adaptive(self, GasLayer layer)
+    cpdef void strech_layer_adaptive(self, GasLayer layer, GasLayer layer_prev, double tau)
     cpdef bint sync_layers(self, GasLayer layer0, GasLayer layer1, double tau, double v_left, double v_right)
 
 cdef class GasLayer:
@@ -102,5 +105,7 @@ cdef class GasLayer:
     cpdef void init_h(self)
     cpdef double get_tau_min(self)
     cpdef void init_taus_acustic(self)
-    cpdef GasLayer step_Godunov_simple(self, double v_left, double v_right, double courant, bint init_taus_acustic)
+    cpdef GasLayer step_Godunov_simple(self, double v_left, double v_right, double courant, bint init_taus_acustic, double alpha=*)
     cpdef void fill_fluxes_taus(self)
+    cpdef GasLayer step_Godunov_corrector(self, GasLayer layer_simple, double v_left, double v_right)
+    cpdef GasLayer step_Godunov_corrector2(self, GasLayer layer_simple, double v_left, double v_right)
