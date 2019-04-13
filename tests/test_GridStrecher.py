@@ -12,6 +12,7 @@ from pytest import approx
 
 from tube import Tube
 from gaslayer import GasLayer, GasEOS, GridStrecher, GasFluxCalculator
+import time
 
 def test_adapt():
     gs = GridStrecher()
@@ -140,6 +141,8 @@ def _plot3():
         plt.legend()
         plt.show()
     layer.init_taus_acustic()
+
+    t0 = time.time()
     while layer.time < d['ts'][0]:
         # d['ts'][0] = 0.001
         # layer.time = 0.01
@@ -151,7 +154,10 @@ def _plot3():
         # if layer1 == layer:
         #     break
         layer = layer1
-        
+    print(time.time() - t0)  
+
+
+    #(3.55189 + 3.40513 + 3.33072 + 3.44629 + 3.717145 + 3.93337 + 3.94355 + 3.706031+3.54699+3.4006)  
         # plot_layer(layer)
     print(layer.time)
     # print(layer.to_dict())

@@ -65,10 +65,10 @@ cdef class GasEOS:
 cdef class GasFluxCalculator:
     cdef public int flux_type, left_border_type, right_border_type, n_iter_max
     cdef public double epsF
-    cpdef void fill_fluxes_Ds_Godunov(self, double[:] Vs_borders, double[:] ps, double[:] ros, \
+    cpdef void fill_fluxesURP_Ds_Godunov(self, double[:] Vs_borders, double[:] ps, double[:] ros, \
             double[:] us, double[:] cs, GasEOS gasEOS, \
             double[:] flux1, double[:] flux2, double[:] flux3, double[:] D_left, double[:] D_right)
-    cpdef void fill_fluxes_taus(self, GasLayer layer)
+    cpdef void fill_fluxesURP_taus(self, GasLayer layer)
     cpdef void fill_taus_Godunov(self, double[:] xs_borders, double[:] Vs_borders, double[:] D_left, double[:] D_right, double[:] taus)
 
 cdef class GridStrecher:
@@ -97,6 +97,7 @@ cdef class GasLayer:
     cdef public double time
     cdef public GasFluxCalculator flux_calculator
     cdef public GridStrecher grid_strecher
+    cpdef void copy_params_to(self, GasLayer to_me)
     cpdef GasLayer copy(self)
     cpdef void init_ropue_fromfoo(self, foo_ropu, bint init_q=*, bint init_SsdW=*)
     cpdef void init_SsdW(self)
@@ -106,6 +107,14 @@ cdef class GasLayer:
     cpdef double get_tau_min(self)
     cpdef void init_taus_acustic(self)
     cpdef GasLayer step_Godunov_simple(self, double v_left, double v_right, double courant, bint init_taus_acustic, double alpha=*)
-    cpdef void fill_fluxes_taus(self)
+    cpdef void fill_fluxes(self)
     cpdef GasLayer step_Godunov_corrector(self, GasLayer layer_simple, double v_left, double v_right)
     cpdef GasLayer step_Godunov_corrector2(self, GasLayer layer_simple, double v_left, double v_right)
+    cpdef void fill_fluxesURP_taus(self)
+    
+cdef class PowderOvLayer(GasLayer):
+    cdef public double some
+    cdef public double[:] zs
+    cpdef void copy_params_to_Ov(self, PowderOvLayer to_me)
+    cpdef GasLayer copy(self)
+    cpdef void init_ropue_fromfoo(self, foo_ropu, bint init_q=*,  bint init_SsdW=*)
