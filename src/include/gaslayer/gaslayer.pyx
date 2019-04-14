@@ -254,6 +254,7 @@ cdef class Powder(GasEOS):
             dpsis[i] = dpsis[i]*mnj
         self.dpsi = InterpXY(zs, dpsis)    
         self.psi = InterpXY(zs, psis)
+        self.z_k = self.get_z_k()
     
     cpdef double get_e_powder(self, double ro, double p, double z):
         cdef double psi = self.psi.get_v(z)
@@ -271,6 +272,8 @@ cdef class Powder(GasEOS):
         cdef double znam = 1/ro - ((1-psi)/self.ro + self.kappa*psi)
         return sqrt(chsl/znam)/ro
 
+    cpdef double get_z_k(self):
+        return self.dpsi.xs[-1]
 
 cdef class GasFluxCalculator(object):
     """Класс для расчета потоков через 2 соседние ячейки. Так же предоставляет методы для граничных условий
@@ -721,6 +724,30 @@ cdef class GasLayer(object):
             else:
                 self.taus[i] = tau_right
 
+    cpdef GasLayer step_simple(self, double tau, double v_left, double v_right):
+        self.init_h()
+        self.fill_fluxesURP()
+        cpdef GasLayer layer1 = self.copy() 
+        cdef bint suc = self.grid_strecher.sync_layers(self, layer1, tau, v_left, v_right)
+        if not suc:
+            print('suc 454')
+            return self
+        self.fill_taus()
+        layer1.init_SsdW()
+        layer1.taus[:] = self.taus
+        if self.get_tau_min() < tau:
+            print('suc 455')
+            return self
+        cdef size_t i, j
+        cdef double dx
+        self.fill_fluxes()
+        for i in range(layer1.xs_cells.shape[0]):
+            dx = self.xs_borders[i+1] - self.xs_borders[i]
+            for j in range(layer1.n_qs):
+                layer1.qs[j, i] = (self.qs[j, i]*self.W[i] - tau*(self.S[i+1]*self.fluxes[j, i+1] - self.S[i]*self.fluxes[j, i]) + tau*self.hs[j, i]*dx)/layer1.W[i]
+        layer1.init_ropue()
+        return layer1
+
     cpdef GasLayer step_Godunov_simple(self, double v_left, double v_right, double courant, bint init_taus_acustic, double alpha=1):
         self.fill_fluxesURP()
         self.fill_taus()
@@ -866,7 +893,7 @@ cdef class GasLayer(object):
     
 cdef class PowderOvLayer(GasLayer):
     def __init__(self, n_cells, Tube tube, Powder powder, GasFluxCalculator flux_calculator, GridStrecher grid_strecher):
-        super().__init__(tube, powder, flux_calculator, grid_strecher, 4)
+        super().__init__(n_cells, tube, powder, flux_calculator, grid_strecher, 4)
         self.zs = np.zeros(n_cells, dtype=np.double)
 
     cpdef void copy_params_to_Ov(self, PowderOvLayer to_me):
@@ -909,9 +936,12 @@ cdef class PowderOvLayer(GasLayer):
         cdef size_t n = self.ros.shape[0]
         cdef double ro, p, u, e, z
         cdef Powder eos = <Powder>self.gasEOS
+        cdef double z_k = eos.z_k
         for i in range(n):
             ro, u, e = q123_to_roue(self.qs[0, i], self.qs[1, i], self.qs[2, i])
             z = self.qs[3, i] / ro
+            if z > z_k:
+                z = z_k
             p = eos.get_p_powder(ro, e, z)
             self.ros[i] = ro
             self.ps[i] = p
@@ -961,6 +991,7 @@ cdef class PowderOvLayer(GasLayer):
     def to_dict(self):
         res = super().to_dict()
         res['zs'] = np.array(self.zs)
+        return res
 
     def from_dict(self, d):
         super().from_dict()

@@ -66,10 +66,12 @@ cdef class GasEOS:
 
 cdef class Powder(GasEOS):
     cdef public InterpXY psi, dpsi
-    cdef public double I_k, alpha_k, ro, f, T_1, nu
+    cdef public str name
+    cdef public double z_k, I_k, alpha_k, ro, f, T_1, nu, R_g
     cpdef double get_e_powder(self, double ro, double p, double z)
     cpdef double get_p_powder(self, double ro, double e, double z)
     cpdef double get_csound_powder(self, double ro, double p, double z)
+    cpdef double get_z_k(self)
 
 cdef class GasFluxCalculator:
     cdef public int flux_type, left_border_type, right_border_type, n_iter_max
@@ -116,6 +118,7 @@ cdef class GasLayer:
     cpdef void init_h(self)
     cpdef double get_tau_min(self)
     cpdef void init_taus_acustic(self)
+    cpdef GasLayer step_simple(self, double tau, double v_left, double v_right)
     cpdef GasLayer step_Godunov_simple(self, double v_left, double v_right, double courant, bint init_taus_acustic, double alpha=*)
     cpdef void fill_fluxes(self)
     cpdef void fill_taus(self)
