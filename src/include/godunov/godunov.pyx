@@ -2,11 +2,14 @@
 # cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True, initializedcheck=False, wraparound=False
 
 import cython
-from libc.math cimport pi, sqrt, abs, copysign, pow
+from libc.math cimport pi, sqrt, copysign, pow
 # import numpy as np
 # from libcpp cimport bool as bool_t
-
-cpdef  double get_e_13_1(double p, double ro, double p_0, double c_0, double gamma):
+cpdef inline double abs(double x) nogil:
+    if x < 0:
+        return -x
+    return x
+cpdef  double get_e_13_1(double p, double ro, double p_0, double c_0, double gamma) nogil:
     """Уравнение состояния
     (формула 13.1 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
 
@@ -23,10 +26,10 @@ cpdef  double get_e_13_1(double p, double ro, double p_0, double c_0, double gam
     # return p*(1/ro-0.001)/(gamma-1)
     return (p+gamma*p_0)/((gamma-1)*ro)-c_0*c_0/(gamma-1)
 
-cpdef  double get_p_13_1(double e, double ro, double p_0, double c_0, double gamma):
+cpdef  double get_p_13_1(double e, double ro, double p_0, double c_0, double gamma) nogil:
     return e*ro*(gamma-1) + c_0*c_0/ro-gamma*p_0
 
-cpdef  double get_p_0(double ro_0, double c_0, double gamma):
+cpdef  double get_p_0(double ro_0, double c_0, double gamma) nogil:
     """Нахождение параметра в уравнении состояния p_0 по его другой "постановке" через плотность(?)
     
     Arguments:
@@ -40,7 +43,7 @@ cpdef  double get_p_0(double ro_0, double c_0, double gamma):
 
     return ro_0*c_0*c_0/gamma
 
-cpdef  double get_R_13_2(double ro, double p, double P, double p_0, double gamma):
+cpdef  double get_R_13_2(double ro, double p, double P, double p_0, double gamma) nogil:
     """Адиабата Гюгонио (формула 13.2 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
     Arguments:
@@ -58,7 +61,7 @@ cpdef  double get_R_13_2(double ro, double p, double P, double p_0, double gamma
     cdef double znam = (gamma-1)*(P+p_0)+(gamma+1)*(p+p_0)
     return ro*chsl/znam
 
-cpdef  double get_a_13_4_shock(double ro, double p, double P, double p_0, double gamma):
+cpdef  double get_a_13_4_shock(double ro, double p, double P, double p_0, double gamma) nogil:
     """Получить массовую скорость для ударной волны 
     (формула 13.4 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -75,7 +78,7 @@ cpdef  double get_a_13_4_shock(double ro, double p, double P, double p_0, double
 
     return sqrt(ro*(0.5*(gamma+1)*(P+p_0) + 0.5*(gamma-1)*(p+p_0)))
 
-cpdef  double get_c_13_8(double p, double ro, double p_0, double gamma):
+cpdef  double get_c_13_8(double p, double ro, double p_0, double gamma) nogil:
     """Получить скорость звука в газе
     (формула 13.8 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -91,7 +94,7 @@ cpdef  double get_c_13_8(double p, double ro, double p_0, double gamma):
     # return sqrt(p / ((1/gamma) * ro * (1 - 0.001*ro)))
     return sqrt(gamma*(p+p_0)/ro)
 
-cpdef double get_a_13_11_discharge(double ro, double p, double P, double c, double p_0, double gamma):
+cpdef double get_a_13_11_discharge(double ro, double p, double P, double c, double p_0, double gamma) nogil:
     """Получить массовую скорость для волны разряжения
     (формула 13.11 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -113,7 +116,7 @@ cpdef double get_a_13_11_discharge(double ro, double p, double P, double c, doub
         return 0
     return 0.5*(gamma-1)*ro*c/gamma*chsl/znam
 
-cpdef double get_f_13_16(double P, double p_k, double ro_k, double c_k, double p_0, double gamma):
+cpdef double get_f_13_16(double P, double p_k, double ro_k, double c_k, double p_0, double gamma) nogil:
     """
     (формула 13.16 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -138,7 +141,7 @@ cpdef double get_f_13_16(double P, double p_k, double ro_k, double c_k, double p
     else:
         return 2/(gamma-1)*c_k*(pow(pi_k, 0.5*(gamma-1)/gamma)-1)
 
-cpdef double get_df_13_17(double P, double p_k, double ro_k, double c_k, double p_0, double gamma):
+cpdef double get_df_13_17(double P, double p_k, double ro_k, double c_k, double p_0, double gamma) nogil:
     """
     Производная формулы 13.16
     (формула 13.17 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
@@ -166,7 +169,7 @@ cpdef double get_df_13_17(double P, double p_k, double ro_k, double c_k, double 
         znam = gamma*(P+p_0)
         return chsl/znam
 
-cpdef double get_ddf_13_18(double P, double p_k, double ro_k, double c_k, double p_0, double gamma):
+cpdef double get_ddf_13_18(double P, double p_k, double ro_k, double c_k, double p_0, double gamma) nogil:
     """
     Вторая производная формулы 13.16
     (формула 13.18 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
@@ -194,7 +197,7 @@ cpdef double get_ddf_13_18(double P, double p_k, double ro_k, double c_k, double
         znam = 2*gamma*gamma*(P+p_0)*(P+p_0)
         return -chsl/znam
 
-cpdef  double get_F_13_15(double P, double p_1, double ro_1, double c_1, double p_2, double ro_2, double c_2, double p_0, double gamma):
+cpdef  double get_F_13_15(double P, double p_1, double ro_1, double c_1, double p_2, double ro_2, double c_2, double p_0, double gamma) nogil:
     """Уравнение для давления в зоне контактного разрыва
     (формула 13.15 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -216,7 +219,7 @@ cpdef  double get_F_13_15(double P, double p_1, double ro_1, double c_1, double 
     return get_f_13_16(P=P, p_k=p_1, ro_k=ro_1, c_k=c_1, p_0=p_0, gamma=gamma)+\
            get_f_13_16(P=P, p_k=p_2, ro_k=ro_2, c_k=c_2, p_0=p_0, gamma=gamma)
 
-cpdef  double get_dF_13_15(double P, double p_1, double ro_1, double c_1, double p_2, double ro_2, double c_2, double p_0, double gamma):
+cpdef  double get_dF_13_15(double P, double p_1, double ro_1, double c_1, double p_2, double ro_2, double c_2, double p_0, double gamma) nogil:
     """Производная уравнения 13.15 для давления в зоне контактного разрыва
     (формула 13.17 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -237,7 +240,7 @@ cpdef  double get_dF_13_15(double P, double p_1, double ro_1, double c_1, double
     return get_df_13_17(P=P, p_k=p_1, ro_k=ro_1, c_k=c_1, p_0=p_0, gamma=gamma)+\
            get_df_13_17(P=P, p_k=p_2, ro_k=ro_2, c_k=c_2, p_0=p_0, gamma=gamma)
 
-cpdef double get_ddF_13_15(double P, double p_1, double ro_1, double c_1, double p_2, double ro_2, double c_2, double p_0, double gamma):
+cpdef double get_ddF_13_15(double P, double p_1, double ro_1, double c_1, double p_2, double ro_2, double c_2, double p_0, double gamma) nogil:
     """Вторая производная уравнения 13.15 для давления в зоне контактного разрыва
     (формула 13.18 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
     
@@ -258,7 +261,7 @@ cpdef double get_ddF_13_15(double P, double p_1, double ro_1, double c_1, double
     return get_ddf_13_18(P=P, p_k=p_1, ro_k=ro_1, c_k=c_1, p_0=p_0, gamma=gamma)+\
            get_ddf_13_18(P=P, p_k=p_2, ro_k=ro_2, c_k=c_2, p_0=p_0, gamma=gamma)
 
-cpdef (double, double, double) get_Us_13_22(double p_1, double p_2, double ro_1, double c_1, double c_2, double p_0, double gamma):
+cpdef (double, double, double) get_Us_13_22(double p_1, double p_2, double ro_1, double c_1, double c_2, double p_0, double gamma) nogil:
     """Значения функции get_F_13_15 (значения разницы скоростей газовых потоков) в точках P = -p_0, p_1, p_2, 
     для определения конфигурации, возникающих при распаде разрыва.
     (формула 13.22 из монографии С.К. Годунова "Численное решение многомерных задач газовой динамики")
@@ -286,7 +289,10 @@ cpdef (double, double, double) get_Us_13_22(double p_1, double p_2, double ro_1,
     cdef double U_vak = -2*c_1/(gamma-1) - 2*c_2/(gamma-1)
     return U_ud, U_raz, U_vak
 
-cdef class MegaFooResult(object):
+
+
+
+cdef class MegaFooResult:
     pass
 
 cpdef MegaFooResult mega_foo_cython(double p_1, double ro_1, double u_1, double c_1, \
@@ -310,13 +316,14 @@ cpdef MegaFooResult mega_foo_cython(double p_1, double ro_1, double u_1, double 
     res.P = P
     return res
 
+
 cdef class Border_URPDD_Result:
     pass
 
 cpdef Border_URPDD_Result border_wall_URPDD_result(bint left_border, double vbi, double p, double ro, double u, double c, \
              double p_0, double gamma, double eps_F=1e-6, int n_iter_max=13):
-    cdef double rU,rR,rP,D_1,D_2 
-    rU,rR,rP,D_1,D_2= border_wall_URPDD(left_border,vbi,p, ro, u, c, \
+    cdef double rU,rR,rP,D_1,D_2,U_kr 
+    rU,rR,rP,D_1,D_2,U_kr= border_wall_URPDD(left_border,vbi,p, ro, u, c, \
              p_0, gamma, eps_F, n_iter_max)
     cdef Border_URPDD_Result res = Border_URPDD_Result()
     res.rU = rU
@@ -324,10 +331,11 @@ cpdef Border_URPDD_Result border_wall_URPDD_result(bint left_border, double vbi,
     res.rP=rP
     res.D_1=D_1
     res.D_2=D_2
+    res.U_kr = U_kr
     return res
 
-cpdef (double, double, double, double, double) border_wall_URPDD(bint left_border, double vbi, double p, double ro, double u, double c, \
-             double p_0, double gamma, double eps_F=1e-6, int n_iter_max=13):
+cpdef (double, double, double, double, double,double) border_wall_URPDD(bint left_border, double vbi, double p, double ro, double u, double c, \
+             double p_0, double gamma, double eps_F=1e-6, int n_iter_max=13) nogil:
     
     cdef double p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2, rU,rR,rP,D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P
     cdef bint suc, UD_left, UD_right
@@ -345,16 +353,16 @@ cpdef (double, double, double, double, double) border_wall_URPDD(bint left_borde
              p_2, ro_2, u_2, c_2, \
              p_0, gamma, eps_F, n_iter_max)  
     if not suc:
-        return vbi,ro,p,D_1,D_2 
+        return vbi,ro,p,D_1,D_2,U 
     
     rU,rR,rP=get_ray_URP(vbi, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P,
                          p_1=p_1, ro_1=ro_1, u_1=u_1, c_1=c_1, p_2=p_2, ro_2=ro_2, u_2=u_2, c_2=c_2, gamma=gamma)
-    return rU,rR,rP,D_1,D_2
+    return rU,rR,rP,D_1,D_2,U
 
 cpdef (bint, bint, bint, double, double, double, double, double, double, double, double) \
     mega_foo(double p_1, double ro_1, double u_1, double c_1, \
              double p_2, double ro_2, double u_2, double c_2, \
-             double p_0, double gamma, double eps_F=1e-5, int n_iter_max=37):
+             double p_0, double gamma, double eps_F=1e-5, int n_iter_max=37) nogil:
     """Функция определения параметров газового потока в задаче Римана о распаде разрыва
     
     Arguments:
@@ -471,7 +479,7 @@ cpdef (double, double, double) get_ray_URP( \
     double ray_W, bint UD_left, bint UD_right, double D_1, double D_star_1, double U, \
     double D_star_2, double D_2, double R_1, double R_2, double P, \
     double p_1, double ro_1, double u_1, double c_1, \
-    double p_2, double ro_2, double u_2, double c_2, double gamma):
+    double p_2, double ro_2, double u_2, double c_2, double gamma) nogil:
     """ОООооо даааа =) функция получения вектора характеристик газа, испытавшего распад разрыва, на подвижной границе.
     В начальный момент времени граница находится в точке разрыва. Скорость границы (rayW) постоянна
     

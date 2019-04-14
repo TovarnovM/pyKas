@@ -9,34 +9,36 @@ cpdef inline void roue_to_q_(
     double ro,
     double u,
     double e,
-    double[:] q)
+    double[:] q) nogil
 
-cpdef inline (double, double, double) q_to_roue(double[:] q)
+cpdef inline double abs(double x) nogil
 
-cpdef inline (double, double, double) q123_to_roue(double q1, double q2, double q3)
+cpdef inline (double, double, double) q_to_roue(double[:] q) nogil
+
+cpdef inline (double, double, double) q123_to_roue(double q1, double q2, double q3) nogil
 
 cpdef inline (double, double, double) roue_to_q(
     double ro,
     double u,
-    double e)
+    double e) nogil
 
 cpdef inline double roe_to_p(
     double ro,
     double e,
     double gamma,
-    double b)
+    double b) nogil
 
 cpdef inline double rop_to_e(
     double ro,
     double p,
     double gamma,
-    double b)
+    double b) nogil
 
 cpdef inline double rop_to_csound(
     double ro,
     double p,
     double gamma,
-    double b)
+    double b) nogil
 
 cpdef (double, double, double) AUSM_gas_(
     double p1, 
@@ -49,11 +51,11 @@ cpdef (double, double, double) AUSM_gas_(
     double u2, 
     double e2, 
     double c2,
-    double vbi)
+    double vbi) nogil
 
-cpdef inline double min2(double a, double b)
+cpdef inline double min2(double a, double b) nogil
 
-cpdef inline double max2(double a, double b)
+cpdef inline double max2(double a, double b) nogil
     
 cdef class GasEOS:
     cdef public double gamma, kappa, p_0, c_0
@@ -62,14 +64,21 @@ cdef class GasEOS:
     cpdef double get_p(self, double ro, double e)
     cpdef double get_csound(self, double ro, double p)  
 
+cdef class Powder(GasEOS):
+    cdef public InterpXY psi, dpsi
+    cdef public double I_k, alpha_k, ro, f, T_1, nu
+    cpdef double get_e_powder(self, double ro, double p, double z)
+    cpdef double get_p_powder(self, double ro, double e, double z)
+    cpdef double get_csound_powder(self, double ro, double p, double z)
+
 cdef class GasFluxCalculator:
     cdef public int flux_type, left_border_type, right_border_type, n_iter_max
     cdef public double epsF
     cpdef void fill_fluxesURP_Ds_Godunov(self, double[:] Vs_borders, double[:] ps, double[:] ros, \
             double[:] us, double[:] cs, GasEOS gasEOS, \
-            double[:] flux1, double[:] flux2, double[:] flux3, double[:] D_left, double[:] D_right)
-    cpdef void fill_fluxesURP_taus(self, GasLayer layer)
-    cpdef void fill_taus_Godunov(self, double[:] xs_borders, double[:] Vs_borders, double[:] D_left, double[:] D_right, double[:] taus)
+            double[:] flux1, double[:] flux2, double[:] flux3, double[:] D_left, double[:] D_right, double[:] U_kr)
+    cpdef void fill_fluxesURP(self, GasLayer layer)
+    
 
 cdef class GridStrecher:
     cdef public int strech_type
@@ -87,10 +96,11 @@ cdef class GridStrecher:
     cpdef bint sync_layers(self, GasLayer layer0, GasLayer layer1, double tau, double v_left, double v_right)
 
 cdef class GasLayer:
-    cdef public double[:] xs_cells, xs_borders, Vs_borders, \
-        ps, ros, us, es, cs, taus, D_left, D_right, \
+    cdef public double[:] xs_cells, xs_borders, Vs_borders, U_kr,\
+        ros, ps, us, es, cs, taus, D_left, D_right,  \
         ds, S, W
     cdef public double[:,:] qs, hs, fluxes
+        #pars # 0 - ros, 1 - ps, 2 - us  
     cdef public int n_cells, n_qs
     cdef public Tube tube
     cdef public GasEOS gasEOS
@@ -108,13 +118,18 @@ cdef class GasLayer:
     cpdef void init_taus_acustic(self)
     cpdef GasLayer step_Godunov_simple(self, double v_left, double v_right, double courant, bint init_taus_acustic, double alpha=*)
     cpdef void fill_fluxes(self)
+    cpdef void fill_taus(self)
     cpdef GasLayer step_Godunov_corrector(self, GasLayer layer_simple, double v_left, double v_right)
     cpdef GasLayer step_Godunov_corrector2(self, GasLayer layer_simple, double v_left, double v_right)
-    cpdef void fill_fluxesURP_taus(self)
-    
+    cpdef void fill_fluxesURP(self)
+
 cdef class PowderOvLayer(GasLayer):
     cdef public double some
     cdef public double[:] zs
     cpdef void copy_params_to_Ov(self, PowderOvLayer to_me)
     cpdef GasLayer copy(self)
     cpdef void init_ropue_fromfoo(self, foo_ropu, bint init_q=*,  bint init_SsdW=*)
+    cpdef void init_q(self)
+    cpdef void init_ropue(self)
+    cpdef void init_h(self)
+    cpdef void fill_fluxes(self)

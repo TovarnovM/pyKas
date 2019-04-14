@@ -3,7 +3,7 @@
 
 from tube cimport Tube, InterpXY
 import cython
-from libc.math cimport pi, sqrt, abs, copysign, abs
+from libc.math cimport pi, sqrt, copysign
 from godunov cimport get_e_13_1, get_p_13_1, get_c_13_8, mega_foo_cython, \
                      get_ray_URP, MegaFooResult, border_wall_URPDD_result, Border_URPDD_Result
 import numpy as np
@@ -20,11 +20,28 @@ cpdef double foo():
     cdef double d = t.get_d(4)
     return d
 
+cpdef inline double abs(double x) nogil:
+    if x < 0:
+        return -x
+    return x
+
+cpdef inline double min2(double a, double b) nogil:
+    if a < b:
+        return a
+    else:
+        return b
+
+cpdef inline double max2(double a, double b) nogil:
+    if a > b:
+        return a
+    else:
+        return b
+
 cpdef inline void roue_to_q_(
     double ro,
     double u,
     double e,
-    double[:] q):
+    double[:] q) nogil:
 
     q[0] = ro
     q[1] = ro * u
@@ -33,18 +50,18 @@ cpdef inline void roue_to_q_(
 cpdef inline (double, double, double) roue_to_q(
     double ro,
     double u,
-    double e):
+    double e) nogil:
 
     return ro, ro * u, ro * (e + 0.5 * u * u)
 
 
-cpdef inline (double, double, double) q_to_roue(double[:] q):
+cpdef inline (double, double, double) q_to_roue(double[:] q) nogil:
     cdef double ro = q[0]
     cdef double u = q[1] / q[0]
     cdef double e = q[2] / q[0] - 0.5 * u * u
     return ro, u, e
 
-cpdef inline (double, double, double) q123_to_roue(double q1, double q2, double q3):
+cpdef inline (double, double, double) q123_to_roue(double q1, double q2, double q3) nogil:
     cdef double ro = q1
     cdef double u = q2 / q1
     cdef double e = q3 / q1 - 0.5 * u * u
@@ -55,7 +72,7 @@ cpdef inline double roe_to_p(
     double ro,
     double e,
     double gamma,
-    double b):
+    double b) nogil:
 
     return (gamma-1)*e*ro/(1-b*ro)
 
@@ -65,7 +82,7 @@ cpdef inline double rop_to_e(
     double ro,
     double p,
     double gamma,
-    double b):
+    double b) nogil:
 
     return p*(1/ro-b)/(gamma-1)
 
@@ -74,7 +91,7 @@ cpdef inline double rop_to_csound(
     double ro,
     double p,
     double gamma,
-    double b):
+    double b) nogil:
 
     return sqrt(p / ((1/gamma) * ro * (1 - b*ro)))
 
@@ -91,7 +108,7 @@ cpdef (double, double, double) AUSM_gas_(
     double u2, 
     double e2, 
     double c2,
-    double vbi):
+    double vbi) nogil:
 
     cdef double r1=ro1
     cdef double r2=ro2
@@ -169,6 +186,92 @@ cdef class GasEOS(object):
         else:
             return get_c_13_8(p, ro, self.p_0, self.gamma)
 
+cdef class Powder(GasEOS):
+    @classmethod
+    def from_bd(cls, d, n_points=300):
+        """Создать образец Powder из словаря БД
+        
+        Arguments:
+            d {[type]} -- словарь типа 
+                        {   'name': '4\\7',
+                            'f': 1.027,
+                            'etta': 0.228,
+                            'alpha_k': 1.008,
+                            'T_1': 3006.0,
+                            'ro': 1.6,
+                            'I_k': 0.32,
+                            'Z_k': 1.488,
+                            'k_1': 0.811,
+                            'lambda_1': 0.081,
+                            'k_2': 0.505,
+                            'lambda_2': -1.024,
+                            'k_f': 0.0003,
+                            'k_l': 0.0016   }
+        """
+        Z_k = d['Z_k']
+        k1 = d['k_1']
+        l1 = d['lambda_1']
+        k2 = d['k_2']
+        l2 = d['lambda_2']
+        zs = np.linspace(0, Z_k, n_points)
+        dpsidz = np.empty_like(zs)
+        for i, z in enumerate(zs):
+            dpsidz[i] = k1*(1+2*l1*z) if z<=1 else k2*(1+2*l2*(z-1)) if z<Z_k else 0
+        return cls(name=d['name'], I_k=d['I_k'], alpha_k=d['alpha_k'], ro=d['ro'], f=d['f'], etta=d['etta'], T_1=d['T_1'], zs=zs, dpsi_dz=dpsidz)
+
+    def __init__(self, name, I_k, alpha_k, ro, f, etta, T_1, zs, dpsi_dz):
+        """Конструктор
+        
+        Arguments:
+            I_k  -- импульс конца горения МПа*с
+            alpha_k  -- коволюм (как в БД, т.е. настоящий коволюм =/ 1000)
+            ro  -- плотность пороха г/см^3
+            f  -- сила пороха, МДж/кг
+            etta  -- k -1
+            T_1  -- темп. горения ?
+            zs {list} -- точки z для интерполяции dpsi
+            dpsi_dz {list} -- точки dpsi_dz для интерполяции dpsi_dz
+        """
+        self.name = name
+        super().__init__(gamma=etta+1, kappa=alpha_k/1000, p_0=0, c_0=0, kind=33)
+        self.I_k = I_k * 1e6
+        self.ro = ro * 1000
+        self.f = f * 1e6
+        self.T_1 = T_1
+        self.R_g = self.f / self.T_1
+        self.nu = 1
+        
+        psis = [0]
+        dpsis = [dpsi_dz[0]]
+        for i in range(1, len(dpsi_dz)):
+            dz = zs[i] - zs[i-1]
+            dpsi = (dpsi_dz[i] + dpsi_dz[i-1])*0.5
+            psis.append(psis[-1] + dz*dpsi)
+            dpsis.append(dpsi_dz[i])
+        mnj = 1/psis[-1]
+        for i in range(len(zs)):
+            psis[i] = psis[i]*mnj
+            dpsis[i] = dpsis[i]*mnj
+        self.dpsi = InterpXY(zs, dpsis)    
+        self.psi = InterpXY(zs, psis)
+    
+    cpdef double get_e_powder(self, double ro, double p, double z):
+        cdef double psi = self.psi.get_v(z)
+        return (p/(self.gamma-1)) * (1/ro - ((1-psi)/self.ro + self.kappa*psi)) +(1-psi)*self.f/(self.gamma-1)
+    
+    cpdef double get_p_powder(self, double ro, double e, double z):
+        cdef double psi = self.psi.get_v(z)
+        cdef double chsl = e * (self.gamma-1) - (1-psi)*self.f
+        cdef double znam = 1/ro - ((1-psi)/self.ro + self.kappa*psi)
+        return chsl/znam
+    
+    cpdef double get_csound_powder(self, double ro, double p, double z): 
+        cdef double psi = self.psi.get_v(z)
+        cdef double chsl = self.gamma * p
+        cdef double znam = 1/ro - ((1-psi)/self.ro + self.kappa*psi)
+        return sqrt(chsl/znam)/ro
+
+
 cdef class GasFluxCalculator(object):
     """Класс для расчета потоков через 2 соседние ячейки. Так же предоставляет методы для граничных условий
 
@@ -191,44 +294,22 @@ cdef class GasFluxCalculator(object):
         self.epsF=1e-6
         self.n_iter_max = 7
 
-    cpdef void fill_fluxesURP_taus(self, GasLayer layer):
+    cpdef void fill_fluxesURP(self, GasLayer layer):
         """Основной метод для зполнения в GasLayer'e массивов с потоками и временами прохождения возмущений в ячейках с учетом движения узлов
         """
 
         if self.flux_type == 1:
             self.fill_fluxesURP_Ds_Godunov(layer.Vs_borders, layer.ps, layer.ros, layer.us, layer.cs, layer.gasEOS,\
-                layer.fluxes[0], layer.fluxes[1], layer.fluxes[2], layer.D_left, layer.D_right)
-            self.fill_taus_Godunov(layer.xs_borders, layer.Vs_borders, layer.D_left, layer.D_right, layer.taus)
-
-    cpdef void fill_taus_Godunov(self, double[:] xs_borders, double[:] Vs_borders, double[:] D_left, double[:] D_right, double[:] taus):
-        cdef size_t i
-        cdef double dx, v_otn_left, v_otn_right, tau_left, tau_right
-        for i in range(taus.shape[0]):
-            dx = xs_borders[i+1] - xs_borders[i]
-            v_otn_left = D_left[i] - Vs_borders[i+1]
-            if v_otn_left < 1e-12:
-                tau_left = 999
-            else:
-                tau_left = dx / v_otn_left
-            
-            v_otn_right = Vs_borders[i] - D_right[i] 
-            if v_otn_right < 1e-12:
-                tau_right = 999
-            else:
-                tau_right = dx / v_otn_right
-            if tau_left < tau_right:
-                taus[i] = tau_left
-            else:
-                taus[i] = tau_right
+                layer.fluxes[0], layer.fluxes[1], layer.fluxes[2], layer.D_left, layer.D_right, layer.U_kr)
             
 
     cpdef void fill_fluxesURP_Ds_Godunov(self, double[:] Vs_borders, double[:] ps, double[:] ros, \
             double[:] us, double[:] cs, GasEOS gasEOS, \
-            double[:] flux1, double[:] flux2, double[:] flux3, double[:] D_left, double[:] D_right):
+            double[:] flux1, double[:] flux2, double[:] flux3, double[:] D_left, double[:] D_right, double[:] U_kr):
         cdef size_t i
         cdef double p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2
         cdef MegaFooResult mfres
-        cdef double rayU, rayR, rayP, rayE, ray_W, M_j, J_j, E_j, D_1, D_2
+        cdef double rayU, rayR, rayP, rayE, ray_W, M_j, J_j, E_j, D_1, D_2, rayU_kr
         cdef Border_URPDD_Result border_res
 
         p_1 = ps[0]
@@ -243,6 +324,7 @@ cdef class GasFluxCalculator(object):
         rayP = border_res.rP 
         D_1 = border_res.D_1 
         D_2 = border_res.D_2 
+        rayU_kr = border_res.U_kr
         
         # rayE = gasEOS.get_e(rayR, rayP)
 
@@ -254,6 +336,7 @@ cdef class GasFluxCalculator(object):
         flux2[0] = rayR
         flux3[0] = rayP
         D_left[0] = D_2
+        U_kr[0] = rayU_kr
         for i in range(1, ps.shape[0]):
             p_1 = ps[i-1]
             ro_1 = ros[i-1] 
@@ -281,6 +364,7 @@ cdef class GasFluxCalculator(object):
             flux3[i] = rayP
             D_right[i-1] = D_1
             D_left[i] = D_2 
+            U_kr[i] = mfres.U
 
         i=ps.shape[0]-1
         ray_W = Vs_borders[i+1]
@@ -296,7 +380,7 @@ cdef class GasFluxCalculator(object):
         rayP = border_res.rP 
         D_1 = border_res.D_1 
         D_2 = border_res.D_2 
-
+        rayU_kr = border_res.U_kr
         # rayE = gasEOS.get_e(rayR, rayP)
         # M_j = rayR * (rayU - ray_W)
         # J_j = rayP + M_j * rayU
@@ -306,18 +390,9 @@ cdef class GasFluxCalculator(object):
         flux2[i+1] = rayR
         flux3[i+1] = rayP
         D_right[i] = D_1
+        U_kr[i+1] = rayU_kr
 
-cpdef inline double min2(double a, double b):
-    if a < b:
-        return a
-    else:
-        return b
 
-cpdef inline double max2(double a, double b):
-    if a > b:
-        return a
-    else:
-        return b
 
 cdef class GridStrecher(object):
     """Класс дял управления координатами и скоростями одномерных сеток
@@ -471,6 +546,7 @@ cdef class GasLayer(object):
     def __init__(self, n_cells, Tube tube, GasEOS gasEOS, GasFluxCalculator flux_calculator, GridStrecher grid_strecher, int n_qs=3):
         self.n_cells = n_cells
         self.n_qs = n_qs
+        # self.n_pars = n_pars
         self.tube = tube
         self.gasEOS = gasEOS
         self.time = 0
@@ -486,15 +562,18 @@ cdef class GasLayer(object):
         self.ds = np.zeros(n_cells, dtype=np.double)
         self.W = np.zeros(n_cells, dtype=np.double)
 
-        self.ps = np.zeros(n_cells, dtype=np.double)
         self.ros = np.zeros(n_cells, dtype=np.double)
+        self.ps = np.zeros(n_cells, dtype=np.double)
         self.us = np.zeros(n_cells, dtype=np.double)
         self.es = np.zeros(n_cells, dtype=np.double)
         self.cs = np.zeros(n_cells, dtype=np.double)
 
+        # self.pars = np.zeros((n_pars, n_cells), dtype=np.double) # 0 - ros, 1 - ps, 2 - us 
+
         self.taus = np.zeros(n_cells, dtype=np.double)
         self.D_left = np.zeros(n_cells, dtype=np.double)
         self.D_right = np.zeros(n_cells, dtype=np.double)
+        self.U_kr = np.zeros(n_cells+1, dtype=np.double)
 
         self.fluxes = np.zeros((n_qs, n_cells+1), dtype=np.double)
 
@@ -521,9 +600,12 @@ cdef class GasLayer(object):
         to_me.es[:] = self.es
         to_me.cs[:] = self.cs
 
+        # to_me.pars[:] = self.pars
+
         to_me.taus[:] = self.taus
         to_me.D_left[:] = self.D_left
         to_me.D_right[:] = self.D_right
+        to_me.U_kr[:] = self.U_kr
 
         to_me.fluxes[:] = self.fluxes
         to_me.qs[:] = self.qs
@@ -615,11 +697,33 @@ cdef class GasLayer(object):
             self.fluxes[1, i] = J_j
             self.fluxes[2, i] = E_j
 
-    cpdef void fill_fluxesURP_taus(self):
-        self.flux_calculator.fill_fluxesURP_taus(self)
+    cpdef void fill_fluxesURP(self):
+        self.flux_calculator.fill_fluxesURP(self)
+    
+    cpdef void fill_taus(self):
+        cdef size_t i
+        cdef double dx, v_otn_left, v_otn_right, tau_left, tau_right
+        for i in range(self.taus.shape[0]):
+            dx = self.xs_borders[i+1] - self.xs_borders[i]
+            v_otn_left = self.D_left[i] - self.Vs_borders[i+1]
+            if v_otn_left < 1e-12:
+                tau_left = 999
+            else:
+                tau_left = dx / v_otn_left
+            
+            v_otn_right = self.Vs_borders[i] - self.D_right[i] 
+            if v_otn_right < 1e-12:
+                tau_right = 999
+            else:
+                tau_right = dx / v_otn_right
+            if tau_left < tau_right:
+                self.taus[i] = tau_left
+            else:
+                self.taus[i] = tau_right
 
     cpdef GasLayer step_Godunov_simple(self, double v_left, double v_right, double courant, bint init_taus_acustic, double alpha=1):
-        self.fill_fluxesURP_taus()
+        self.fill_fluxesURP()
+        self.fill_taus()
         if init_taus_acustic:
             self.init_taus_acustic()
         cdef double tau = self.get_tau_min() * courant * alpha  
@@ -629,11 +733,10 @@ cdef class GasLayer(object):
         if not suc:
             print('suc 554')
             return self
-        
+        self.fill_taus()
         layer1.init_SsdW()
         if self.get_tau_min() < tau/alpha:
             print('tau stuff 560')
-            self.fill_fluxesURP_taus()
             tau = self.get_tau_min() * courant * alpha
             suc = self.grid_strecher.sync_layers(self, layer1, tau, v_left, v_right)
             layer1.init_SsdW()
@@ -661,8 +764,8 @@ cdef class GasLayer(object):
         layer2.init_SsdW()
         layer_simple.init_h()
         
-        layer_simple.fill_fluxesURP_taus()
-
+        layer_simple.fill_fluxesURP()
+        layer_simple.fill_taus()
         layer_simple.fill_fluxes()
 
         cdef size_t i, j
@@ -688,7 +791,8 @@ cdef class GasLayer(object):
 
         layer_simple.Vs_borders[:] = self.Vs_borders
         layer_simple.init_h()
-        layer_simple.fill_fluxesURP_taus()
+        layer_simple.fill_fluxesURP()
+        layer_simple.fill_taus()
         layer_simple.fill_fluxes()
         cdef size_t i, j
         cdef double dx, dx_simple
@@ -722,6 +826,7 @@ cdef class GasLayer(object):
             'taus': np.array(self.taus),
             'D_left': np.array(self.D_left),
             'D_right': np.array(self.D_right),
+            'U_kr': np.array(self.U_kr),
             'ds': np.array(self.ds),
             'S': np.array(self.S),
             'W': np.array(self.W),
@@ -731,36 +836,37 @@ cdef class GasLayer(object):
             'fluxes':np.array(self.fluxes)
        }
     def from_dict(self, d):
-        self.time = d['time']
-        self.n_cells = d['xs_cells'].shape[0] 
-        self.n_qs = d['n_qs']
-        self.xs_cells[:] = d['xs_cells']
-        self.xs_borders[:] = d['xs_borders']
-        self.Vs_borders[:] = d['Vs_borders']
+        self.time = np.array(d['time'])
+        self.n_cells = np.array(d['xs_cells'].shape[0])
+        self.n_qs = np.array(d['n_qs'])
+        self.xs_cells = np.array(d['xs_cells'])
+        self.xs_borders = np.array(d['xs_borders'])
+        self.Vs_borders = np.array(d['Vs_borders'])
 
-        self.S[:] = d['S'] 
+        self.S = np.array(d['S'] )
 
-        self.ds[:] = d['ds']
-        self.W[:] = d['W']
+        self.ds = np.array(d['ds'])
+        self.W = np.array(d['W'])
 
-        self.ps[:] = d['ps']
-        self.ros[:] = d['ros']
-        self.us[:] = d['us']
-        self.es[:] = d['es']
-        self.cs[:] = d['cs']
+        self.ps = np.array(d['ps'])
+        self.ros = np.array(d['ros'])
+        self.us = np.array(d['us'])
+        self.es = np.array(d['es'])
+        self.cs = np.array(d['cs'])
 
-        self.taus[:] = d['taus']
-        self.D_left[:] = d['D_left']
-        self.D_right[:] = d['D_right']
+        self.taus = np.array(d['taus'])
+        self.D_left = np.array(d['D_left'])
+        self.D_right = np.array(d['D_right'])
+        self.U_kr = np.array(d['U_kr'],)
 
-        self.fluxes[:] = d['fluxes']
-        self.qs[:] = d['qs']
-        self.hs[:] = d['hs']
+        self.fluxes = np.array(d['fluxes'])
+        self.qs = np.array(d['qs'])
+        self.hs = np.array(d['hs'])
     
     
 cdef class PowderOvLayer(GasLayer):
-    def __init__(self, n_cells, Tube tube, GasEOS gasEOS, GasFluxCalculator flux_calculator, GridStrecher grid_strecher):
-        super().__init__(tube, gasEOS, flux_calculator, grid_strecher, 4)
+    def __init__(self, n_cells, Tube tube, Powder powder, GasFluxCalculator flux_calculator, GridStrecher grid_strecher):
+        super().__init__(tube, powder, flux_calculator, grid_strecher, 4)
         self.zs = np.zeros(n_cells, dtype=np.double)
 
     cpdef void copy_params_to_Ov(self, PowderOvLayer to_me):
@@ -768,7 +874,7 @@ cdef class PowderOvLayer(GasLayer):
         to_me.zs[:] = self.zs
 
     cpdef GasLayer copy(self):
-        cdef PowderOvLayer res = PowderOvLayer(self.n_cells, self.tube, self.gasEOS, self.flux_calculator, self.grid_strecher)
+        cdef PowderOvLayer res = PowderOvLayer(self.n_cells, self.tube, <Powder>self.gasEOS, self.flux_calculator, self.grid_strecher)
         self.copy_params_to_Ov(res)
         return res
     
@@ -776,14 +882,88 @@ cdef class PowderOvLayer(GasLayer):
         self.grid_strecher.fill_xs_cells(self.xs_borders, self.xs_cells)
         cdef size_t i
         cdef double x
-        cdef GasEOS eos = self.gasEOS
+        cdef Powder eos = <Powder>self.gasEOS
         cdef double ro, p, u, e, z
         for i in range(self.n_cells):
             ro, p, u, z = foo_ropu(self.xs_cells[i], self)
             self.ros[i], self.ps[i], self.us[i], self.zs[i] = ro, p, u, z
-            self.es[i] = eos.get_e(ro, p)
-            self.cs[i] = eos.get_csound(ro, p)
+            self.es[i] = eos.get_e_powder(ro, p, z)
+            self.cs[i] = eos.get_csound_powder(ro, p, z)
         if init_q:
             self.init_q()
         if init_SsdW:
             self.init_SsdW()
+
+    cpdef void init_q(self):
+        cdef size_t i
+        cdef size_t n = self.ros.shape[0]
+        for i in range(n):
+            q1, q2, q3 = roue_to_q(self.ros[i], self.us[i], self.es[i])
+            self.qs[0, i] = q1
+            self.qs[1, i] = q2 
+            self.qs[2, i] = q3
+            self.qs[3, i] = self.ros[i]*self.zs[i]
+
+    cpdef void init_ropue(self):
+        cdef size_t i
+        cdef size_t n = self.ros.shape[0]
+        cdef double ro, p, u, e, z
+        cdef Powder eos = <Powder>self.gasEOS
+        for i in range(n):
+            ro, u, e = q123_to_roue(self.qs[0, i], self.qs[1, i], self.qs[2, i])
+            z = self.qs[3, i] / ro
+            p = eos.get_p_powder(ro, e, z)
+            self.ros[i] = ro
+            self.ps[i] = p
+            self.us[i] = u
+            self.es[i] = e
+            self.zs[i] = z
+            self.cs[i] = eos.get_csound_powder(ro, p, z)
+
+    cpdef void init_h(self):
+        cdef size_t i
+        cdef Powder powder = <Powder>self.gasEOS
+        for i in range(self.hs.shape[1]):
+            self.hs[0, i] = 0
+            self.hs[1, i] = self.ps[i] * self.ds[i] 
+            self.hs[2, i] = 0
+            self.hs[3, i] = self.ros[i] * 0.5*(self.S[i]+self.S[i+1]) * pow(self.ps[i], powder.nu) / powder.I_k
+
+    cpdef void fill_fluxes(self):
+        cdef size_t i
+        cdef Powder powder = <Powder>self.gasEOS
+        cdef double rayE, rayU, rayR, rayP, rayZ, M_j, J_j, E_j, ray_W
+        for i in range(self.fluxes.shape[1]):
+            ray_W = self.Vs_borders[i]
+            rayU = self.fluxes[0, i]
+            rayR = self.fluxes[1, i]
+            rayP = self.fluxes[2, i]
+
+            if i == 0:
+                rayZ = self.zs[0]
+            elif i == self.fluxes.shape[1]-1:
+                rayZ = self.zs[self.zs.shape[0]-1]
+            elif ray_W > self.U_kr[i]:
+                rayZ = self.zs[i]
+            else:
+                rayZ = self.zs[i-1]
+
+            rayE = powder.get_e_powder(rayR, rayP, rayZ)
+
+            M_j = rayR * (rayU - ray_W)
+            J_j = rayP + M_j * rayU
+            E_j = (rayE + 0.5*rayU*rayU)*M_j + rayP*rayU
+            self.fluxes[0, i] = M_j
+            self.fluxes[1, i] = J_j
+            self.fluxes[2, i] = E_j
+            self.fluxes[3, i] = M_j * rayZ
+
+    def to_dict(self):
+        res = super().to_dict()
+        res['zs'] = np.array(self.zs)
+
+    def from_dict(self, d):
+        super().from_dict()
+        self.zs = np.array(d['zs'])
+
+    
