@@ -726,13 +726,14 @@ cdef class GasLayer(object):
                 self.taus[i] = tau_right
 
     cpdef GasLayer step_simple(self, double tau, double v_left, double v_right):
-        self.init_h()
+        
         self.fill_fluxesURP()
         cpdef GasLayer layer1 = self.copy() 
         cdef bint suc = self.grid_strecher.sync_layers(self, layer1, tau, v_left, v_right)
         if not suc:
             print('suc 454')
             return self
+        self.init_h()
         self.fill_taus()
         layer1.init_SsdW()
         layer1.taus[:] = self.taus
@@ -1027,7 +1028,10 @@ cdef class ElPistLayer(GasLayer):
                 dudx = (self.us[i+1] - self.us[i])/(self.xs_cells[i+1] - self.xs_cells[i])
             skobka = 2*dudx - self.us[i]*self.ds[i]/S
             h = 1/2/sqrt(3)*abs(skobka)
-            tauxx = 2/3*eos.get_kh(h)*skobka
+            if abs(h) < 1e-10:
+                tauxx = 0.0
+            else:
+                tauxx = 2/3*eos.get_kh(h)*skobka
             sigma_nn_w = - self.ps[i] - 0.5 * tauxx 
             self.hs[0, i] = 0
             self.hs[1, i] = 2*pi*R*sigma_nt_w - self.ds[i]*sigma_nn_w
@@ -1068,6 +1072,7 @@ cdef class ElPistEOS(GasEOS):
         self.tau_0 = tau_0 * 1e6
         self.mu = mu
         self.tau_s = tau_s * 1e6
+
 
     cpdef double get_tauu(self, double sigma, double u):
         if sigma < self.sigma_star:

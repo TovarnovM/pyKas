@@ -138,7 +138,7 @@ cdef class PowderOvLayer(GasLayer):
     cpdef void fill_fluxes(self)
 
 cdef class ElPistLayer(GasLayer):
-    cdef double[:] tauxx_flux
+    cdef public double[:] tauxx_flux
     cpdef void copy_params_to_elpist(self, ElPistLayer lr)
     cpdef GasLayer copy(self)
     cpdef void init_h(self)
