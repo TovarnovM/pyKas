@@ -316,6 +316,26 @@ cpdef MegaFooResult mega_foo_cython(double p_1, double ro_1, double u_1, double 
     res.P = P
     return res
 
+cpdef void mega_foo_fill_rr(double p_1, double ro_1, double u_1, double c_1, \
+             double p_2, double ro_2, double u_2, double c_2, \
+             double p_0, double gamma, double[:] rr_vals, bint[:] rr_bint, double eps_F=1e-5, int n_iter_max=37) nogil:
+    cdef double D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P
+    cdef bint suc, UD_left, UD_right
+    suc, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P = mega_foo(p_1, ro_1, u_1, c_1, \
+             p_2, ro_2, u_2, c_2, \
+             p_0, gamma, eps_F, n_iter_max)  
+    rr_bint[0] = suc
+    rr_bint[1] = UD_left
+    rr_bint[2] = UD_right
+    
+    rr_vals[0] = D_1
+    rr_vals[1] = D_star_1
+    rr_vals[2] = U
+    rr_vals[3] = D_star_2
+    rr_vals[4] = D_2
+    rr_vals[5] = R_1
+    rr_vals[6] = R_2
+    rr_vals[7] = P
 
 cdef class Border_URPDD_Result:
     pass
@@ -333,6 +353,49 @@ cpdef Border_URPDD_Result border_wall_URPDD_result(bint left_border, double vbi,
     res.D_2=D_2
     res.U_kr = U_kr
     return res
+
+
+
+cpdef (double, double, double) border_wall_fill_rr(bint left_border, double vbi, double p, double ro, double u, double c, \
+             double p_0, double gamma, double[:] rr_vals, bint[:] rr_bint, double eps_F=1e-6, int n_iter_max=13) nogil:
+    
+    cdef double rU,rR,rP,p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2,D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P
+    cdef bint suc, UD_left, UD_right
+    p_1, p_2 = p, p
+    ro_1, ro_2 = ro, ro
+    c_1, c_2 = c, c
+    if left_border:
+        u_2 = u
+        u_1 = - u + 2*vbi
+    else:
+        u_1 = u
+        u_2 = -u + 2*vbi
+
+    mega_foo_fill_rr(p_1, ro_1, u_1, c_1, \
+             p_2, ro_2, u_2, c_2, \
+             p_0, gamma, rr_vals, rr_bint, eps_F, n_iter_max) 
+    if not rr_bint[0]:
+        return vbi,ro,p
+        rr_bint[0] = suc
+
+    UD_left = rr_bint[1]
+    UD_right = rr_bint[2]
+    
+    D_1 = rr_vals[0]
+    D_star_1 = rr_vals[1]
+    U = rr_vals[2] 
+    D_star_2 = rr_vals[3]
+    D_2 = rr_vals[4]
+    R_1 = rr_vals[5] 
+    R_2 = rr_vals[6]
+    P = rr_vals[7]
+
+    rU,rR,rP=get_ray_URP(vbi, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P,
+                         p_1=p_1, ro_1=ro_1, u_1=u_1, c_1=c_1, p_2=p_2, ro_2=ro_2, u_2=u_2, c_2=c_2, gamma=gamma)
+    return rU, rR, rP
+    
+    
+
 
 cpdef (double, double, double, double, double,double) border_wall_URPDD(bint left_border, double vbi, double p, double ro, double u, double c, \
              double p_0, double gamma, double eps_F=1e-6, int n_iter_max=13) nogil:
@@ -352,6 +415,7 @@ cpdef (double, double, double, double, double,double) border_wall_URPDD(bint lef
     suc, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P = mega_foo(p_1, ro_1, u_1, c_1, \
              p_2, ro_2, u_2, c_2, \
              p_0, gamma, eps_F, n_iter_max)  
+    
     if not suc:
         return vbi,ro,p,D_1,D_2,U 
     

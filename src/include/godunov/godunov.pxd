@@ -1,7 +1,7 @@
 # distutils: language=c++
 # cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True, initializedcheck=False, wraparound=False
 
-cpdef inline double abs(double x) nogil
+cpdef  double abs(double x) nogil
 
 cpdef  double get_e_13_1(double p, double ro, double p_0, double c_0, double gamma) nogil
 
@@ -42,8 +42,15 @@ cpdef MegaFooResult mega_foo_cython(double p_1, double ro_1, double u_1, double 
              double p_2, double ro_2, double u_2, double c_2, \
              double p_0, double gamma, double eps_F=*, int n_iter_max=*)
 
+cpdef void mega_foo_fill_rr(double p_1, double ro_1, double u_1, double c_1, \
+             double p_2, double ro_2, double u_2, double c_2, \
+             double p_0, double gamma, double[:] rr_vals, bint[:] rr_bint, double eps_F=*, int n_iter_max=*) nogil
+
 cpdef Border_URPDD_Result border_wall_URPDD_result(bint left_border, double vbi, double p, double ro, double u, double c, \
              double p_0, double gamma, double eps_F=*, int n_iter_max=*)
+
+cpdef (double, double, double) border_wall_fill_rr(bint left_border, double vbi, double p, double ro, double u, double c, \
+             double p_0, double gamma, double[:] rr_vals, bint[:] rr_bint, double eps_F=*, int n_iter_max=*) nogil
 
 cpdef (double, double, double, double, double,double) border_wall_URPDD(bint left_border, double vbi, double p, double ro, double u, double c, \
              double p_0, double gamma, double eps_F=*, int n_iter_max=*) nogil

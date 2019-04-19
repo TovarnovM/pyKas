@@ -6,7 +6,7 @@ import cython
 from libc.math cimport pi, sqrt, copysign, exp
 from godunov cimport get_e_13_1, get_p_13_1, get_c_13_8, mega_foo_cython, \
                      get_ray_URP, MegaFooResult, border_wall_URPDD_result, Border_URPDD_Result, \
-                     get_p_0
+                     get_p_0, border_wall_fill_rr, mega_foo_fill_rr
 import numpy as np
 cimport numpy as np
 
@@ -292,110 +292,102 @@ cdef class GasFluxCalculator(object):
             right_border_type {int} -- -- (default: {1})
         """
 
-        self.flux_type = flux_type
+        self.set_flux_type(flux_type)
         self.left_border_type = left_border_type
         self.right_border_type = right_border_type
         self.epsF=1e-6
-        self.n_iter_max = 7
+        self.n_iter_max = 17
 
-    cpdef void fill_fluxesURP(self, GasLayer layer):
-        """Основной метод для зполнения в GasLayer'e массивов с потоками и временами прохождения возмущений в ячейках с учетом движения узлов
-        """
+    cpdef void set_flux_type(self, int new_flux_type):
+        if new_flux_type == 1:
+            self.flux_type = new_flux_type
+            self.rr_vals_len = 8
+            self.rr_bint_len = 3
+        else:
+            print("Неправильный тип расчета потока!!! Будет использоваться 1")
+            self.set_flux_type(1)
 
+    cpdef void create_rr_arrs(self, GasLayer layer):
+        layer.rr_vals = np.zeros((layer.n_cells+1, self.rr_vals_len), dtype=np.double)
+        layer.rr_bint = np.zeros((layer.n_cells+1, self.rr_bint_len), dtype=np.int)
+
+
+    cpdef void fill_rr_vals(self, GasLayer layer):
         if self.flux_type == 1:
-            self.fill_fluxesURP_Ds_Godunov(layer.Vs_borders, layer.ps, layer.ros, layer.us, layer.cs, layer.gasEOS,\
-                layer.fluxes[0], layer.fluxes[1], layer.fluxes[2], layer.D_left, layer.D_right, layer.U_kr)
-            
+            self.fill_rr_vals_borders_fill_fluxesURP(layer)
+            self.fill_rr_vals_Riman(layer)
 
-    cpdef void fill_fluxesURP_Ds_Godunov(self, double[:] Vs_borders, double[:] ps, double[:] ros, \
-            double[:] us, double[:] cs, GasEOS gasEOS, \
-            double[:] flux1, double[:] flux2, double[:] flux3, double[:] D_left, double[:] D_right, double[:] U_kr):
+    cpdef void fill_rr_vals_borders_fill_fluxesURP(self, GasLayer layer):
+        cdef double p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2,rU, rR, rP,ray_W
         cdef size_t i
-        cdef double p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2
-        cdef MegaFooResult mfres
-        cdef double rayU, rayR, rayP, rayE, ray_W, M_j, J_j, E_j, D_1, D_2, rayU_kr
-        cdef Border_URPDD_Result border_res
+        if self.flux_type == 1:
+            if self.left_border_type == 1:  
+                p_1 = layer.ps[0]
+                ro_1 = layer.ros[0] 
+                u_1 = layer.us[0] 
+                c_1 = layer.cs[0] 
+                ray_W = layer.Vs_borders[0]
+                rU, rR, rP = border_wall_fill_rr(left_border=True, vbi=ray_W, p=p_1, ro=ro_1, u=u_1, c=c_1, \
+                    p_0=layer.gasEOS.p_0, gamma=layer.gasEOS.gamma, 
+                    rr_vals=layer.rr_vals[0], rr_bint=layer.rr_bint[0], 
+                    eps_F=self.epsF, n_iter_max=self.n_iter_max)
+                layer.fluxes[0, 0] = rU
+                layer.fluxes[1, 0] = rR
+                layer.fluxes[2, 0] = rP
 
-        p_1 = ps[0]
-        ro_1 = ros[0] 
-        u_1 = us[0] 
-        c_1 = cs[0] 
-        ray_W = Vs_borders[0]
-        
-        border_res = border_wall_URPDD_result(True, ray_W, p_1, ro_1, u_1, c_1, gasEOS.p_0, gasEOS.gamma, self.epsF, self.n_iter_max)
-        rayU = border_res.rU 
-        rayR = border_res.rR 
-        rayP = border_res.rP 
-        D_1 = border_res.D_1 
-        D_2 = border_res.D_2 
-        rayU_kr = border_res.U_kr
-        
-        # rayE = gasEOS.get_e(rayR, rayP)
+                layer.D_left[0] = layer.rr_vals[0, 4]
+                layer.U_kr[0] = layer.rr_vals[0, 2]
 
-        # M_j = rayR * (rayU - ray_W)
-        # J_j = rayP + M_j * rayU
-        # E_j = (rayE + 0.5*rayU*rayU)*M_j + rayP*rayU
+            if self.right_border_type == 1:
+                i=layer.n_cells-1
+                p_1 = layer.ps[i]
+                ro_1 = layer.ros[i] 
+                u_1 = layer.us[i] 
+                c_1 = layer.cs[i] 
+                ray_W = layer.Vs_borders[i+1]
 
-        flux1[0] = rayU
-        flux2[0] = rayR
-        flux3[0] = rayP
-        D_left[0] = D_2
-        U_kr[0] = rayU_kr
-        for i in range(1, ps.shape[0]):
-            p_1 = ps[i-1]
-            ro_1 = ros[i-1] 
-            u_1 = us[i-1] 
-            c_1 = cs[i-1] 
-            p_2 = ps[i] 
-            ro_2 = ros[i]
-            u_2 = us[i]
-            c_2 = cs[i]
-            ray_W = Vs_borders[i]
-            mfres = mega_foo_cython(p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2, gasEOS.p_0, gasEOS.gamma)
-            rayU, rayR, rayP = get_ray_URP(ray_W, mfres.UD_left, mfres.UD_right, 
-                                        mfres.D_1, mfres.D_star_1, mfres.U, 
-                                        mfres.D_star_2, mfres.D_2, mfres.R_1, mfres.R_2, mfres.P, \
-                                        p_1, ro_1, u_1, c_1, \
-                                        p_2, ro_2, u_2, c_2, gasEOS.gamma)
-            # rayE = gasEOS.get_e(rayR, rayP)
+                rU, rR, rP = border_wall_fill_rr(left_border=False, vbi=ray_W, p=p_1, ro=ro_1, u=u_1, c=c_1, \
+                    p_0=layer.gasEOS.p_0, gamma=layer.gasEOS.gamma, 
+                    rr_vals=layer.rr_vals[i+1], rr_bint=layer.rr_bint[i+1], 
+                    eps_F=self.epsF, n_iter_max=self.n_iter_max)
+                layer.fluxes[0, i+1] = rU
+                layer.fluxes[1, i+1] = rR
+                layer.fluxes[2, i+1] = rP
 
-            # M_j = rayR * (rayU - ray_W)
-            # J_j = rayP + M_j * rayU
-            # E_j = (rayE + 0.5*rayU*rayU)*M_j + rayP*rayU
+                layer.D_right[i] = layer.rr_vals[i+1, 0]
+                layer.U_kr[i+1] = layer.rr_vals[i+1, 2]
 
-            flux1[i] = rayU
-            flux2[i] = rayR
-            flux3[i] = rayP
-            D_right[i-1] = D_1
-            D_left[i] = D_2 
-            U_kr[i] = mfres.U
+    cpdef void fill_rr_vals_Riman(self, GasLayer layer):
+        if layer.rr_vals.shape[1] != self.rr_vals_len or layer.rr_bint.shape[1] != self.rr_bint_len:
+            self.create_rr_arrs(layer)
+        cdef size_t i
 
-        i=ps.shape[0]-1
-        ray_W = Vs_borders[i+1]
-        p_1 = ps[i]
-        ro_1 = ros[i] 
-        u_1 = us[i] 
-        c_1 = cs[i] 
+        for i in range(1, layer.n_cells):
+            mega_foo_fill_rr(
+                p_1=layer.ps[i-1], ro_1=layer.ros[i-1], u_1=layer.us[i-1], c_1=layer.cs[i-1], \
+                p_2=layer.ps[i],   ro_2=layer.ros[i],   u_2=layer.us[i],   c_2=layer.cs[i], \
+                p_0=layer.gasEOS.p_0, gamma=layer.gasEOS.gamma, 
+                rr_vals=layer.rr_vals[i], rr_bint=layer.rr_bint[i], 
+                eps_F=self.epsF, n_iter_max=self.n_iter_max)
 
-        border_res = border_wall_URPDD_result(False, ray_W, p_1, ro_1, u_1, c_1, gasEOS.p_0, gasEOS.gamma, self.epsF, self.n_iter_max)
-        
-        rayU = border_res.rU 
-        rayR = border_res.rR 
-        rayP = border_res.rP 
-        D_1 = border_res.D_1 
-        D_2 = border_res.D_2 
-        rayU_kr = border_res.U_kr
-        # rayE = gasEOS.get_e(rayR, rayP)
-        # M_j = rayR * (rayU - ray_W)
-        # J_j = rayP + M_j * rayU
-        # E_j = (rayE + 0.5*rayU*rayU)*M_j + rayP*rayU
+            layer.D_left[i] = layer.rr_vals[i, 4]
+            layer.D_right[i-1] = layer.rr_vals[i, 0]
+            layer.U_kr[i] = layer.rr_vals[i, 2]
+    
+    cpdef void fill_fluxesURP(self, GasLayer layer):
+        if self.flux_type == 1:
+            self.fill_fluxesURP_Godunov(layer)
 
-        flux1[i+1] = rayU
-        flux2[i+1] = rayR
-        flux3[i+1] = rayP
-        D_right[i] = D_1
-        U_kr[i+1] = rayU_kr
-
+    cpdef void fill_fluxesURP_Godunov(self, GasLayer layer):
+        cdef size_t i
+        for i in range(1, layer.n_cells):
+            layer.fluxes[0, i], layer.fluxes[1, i], layer.fluxes[2, i] = get_ray_URP(
+                ray_W=layer.Vs_borders[i], UD_left=layer.rr_bint[i, 1], UD_right=layer.rr_bint[i, 2], \
+                D_1=layer.rr_vals[i, 0], D_star_1=layer.rr_vals[i, 1], U=layer.rr_vals[i, 2], \
+                D_star_2=layer.rr_vals[i, 3], D_2=layer.rr_vals[i, 4], R_1=layer.rr_vals[i, 5], R_2=layer.rr_vals[i, 6], \
+                P=layer.rr_vals[i, 7], \
+                p_1=layer.ps[i-1], ro_1=layer.ros[i-1], u_1=layer.us[i-1], c_1=layer.cs[i-1], \
+                p_2=layer.ps[i], ro_2=layer.ros[i], u_2=layer.us[i], c_2=layer.cs[i], gamma=layer.gasEOS.gamma)
 
 
 cdef class GridStrecher(object):
@@ -585,6 +577,7 @@ cdef class GasLayer(object):
 
         self.hs = np.zeros((n_qs, n_cells), dtype=np.double)
         # self.mega_foo_results = np.zeros((n_cells+1, ), dtype=np.double)
+        self.flux_calculator.create_rr_arrs(self)
 
     cpdef void copy_params_to(self, GasLayer to_me):
         to_me.time = self.time
@@ -613,7 +606,10 @@ cdef class GasLayer(object):
 
         to_me.fluxes[:] = self.fluxes
         to_me.qs[:] = self.qs
-        to_me.hs[:] = self.hs        
+        to_me.hs[:] = self.hs   
+
+        to_me.rr_bint[:] = self.rr_bint
+        to_me.rr_vals[:] = self.rr_vals     
 
     cpdef GasLayer copy(self):
         cdef GasLayer res = GasLayer(self.n_cells, self.tube, self.gasEOS, self.flux_calculator, self.grid_strecher, self.n_qs)
@@ -684,6 +680,9 @@ cdef class GasLayer(object):
         for i in range(self.taus.shape[0]):
             self.taus[i] = (self.xs_borders[i+1] - self.xs_borders[i])/(abs(self.us[i])+self.cs[i])
 
+    cpdef void fill_fluxesURP(self):
+        self.flux_calculator.fill_fluxesURP(self)
+
     cpdef void fill_fluxes(self):
         cdef size_t i
         cdef double rayE, rayU, rayR, rayP, M_j, J_j, E_j, ray_W
@@ -701,8 +700,8 @@ cdef class GasLayer(object):
             self.fluxes[1, i] = J_j
             self.fluxes[2, i] = E_j
 
-    cpdef void fill_fluxesURP(self):
-        self.flux_calculator.fill_fluxesURP(self)
+    cpdef void fill_rr(self):
+        self.flux_calculator.fill_rr_vals(self)
     
     cpdef void fill_taus(self):
         cdef size_t i
@@ -711,13 +710,13 @@ cdef class GasLayer(object):
             dx = self.xs_borders[i+1] - self.xs_borders[i]
             v_otn_left = self.D_left[i] - self.Vs_borders[i+1]
             if v_otn_left < 1e-12:
-                tau_left = 999
+                tau_left = 999999
             else:
                 tau_left = dx / v_otn_left
             
             v_otn_right = self.Vs_borders[i] - self.D_right[i] 
             if v_otn_right < 1e-12:
-                tau_right = 999
+                tau_right = 999999
             else:
                 tau_right = dx / v_otn_right
             if tau_left < tau_right:
@@ -726,8 +725,9 @@ cdef class GasLayer(object):
                 self.taus[i] = tau_right
 
     cpdef GasLayer step_simple(self, double tau, double v_left, double v_right):
-        
-        self.fill_fluxesURP()
+        self.Vs_borders[0] = v_left
+        self.Vs_borders[self.n_cells] = v_right
+        self.fill_rr()
         cpdef GasLayer layer1 = self.copy() 
         cdef bint suc = self.grid_strecher.sync_layers(self, layer1, tau, v_left, v_right)
         if not suc:
@@ -742,102 +742,14 @@ cdef class GasLayer(object):
             return self
         cdef size_t i, j
         cdef double dx
-        self.fill_fluxes()
-        for i in range(layer1.xs_cells.shape[0]):
-            dx = self.xs_borders[i+1] - self.xs_borders[i]
-            for j in range(layer1.n_qs):
-                layer1.qs[j, i] = (self.qs[j, i]*self.W[i] - tau*(self.S[i+1]*self.fluxes[j, i+1] - self.S[i]*self.fluxes[j, i]) + tau*self.hs[j, i]*dx)/layer1.W[i]
-        layer1.init_ropue()
-        return layer1
-
-    cpdef GasLayer step_Godunov_simple(self, double v_left, double v_right, double courant, bint init_taus_acustic, double alpha=1):
         self.fill_fluxesURP()
-        self.fill_taus()
-        if init_taus_acustic:
-            self.init_taus_acustic()
-        cdef double tau = self.get_tau_min() * courant * alpha  
-        self.init_h()
-        cpdef GasLayer layer1 = self.copy() 
-        cdef bint suc = self.grid_strecher.sync_layers(self, layer1, tau, v_left, v_right)
-        if not suc:
-            print('suc 554')
-            return self
-        self.fill_taus()
-        layer1.init_SsdW()
-        if self.get_tau_min() < tau/alpha:
-            print('tau stuff 560')
-            tau = self.get_tau_min() * courant * alpha
-            suc = self.grid_strecher.sync_layers(self, layer1, tau, v_left, v_right)
-            layer1.init_SsdW()
-            if not suc:
-                print('suc 550')
-                return self
-        cdef size_t i, j
-        cdef double dx
         self.fill_fluxes()
         for i in range(layer1.xs_cells.shape[0]):
             dx = self.xs_borders[i+1] - self.xs_borders[i]
             for j in range(layer1.n_qs):
                 layer1.qs[j, i] = (self.qs[j, i]*self.W[i] - tau*(self.S[i+1]*self.fluxes[j, i+1] - self.S[i]*self.fluxes[j, i]) + tau*self.hs[j, i]*dx)/layer1.W[i]
-            
         layer1.init_ropue()
         return layer1
-        
-    cpdef GasLayer step_Godunov_corrector2(self, GasLayer layer_simple, double v_left, double v_right):
-        cdef double tau = (layer_simple.time - self.time)*2
-        cpdef GasLayer layer2 = layer_simple.copy()
-        cdef bint suc = self.grid_strecher.sync_layers(layer_simple, layer2, tau/2, v_left, v_right)
-        if not suc:
-            print('suc 556')
-            return self        
-        layer2.init_SsdW()
-        layer_simple.init_h()
-        
-        layer_simple.fill_fluxesURP()
-        layer_simple.fill_taus()
-        layer_simple.fill_fluxes()
-
-        cdef size_t i, j
-        cdef double dx
-        for i in range(layer2.xs_cells.shape[0]):
-            dx = layer_simple.xs_borders[i+1] - layer_simple.xs_borders[i]
-            for j in range(layer2.n_qs):
-                layer2.qs[j, i] = (self.qs[j, i]*self.W[i] \
-                    - tau*(layer_simple.S[i+1]*layer_simple.fluxes[j, i+1] \
-                         - layer_simple.S[i]*layer_simple.fluxes[j, i]) \
-                    + tau*layer_simple.hs[j, i]*dx) / layer2.W[i]
-        layer2.init_ropue()
-        return layer2
-
-    cpdef GasLayer step_Godunov_corrector(self, GasLayer layer_simple, double v_left, double v_right):
-        cdef double tau = layer_simple.time - self.time
-        cpdef GasLayer layer2 = self.copy()
-        cdef bint suc = self.grid_strecher.sync_layers(self, layer2, tau, v_left, v_right)
-        if not suc:
-            print('suc 555')
-            return self
-        layer2.init_SsdW()
-
-        layer_simple.Vs_borders[:] = self.Vs_borders
-        layer_simple.init_h()
-        layer_simple.fill_fluxesURP()
-        layer_simple.fill_taus()
-        layer_simple.fill_fluxes()
-        cdef size_t i, j
-        cdef double dx, dx_simple
-        for i in range(layer2.xs_cells.shape[0]):
-            dx = layer_simple.xs_borders[i+1] - layer_simple.xs_borders[i]
-            dx_simple = self.xs_borders[i+1] - self.xs_borders[i]
-            for j in range(layer2.n_qs):
-                layer2.qs[j, i] = ( \
-                    self.qs[j, i] * self.W[i] \
-                    - tau * ((self.S[i+1] + layer_simple.S[i+1]) * (self.fluxes[j, i+1] + layer_simple.fluxes[j, i+1])*0.25 \
-                           - (self.S[i]   + layer_simple.S[i]  ) * (self.fluxes[j, i]   + layer_simple.fluxes[j, i]  )*0.25) \
-                    + tau * (self.hs[j, i]*dx +layer_simple.hs[j, i]*dx_simple)*0.5 \
-                                    )/layer2.W[i]
-
-        layer2.init_ropue()
-        return layer2
 
 
     def to_dict(self):
@@ -862,7 +774,9 @@ cdef class GasLayer(object):
 
             'qs':np.array(self.qs),
             'hs':np.array(self.hs),
-            'fluxes':np.array(self.fluxes)
+            'fluxes':np.array(self.fluxes),
+            'rr_vals':np.array(self.rr_vals),
+            'rr_bint':np.array(self.rr_bint)
        }
     def from_dict(self, d):
         self.time = np.array(d['time'])
@@ -891,6 +805,8 @@ cdef class GasLayer(object):
         self.fluxes = np.array(d['fluxes'])
         self.qs = np.array(d['qs'])
         self.hs = np.array(d['hs'])
+        self.rr_vals = np.array(d['rr_vals'])
+        self.rr_bint = np.array(d['rr_bint'])
     
     
 cdef class PowderOvLayer(GasLayer):

@@ -5,36 +5,36 @@ from tube cimport Tube, InterpXY
 
 cpdef double foo()
 
-cpdef inline void roue_to_q_(
+cpdef  void roue_to_q_(
     double ro,
     double u,
     double e,
     double[:] q) nogil
 
-cpdef inline double abs(double x) nogil
+cpdef  double abs(double x) nogil
 
-cpdef inline (double, double, double) q_to_roue(double[:] q) nogil
+cpdef  (double, double, double) q_to_roue(double[:] q) nogil
 
-cpdef inline (double, double, double) q123_to_roue(double q1, double q2, double q3) nogil
+cpdef  (double, double, double) q123_to_roue(double q1, double q2, double q3) nogil
 
-cpdef inline (double, double, double) roue_to_q(
+cpdef  (double, double, double) roue_to_q(
     double ro,
     double u,
     double e) nogil
 
-cpdef inline double roe_to_p(
+cpdef  double roe_to_p(
     double ro,
     double e,
     double gamma,
     double b) nogil
 
-cpdef inline double rop_to_e(
+cpdef  double rop_to_e(
     double ro,
     double p,
     double gamma,
     double b) nogil
 
-cpdef inline double rop_to_csound(
+cpdef  double rop_to_csound(
     double ro,
     double p,
     double gamma,
@@ -53,9 +53,9 @@ cpdef (double, double, double) AUSM_gas_(
     double c2,
     double vbi) nogil
 
-cpdef inline double min2(double a, double b) nogil
+cpdef  double min2(double a, double b) nogil
 
-cpdef inline double max2(double a, double b) nogil
+cpdef  double max2(double a, double b) nogil
     
 cdef class GasEOS:
     cdef public double gamma, kappa, p_0, c_0
@@ -74,12 +74,17 @@ cdef class Powder(GasEOS):
     cpdef double get_z_k(self)
 
 cdef class GasFluxCalculator:
-    cdef public int flux_type, left_border_type, right_border_type, n_iter_max
+    cdef public int flux_type, left_border_type, right_border_type, n_iter_max, rr_vals_len, rr_bint_len
     cdef public double epsF
-    cpdef void fill_fluxesURP_Ds_Godunov(self, double[:] Vs_borders, double[:] ps, double[:] ros, \
-            double[:] us, double[:] cs, GasEOS gasEOS, \
-            double[:] flux1, double[:] flux2, double[:] flux3, double[:] D_left, double[:] D_right, double[:] U_kr)
+    cpdef void set_flux_type(self, int new_flux_type)
+    cpdef void create_rr_arrs(self, GasLayer layer)
+    cpdef void fill_rr_vals(self, GasLayer layer)
+    cpdef void fill_rr_vals_borders_fill_fluxesURP(self, GasLayer layer)
+    cpdef void fill_rr_vals_Riman(self, GasLayer layer)
+    cpdef void fill_fluxesURP_Godunov(self, GasLayer layer)
     cpdef void fill_fluxesURP(self, GasLayer layer)
+    
+
     
 
 cdef class GridStrecher:
@@ -101,8 +106,9 @@ cdef class GasLayer:
     cdef public double[:] xs_cells, xs_borders, Vs_borders, U_kr,\
         ros, ps, us, es, cs, taus, D_left, D_right,  \
         ds, S, W
-    cdef public double[:,:] qs, hs, fluxes
+    cdef public double[:,:] qs, hs, fluxes, rr_vals
         #pars # 0 - ros, 1 - ps, 2 - us  
+    cdef public bint[:,:] rr_bint
     cdef public int n_cells, n_qs
     cdef public Tube tube
     cdef public GasEOS gasEOS
@@ -119,11 +125,9 @@ cdef class GasLayer:
     cpdef double get_tau_min(self)
     cpdef void init_taus_acustic(self)
     cpdef GasLayer step_simple(self, double tau, double v_left, double v_right)
-    cpdef GasLayer step_Godunov_simple(self, double v_left, double v_right, double courant, bint init_taus_acustic, double alpha=*)
     cpdef void fill_fluxes(self)
     cpdef void fill_taus(self)
-    cpdef GasLayer step_Godunov_corrector(self, GasLayer layer_simple, double v_left, double v_right)
-    cpdef GasLayer step_Godunov_corrector2(self, GasLayer layer_simple, double v_left, double v_right)
+    cpdef void fill_rr(self)
     cpdef void fill_fluxesURP(self)
 
 cdef class PowderOvLayer(GasLayer):
