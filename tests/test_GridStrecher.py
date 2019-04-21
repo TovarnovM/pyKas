@@ -151,7 +151,7 @@ def _plot3():
         # d['ts'][0] = 0.001
         # layer.time = 0.01
         # break
-        tau = layer.get_tau_min()*0.3
+        tau = layer.get_tau_min()*0.5
         layer1 = layer.step_simple(tau, 0,0)
         if layer1 == layer:
             break

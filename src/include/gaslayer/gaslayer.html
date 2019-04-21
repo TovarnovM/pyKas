@@ -4899,8 +4899,8 @@ static PyObject *__pyx_pf_8gaslayer_17GasFluxCalculator_6fill_rr_vals(struct __p
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0318</span>:             <span class="bp">self</span><span class="o">.</span><span class="n">fill_rr_vals_Riman</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span></pre>
 <pre class='cython code score-0 '>    ((struct __pyx_vtabstruct_8gaslayer_GasFluxCalculator *)__pyx_v_self-&gt;__pyx_vtab)-&gt;fill_rr_vals_Riman(__pyx_v_self, __pyx_v_layer, 0);
 </pre><pre class="cython line score-0">&#xA0;<span class="">0319</span>: </pre>
-<pre class="cython line score-43" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0320</span>:     <span class="k">cpdef</span> <span class="kt">void</span> <span class="nf">fill_rr_vals_borders_fill_fluxesURP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GasLayer</span> <span class="n">layer</span><span class="p">):</span></pre>
-<pre class='cython code score-43 '>static PyObject *__pyx_pw_8gaslayer_17GasFluxCalculator_9fill_rr_vals_borders_fill_fluxesURP(PyObject *__pyx_v_self, PyObject *__pyx_v_layer); /*proto*/
+<pre class="cython line score-42" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0320</span>:     <span class="k">cpdef</span> <span class="kt">void</span> <span class="nf">fill_rr_vals_borders_fill_fluxesURP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GasLayer</span> <span class="n">layer</span><span class="p">):</span></pre>
+<pre class='cython code score-42 '>static PyObject *__pyx_pw_8gaslayer_17GasFluxCalculator_9fill_rr_vals_borders_fill_fluxesURP(PyObject *__pyx_v_self, PyObject *__pyx_v_layer); /*proto*/
 static void __pyx_f_8gaslayer_17GasFluxCalculator_fill_rr_vals_borders_fill_fluxesURP(struct __pyx_obj_8gaslayer_GasFluxCalculator *__pyx_v_self, struct __pyx_obj_8gaslayer_GasLayer *__pyx_v_layer, int __pyx_skip_dispatch) {
   double __pyx_v_p_1;
   double __pyx_v_ro_1;
@@ -4909,8 +4909,8 @@ static void __pyx_f_8gaslayer_17GasFluxCalculator_fill_rr_vals_borders_fill_flux
   double __pyx_v_rU;
   double __pyx_v_rR;
   double __pyx_v_rP;
+  double __pyx_v_ray_W;
   size_t __pyx_v_i;
-  PyObject *__pyx_v_ray_W = NULL;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("fill_rr_vals_borders_fill_fluxesURP", 0);
   /* Check if called by wrapper */
@@ -4966,11 +4966,10 @@ static void __pyx_f_8gaslayer_17GasFluxCalculator_fill_rr_vals_borders_fill_flux
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_2);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_3);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_t_4);
+  __PYX_XDEC_MEMVIEW(&amp;__pyx_t_11, 1);
   __PYX_XDEC_MEMVIEW(&amp;__pyx_t_12, 1);
-  __PYX_XDEC_MEMVIEW(&amp;__pyx_t_13, 1);
   <span class='pyx_c_api'>__Pyx_WriteUnraisable</span>("gaslayer.GasFluxCalculator.fill_rr_vals_borders_fill_fluxesURP", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_L0:;
-  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_v_ray_W);
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
 }
 
@@ -5013,7 +5012,7 @@ static PyObject *__pyx_pf_8gaslayer_17GasFluxCalculator_8fill_rr_vals_borders_fi
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
 }
-</pre><pre class="cython line score-0">&#xA0;<span class="">0321</span>:         <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">p_1</span><span class="p">,</span> <span class="nf">ro_1</span><span class="p">,</span> <span class="nf">u_1</span><span class="p">,</span> <span class="nf">c_1</span><span class="p">,</span> <span class="nf">p_2</span><span class="p">,</span> <span class="nf">ro_2</span><span class="p">,</span> <span class="nf">u_2</span><span class="p">,</span> <span class="nf">c_2</span><span class="p">,</span><span class="nf">rU</span><span class="p">,</span> <span class="nf">rR</span><span class="p">,</span> <span class="nf">rP</span></pre>
+</pre><pre class="cython line score-0">&#xA0;<span class="">0321</span>:         <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">p_1</span><span class="p">,</span> <span class="nf">ro_1</span><span class="p">,</span> <span class="nf">u_1</span><span class="p">,</span> <span class="nf">c_1</span><span class="p">,</span> <span class="nf">p_2</span><span class="p">,</span> <span class="nf">ro_2</span><span class="p">,</span> <span class="nf">u_2</span><span class="p">,</span> <span class="nf">c_2</span><span class="p">,</span><span class="nf">rU</span><span class="p">,</span> <span class="nf">rR</span><span class="p">,</span> <span class="nf">rP</span><span class="p">,</span><span class="nf">ray_W</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">0322</span>:         <span class="k">cdef</span> <span class="kt">size_t</span> <span class="nf">i</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0323</span>:         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">flux_type</span> <span class="o">==</span> <span class="mf">1</span><span class="p">:</span></pre>
 <pre class='cython code score-0 '>  __pyx_t_5 = ((__pyx_v_self-&gt;flux_type == 1) != 0);
@@ -5041,37 +5040,33 @@ static PyObject *__pyx_pf_8gaslayer_17GasFluxCalculator_8fill_rr_vals_borders_fi
 <pre class='cython code score-0 '>      __pyx_t_9 = 0;
       if (__pyx_t_9 &lt; 0) __pyx_t_9 += __pyx_v_layer-&gt;cs.shape[0];
       __pyx_v_c_1 = (*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;cs.data + __pyx_t_9 * __pyx_v_layer-&gt;cs.strides[0]) )));
-</pre><pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0329</span>:                 <span class="n">ray_W</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">Vs_borders</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span></pre>
-<pre class='cython code score-5 '>      __pyx_t_10 = 0;
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0329</span>:                 <span class="n">ray_W</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">Vs_borders</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span></pre>
+<pre class='cython code score-0 '>      __pyx_t_10 = 0;
       if (__pyx_t_10 &lt; 0) __pyx_t_10 += __pyx_v_layer-&gt;Vs_borders.shape[0];
-      __pyx_t_1 = <span class='py_c_api'>PyFloat_FromDouble</span>((*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;Vs_borders.data + __pyx_t_10 * __pyx_v_layer-&gt;Vs_borders.strides[0]) ))));<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 329, __pyx_L1_error)</span>
-      <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
-      __pyx_v_ray_W = __pyx_t_1;
-      __pyx_t_1 = 0;
-</pre><pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0330</span>:                 <span class="n">rU</span><span class="p">,</span> <span class="n">rR</span><span class="p">,</span> <span class="n">rP</span> <span class="o">=</span> <span class="n">border_wall_fill_rr</span><span class="p">(</span><span class="n">left_border</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">vbi</span><span class="o">=</span><span class="n">ray_W</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p_1</span><span class="p">,</span> <span class="n">ro</span><span class="o">=</span><span class="n">ro_1</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">u_1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c_1</span><span class="p">,</span> \</pre>
-<pre class='cython code score-10 '>      __pyx_t_11 = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(__pyx_v_ray_W); if (unlikely((__pyx_t_11 == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 330, __pyx_L1_error)</span>
-__pyx_t_15.__pyx_n = 2;
+      __pyx_v_ray_W = (*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;Vs_borders.data + __pyx_t_10 * __pyx_v_layer-&gt;Vs_borders.strides[0]) )));
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0330</span>:                 <span class="n">rU</span><span class="p">,</span> <span class="n">rR</span><span class="p">,</span> <span class="n">rP</span> <span class="o">=</span> <span class="n">border_wall_fill_rr</span><span class="p">(</span><span class="n">left_border</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">vbi</span><span class="o">=</span><span class="n">ray_W</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p_1</span><span class="p">,</span> <span class="n">ro</span><span class="o">=</span><span class="n">ro_1</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">u_1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c_1</span><span class="p">,</span> \</pre>
+<pre class='cython code score-0 '>__pyx_t_14.__pyx_n = 2;
 /* … */
-      __pyx_t_15.eps_F = __pyx_v_self-&gt;epsF;
-      __pyx_t_15.n_iter_max = __pyx_v_self-&gt;n_iter_max;
-      __pyx_t_14 = __pyx_f_7godunov_border_wall_fill_rr(1, __pyx_t_11, __pyx_v_p_1, __pyx_v_ro_1, __pyx_v_u_1, __pyx_v_c_1, __pyx_v_layer-&gt;gasEOS-&gt;p_0, __pyx_v_layer-&gt;gasEOS-&gt;gamma, __pyx_t_12, __pyx_t_13, 0, &amp;__pyx_t_15); 
+      __pyx_t_14.eps_F = __pyx_v_self-&gt;epsF;
+      __pyx_t_14.n_iter_max = __pyx_v_self-&gt;n_iter_max;
+      __pyx_t_13 = __pyx_f_7godunov_border_wall_fill_rr(1, __pyx_v_ray_W, __pyx_v_p_1, __pyx_v_ro_1, __pyx_v_u_1, __pyx_v_c_1, __pyx_v_layer-&gt;gasEOS-&gt;p_0, __pyx_v_layer-&gt;gasEOS-&gt;gamma, __pyx_t_11, __pyx_t_12, 0, &amp;__pyx_t_14); 
+      __PYX_XDEC_MEMVIEW(&amp;__pyx_t_11, 1);
+      __pyx_t_11.memview = NULL;
+      __pyx_t_11.data = NULL;
       __PYX_XDEC_MEMVIEW(&amp;__pyx_t_12, 1);
       __pyx_t_12.memview = NULL;
       __pyx_t_12.data = NULL;
-      __PYX_XDEC_MEMVIEW(&amp;__pyx_t_13, 1);
-      __pyx_t_13.memview = NULL;
-      __pyx_t_13.data = NULL;
-      __pyx_t_11 = __pyx_t_14.f0;
-      __pyx_t_16 = __pyx_t_14.f1;
-      __pyx_t_17 = __pyx_t_14.f2;
-      __pyx_v_rU = __pyx_t_11;
+      __pyx_t_15 = __pyx_t_13.f0;
+      __pyx_t_16 = __pyx_t_13.f1;
+      __pyx_t_17 = __pyx_t_13.f2;
+      __pyx_v_rU = __pyx_t_15;
       __pyx_v_rR = __pyx_t_16;
       __pyx_v_rP = __pyx_t_17;
 </pre><pre class="cython line score-0">&#xA0;<span class="">0331</span>:                     <span class="n">p_0</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">gasEOS</span><span class="o">.</span><span class="n">p_0</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">gasEOS</span><span class="o">.</span><span class="n">gamma</span><span class="p">,</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0332</span>:                     <span class="n">rr_vals</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">rr_vals</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span> <span class="n">rr_bint</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">rr_bint</span><span class="p">[</span><span class="mf">0</span><span class="p">],</span></pre>
-<pre class='cython code score-0 '>      __pyx_t_12.data = __pyx_v_layer-&gt;rr_vals.data;
-      __pyx_t_12.memview = __pyx_v_layer-&gt;rr_vals.memview;
-      __PYX_INC_MEMVIEW(&amp;__pyx_t_12, 0);
+<pre class='cython code score-0 '>      __pyx_t_11.data = __pyx_v_layer-&gt;rr_vals.data;
+      __pyx_t_11.memview = __pyx_v_layer-&gt;rr_vals.memview;
+      __PYX_INC_MEMVIEW(&amp;__pyx_t_11, 0);
       {
     Py_ssize_t __pyx_tmp_idx = 0;
         Py_ssize_t __pyx_tmp_shape = __pyx_v_layer-&gt;rr_vals.shape[0];
@@ -5079,16 +5074,16 @@ __pyx_t_15.__pyx_n = 2;
         if (__pyx_tmp_idx &lt; 0)
             __pyx_tmp_idx += __pyx_tmp_shape;
         if ((0)) <span class='error_goto'>__PYX_ERR(0, 332, __pyx_L1_error)</span>
-        __pyx_t_12.data += __pyx_tmp_idx * __pyx_tmp_stride;
+        __pyx_t_11.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
 
-__pyx_t_12.shape[0] = __pyx_v_layer-&gt;rr_vals.shape[1];
-__pyx_t_12.strides[0] = __pyx_v_layer-&gt;rr_vals.strides[1];
-    __pyx_t_12.suboffsets[0] = -1;
+__pyx_t_11.shape[0] = __pyx_v_layer-&gt;rr_vals.shape[1];
+__pyx_t_11.strides[0] = __pyx_v_layer-&gt;rr_vals.strides[1];
+    __pyx_t_11.suboffsets[0] = -1;
 
-__pyx_t_13.data = __pyx_v_layer-&gt;rr_bint.data;
-      __pyx_t_13.memview = __pyx_v_layer-&gt;rr_bint.memview;
-      __PYX_INC_MEMVIEW(&amp;__pyx_t_13, 0);
+__pyx_t_12.data = __pyx_v_layer-&gt;rr_bint.data;
+      __pyx_t_12.memview = __pyx_v_layer-&gt;rr_bint.memview;
+      __PYX_INC_MEMVIEW(&amp;__pyx_t_12, 0);
       {
     Py_ssize_t __pyx_tmp_idx = 0;
         Py_ssize_t __pyx_tmp_shape = __pyx_v_layer-&gt;rr_bint.shape[0];
@@ -5096,12 +5091,12 @@ __pyx_t_13.data = __pyx_v_layer-&gt;rr_bint.data;
         if (__pyx_tmp_idx &lt; 0)
             __pyx_tmp_idx += __pyx_tmp_shape;
         if ((0)) <span class='error_goto'>__PYX_ERR(0, 332, __pyx_L1_error)</span>
-        __pyx_t_13.data += __pyx_tmp_idx * __pyx_tmp_stride;
+        __pyx_t_12.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
 
-__pyx_t_13.shape[0] = __pyx_v_layer-&gt;rr_bint.shape[1];
-__pyx_t_13.strides[0] = __pyx_v_layer-&gt;rr_bint.strides[1];
-    __pyx_t_13.suboffsets[0] = -1;
+__pyx_t_12.shape[0] = __pyx_v_layer-&gt;rr_bint.shape[1];
+__pyx_t_12.strides[0] = __pyx_v_layer-&gt;rr_bint.strides[1];
+    __pyx_t_12.suboffsets[0] = -1;
 
 </pre><pre class="cython line score-0">&#xA0;<span class="">0333</span>:                     <span class="n">eps_F</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epsF</span><span class="p">,</span> <span class="n">n_iter_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_iter_max</span><span class="p">)</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0334</span>:                 <span class="n">layer</span><span class="o">.</span><span class="n">fluxes</span><span class="p">[</span><span class="mf">0</span><span class="p">,</span> <span class="mf">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">rU</span></pre>
@@ -5159,37 +5154,33 @@ __pyx_t_13.strides[0] = __pyx_v_layer-&gt;rr_bint.strides[1];
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0346</span>:                 <span class="n">c_1</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></pre>
 <pre class='cython code score-0 '>      __pyx_t_33 = __pyx_v_i;
       __pyx_v_c_1 = (*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;cs.data + __pyx_t_33 * __pyx_v_layer-&gt;cs.strides[0]) )));
-</pre><pre class="cython line score-6" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0347</span>:                 <span class="n">ray_W</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">Vs_borders</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mf">1</span><span class="p">]</span></pre>
-<pre class='cython code score-6 '>      __pyx_t_34 = (__pyx_v_i + 1);
-      __pyx_t_1 = <span class='py_c_api'>PyFloat_FromDouble</span>((*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;Vs_borders.data + __pyx_t_34 * __pyx_v_layer-&gt;Vs_borders.strides[0]) ))));<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 347, __pyx_L1_error)</span>
-      <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
-      <span class='pyx_macro_api'>__Pyx_XDECREF_SET</span>(__pyx_v_ray_W, __pyx_t_1);
-      __pyx_t_1 = 0;
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0347</span>:                 <span class="n">ray_W</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">Vs_borders</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mf">1</span><span class="p">]</span></pre>
+<pre class='cython code score-0 '>      __pyx_t_34 = (__pyx_v_i + 1);
+      __pyx_v_ray_W = (*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;Vs_borders.data + __pyx_t_34 * __pyx_v_layer-&gt;Vs_borders.strides[0]) )));
 </pre><pre class="cython line score-0">&#xA0;<span class="">0348</span>: </pre>
-<pre class="cython line score-10" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0349</span>:                 <span class="n">rU</span><span class="p">,</span> <span class="n">rR</span><span class="p">,</span> <span class="n">rP</span> <span class="o">=</span> <span class="n">border_wall_fill_rr</span><span class="p">(</span><span class="n">left_border</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">vbi</span><span class="o">=</span><span class="n">ray_W</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p_1</span><span class="p">,</span> <span class="n">ro</span><span class="o">=</span><span class="n">ro_1</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">u_1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c_1</span><span class="p">,</span> \</pre>
-<pre class='cython code score-10 '>      __pyx_t_17 = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(__pyx_v_ray_W); if (unlikely((__pyx_t_17 == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 349, __pyx_L1_error)</span>
-__pyx_t_15.__pyx_n = 2;
+<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0349</span>:                 <span class="n">rU</span><span class="p">,</span> <span class="n">rR</span><span class="p">,</span> <span class="n">rP</span> <span class="o">=</span> <span class="n">border_wall_fill_rr</span><span class="p">(</span><span class="n">left_border</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">vbi</span><span class="o">=</span><span class="n">ray_W</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p_1</span><span class="p">,</span> <span class="n">ro</span><span class="o">=</span><span class="n">ro_1</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="n">u_1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c_1</span><span class="p">,</span> \</pre>
+<pre class='cython code score-0 '>__pyx_t_14.__pyx_n = 2;
 /* … */
-      __pyx_t_15.eps_F = __pyx_v_self-&gt;epsF;
-      __pyx_t_15.n_iter_max = __pyx_v_self-&gt;n_iter_max;
-      __pyx_t_14 = __pyx_f_7godunov_border_wall_fill_rr(0, __pyx_t_17, __pyx_v_p_1, __pyx_v_ro_1, __pyx_v_u_1, __pyx_v_c_1, __pyx_v_layer-&gt;gasEOS-&gt;p_0, __pyx_v_layer-&gt;gasEOS-&gt;gamma, __pyx_t_12, __pyx_t_13, 0, &amp;__pyx_t_15); 
+      __pyx_t_14.eps_F = __pyx_v_self-&gt;epsF;
+      __pyx_t_14.n_iter_max = __pyx_v_self-&gt;n_iter_max;
+      __pyx_t_13 = __pyx_f_7godunov_border_wall_fill_rr(0, __pyx_v_ray_W, __pyx_v_p_1, __pyx_v_ro_1, __pyx_v_u_1, __pyx_v_c_1, __pyx_v_layer-&gt;gasEOS-&gt;p_0, __pyx_v_layer-&gt;gasEOS-&gt;gamma, __pyx_t_11, __pyx_t_12, 0, &amp;__pyx_t_14); 
+      __PYX_XDEC_MEMVIEW(&amp;__pyx_t_11, 1);
+      __pyx_t_11.memview = NULL;
+      __pyx_t_11.data = NULL;
       __PYX_XDEC_MEMVIEW(&amp;__pyx_t_12, 1);
       __pyx_t_12.memview = NULL;
       __pyx_t_12.data = NULL;
-      __PYX_XDEC_MEMVIEW(&amp;__pyx_t_13, 1);
-      __pyx_t_13.memview = NULL;
-      __pyx_t_13.data = NULL;
-      __pyx_t_17 = __pyx_t_14.f0;
-      __pyx_t_16 = __pyx_t_14.f1;
-      __pyx_t_11 = __pyx_t_14.f2;
+      __pyx_t_17 = __pyx_t_13.f0;
+      __pyx_t_16 = __pyx_t_13.f1;
+      __pyx_t_15 = __pyx_t_13.f2;
       __pyx_v_rU = __pyx_t_17;
       __pyx_v_rR = __pyx_t_16;
-      __pyx_v_rP = __pyx_t_11;
+      __pyx_v_rP = __pyx_t_15;
 </pre><pre class="cython line score-0">&#xA0;<span class="">0350</span>:                     <span class="n">p_0</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">gasEOS</span><span class="o">.</span><span class="n">p_0</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">gasEOS</span><span class="o">.</span><span class="n">gamma</span><span class="p">,</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0351</span>:                     <span class="n">rr_vals</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">rr_vals</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mf">1</span><span class="p">],</span> <span class="n">rr_bint</span><span class="o">=</span><span class="n">layer</span><span class="o">.</span><span class="n">rr_bint</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mf">1</span><span class="p">],</span></pre>
-<pre class='cython code score-0 '>      __pyx_t_12.data = __pyx_v_layer-&gt;rr_vals.data;
-      __pyx_t_12.memview = __pyx_v_layer-&gt;rr_vals.memview;
-      __PYX_INC_MEMVIEW(&amp;__pyx_t_12, 0);
+<pre class='cython code score-0 '>      __pyx_t_11.data = __pyx_v_layer-&gt;rr_vals.data;
+      __pyx_t_11.memview = __pyx_v_layer-&gt;rr_vals.memview;
+      __PYX_INC_MEMVIEW(&amp;__pyx_t_11, 0);
       {
     Py_ssize_t __pyx_tmp_idx = (__pyx_v_i + 1);
         Py_ssize_t __pyx_tmp_shape = __pyx_v_layer-&gt;rr_vals.shape[0];
@@ -5197,16 +5188,16 @@ __pyx_t_15.__pyx_n = 2;
         if (__pyx_tmp_idx &lt; 0)
             __pyx_tmp_idx += __pyx_tmp_shape;
         if ((0)) <span class='error_goto'>__PYX_ERR(0, 351, __pyx_L1_error)</span>
-        __pyx_t_12.data += __pyx_tmp_idx * __pyx_tmp_stride;
+        __pyx_t_11.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
 
-__pyx_t_12.shape[0] = __pyx_v_layer-&gt;rr_vals.shape[1];
-__pyx_t_12.strides[0] = __pyx_v_layer-&gt;rr_vals.strides[1];
-    __pyx_t_12.suboffsets[0] = -1;
+__pyx_t_11.shape[0] = __pyx_v_layer-&gt;rr_vals.shape[1];
+__pyx_t_11.strides[0] = __pyx_v_layer-&gt;rr_vals.strides[1];
+    __pyx_t_11.suboffsets[0] = -1;
 
-__pyx_t_13.data = __pyx_v_layer-&gt;rr_bint.data;
-      __pyx_t_13.memview = __pyx_v_layer-&gt;rr_bint.memview;
-      __PYX_INC_MEMVIEW(&amp;__pyx_t_13, 0);
+__pyx_t_12.data = __pyx_v_layer-&gt;rr_bint.data;
+      __pyx_t_12.memview = __pyx_v_layer-&gt;rr_bint.memview;
+      __PYX_INC_MEMVIEW(&amp;__pyx_t_12, 0);
       {
     Py_ssize_t __pyx_tmp_idx = (__pyx_v_i + 1);
         Py_ssize_t __pyx_tmp_shape = __pyx_v_layer-&gt;rr_bint.shape[0];
@@ -5214,12 +5205,12 @@ __pyx_t_13.data = __pyx_v_layer-&gt;rr_bint.data;
         if (__pyx_tmp_idx &lt; 0)
             __pyx_tmp_idx += __pyx_tmp_shape;
         if ((0)) <span class='error_goto'>__PYX_ERR(0, 351, __pyx_L1_error)</span>
-        __pyx_t_13.data += __pyx_tmp_idx * __pyx_tmp_stride;
+        __pyx_t_12.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
 
-__pyx_t_13.shape[0] = __pyx_v_layer-&gt;rr_bint.shape[1];
-__pyx_t_13.strides[0] = __pyx_v_layer-&gt;rr_bint.strides[1];
-    __pyx_t_13.suboffsets[0] = -1;
+__pyx_t_12.shape[0] = __pyx_v_layer-&gt;rr_bint.shape[1];
+__pyx_t_12.strides[0] = __pyx_v_layer-&gt;rr_bint.strides[1];
+    __pyx_t_12.suboffsets[0] = -1;
 
 </pre><pre class="cython line score-0">&#xA0;<span class="">0352</span>:                     <span class="n">eps_F</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">epsF</span><span class="p">,</span> <span class="n">n_iter_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_iter_max</span><span class="p">)</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0353</span>:                 <span class="n">layer</span><span class="o">.</span><span class="n">fluxes</span><span class="p">[</span><span class="mf">0</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mf">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rU</span></pre>
