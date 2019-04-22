@@ -6,7 +6,7 @@ from tube cimport Tube, InterpXY
 from gaslayer cimport GasLayer, GasEOS, GasFluxCalculator, GridStrecher
 
 import cython
-from libc.math cimport pi, sqrt, copysign, exp
+from libc.math cimport pi, sqrt, copysign, exp, pow
 import numpy as np
 cimport numpy as np
 

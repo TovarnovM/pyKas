@@ -154,6 +154,62 @@ cpdef (double, double, double) AUSM_gas_(
     return flux1, flux2, flux3
 
 
+cpdef inline double get_extrapol_2e_v15(double v2, double v3):
+    """cpdef inline double get_extrapol_2e_v15(double v2, double v3)
+    функция получения экстраполированного значения 2 порядка (рис. 3 статьи Богданова-Миллера)
+
+    v2 - значение в 2 ячейке
+    v3 - значение в 3 ячейке
+    return - экстраполированное значение на границе 1 и  2 ячейки
+    """
+
+    return 1.5 * v2 - 0.5 * v3
+
+cpdef inline double get_extraopl_3e_v15(double v2, double v3, double v4):
+    """cpdef inline double get_extraopl_3e_v15(double v2, double v3, double v4)
+    функция получения экстраполированного значения 3 порядка (рис. 3 статьи Богданова-Миллера)
+
+    v2 - значение в 2 ячейке
+    v3 - значение в 3 ячейке
+    v4 - значение в 4 ячейке
+    return - экстраполированное значение на границе 1 и  2 ячейки
+    """
+    
+    return 1.875*v2 - 1.25*v3 + 0.375*v4
+
+cpdef inline double get_interp_3i_v15(double v1, double v2, double v3):
+    """cpdef inline double get_interp_3i_v15(double v1, double v2, double v3)
+    функция получения экстраполированного значения 3 порядка (рис. 3 статьи Богданова-Миллера)
+
+    v1 - значение в 1 ячейке
+    v2 - значение в 2 ячейке
+    v3 - значение в 3 ячейке
+    return - интерполированное значение на границе 1 и  2 ячейки
+    """
+    
+    return 0.375*v1 + 0.75*v2 - 0.125*v3
+
+cpdef double get_final_limited_value(double v_init, double v_min, double v_max, double delta_L=0.025):
+    """cpdef double get_final_limited_value(double v_min, double v_max, double delta=0.025)
+    Функция получения финального занчения интер-экстраполированного значения (рис. 4 статьи Богданова-Миллера)
+
+    v_init - изначальное занчение парамтера (ось Х)
+    v_min  - минимальное соседнее занчение
+    v_max  - максимальное соседнее значение
+    delta_L - значение для сглаживания
+    """
+
+    cdef double L = v_max - v_min
+    cdef double delta = delta_L * L
+    if v_init >= v_min + delta and v_init <= v_max - delta:
+        return v_init
+    if v_init >= v_max + delta:
+        return v_max
+    if v_init <= v_min - delta:
+        return v_min
+    
+
+
 cdef class GasEOS(object):
     """Класс для описания уравонений состояний газов и т.д. Поддерживает различные представления
     Абеля, и из книги Годунова
