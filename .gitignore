@@ -5,3 +5,6 @@ env_pykas/
 *build*
 .vscode
 *.pyd
+src/tube.pyd
+src/gaslayer.pyd
+src/godunov.pyd

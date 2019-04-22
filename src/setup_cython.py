@@ -77,6 +77,10 @@ if __name__ == '__main__':
                 "Extention_kwargs":{"include_dirs":[numpy.get_include()]},
                 "depends": ["tube", "godunov"]
             },
+            "powderlayer": {
+                "Extention_kwargs":{"include_dirs":[numpy.get_include()]},
+                "depends": ["tube", "godunov", "gaslayer"]
+            },
      
         }
 
