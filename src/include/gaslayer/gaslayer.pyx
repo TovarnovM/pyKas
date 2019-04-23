@@ -154,7 +154,7 @@ cpdef (double, double, double) AUSM_gas_(
     return flux1, flux2, flux3
 
 
-cpdef inline double get_extrapol_2e_v15(double v2, double v3):
+cpdef inline double get_extrapol_2e_v15(double v2, double v3) nogil:
     """cpdef inline double get_extrapol_2e_v15(double v2, double v3)
     функция получения экстраполированного значения 2 порядка (рис. 3 статьи Богданова-Миллера)
 
@@ -165,7 +165,7 @@ cpdef inline double get_extrapol_2e_v15(double v2, double v3):
 
     return 1.5 * v2 - 0.5 * v3
 
-cpdef inline double get_extraopl_3e_v15(double v2, double v3, double v4):
+cpdef inline double get_extraopl_3e_v15(double v2, double v3, double v4) nogil:
     """cpdef inline double get_extraopl_3e_v15(double v2, double v3, double v4)
     функция получения экстраполированного значения 3 порядка (рис. 3 статьи Богданова-Миллера)
 
@@ -177,7 +177,7 @@ cpdef inline double get_extraopl_3e_v15(double v2, double v3, double v4):
     
     return 1.875*v2 - 1.25*v3 + 0.375*v4
 
-cpdef inline double get_interp_3i_v15(double v1, double v2, double v3):
+cpdef inline double get_interp_3i_v15(double v1, double v2, double v3) nogil:
     """cpdef inline double get_interp_3i_v15(double v1, double v2, double v3)
     функция получения экстраполированного значения 3 порядка (рис. 3 статьи Богданова-Миллера)
 
@@ -189,25 +189,36 @@ cpdef inline double get_interp_3i_v15(double v1, double v2, double v3):
     
     return 0.375*v1 + 0.75*v2 - 0.125*v3
 
-cpdef double get_final_limited_value(double v_init, double v_min, double v_max, double delta_L=0.025):
-    """cpdef double get_final_limited_value(double v_min, double v_max, double delta=0.025)
+cpdef double get_final_limited_value(double v_init, double v1, double v2, double delta_L=0.025) nogil:
+    """cpdef double get_final_limited_value(double v_init, double v1, double v2, double delta_L=0.025)
     Функция получения финального занчения интер-экстраполированного значения (рис. 4 статьи Богданова-Миллера)
 
     v_init - изначальное занчение парамтера (ось Х)
-    v_min  - минимальное соседнее занчение
-    v_max  - максимальное соседнее значение
+    v1  - одно из соседних занчений
+    v2  - другое из соседних занчений
     delta_L - значение для сглаживания
     """
-
+    cdef double v_min = min2(v1, v2)
+    cdef double v_max = max2(v1, v2)
     cdef double L = v_max - v_min
     cdef double delta = delta_L * L
+    cdef double k0,k1,k2
     if v_init >= v_min + delta and v_init <= v_max - delta:
         return v_init
     if v_init >= v_max + delta:
         return v_max
     if v_init <= v_min - delta:
         return v_min
-    
+    if v_init > v_min-delta and v_init < v_min+delta:
+        k0 = 0.25*delta + 0.5*v_min + 0.25*v_min*v_min/delta
+        k1 = 0.5*(delta-v_min)/delta
+        k2 = 0.25/delta
+        return k0 + k1*v_init + k2*v_init*v_init
+    else:
+        k0 = -0.25*delta + v_max*0.5 - 0.25*v_max*v_max/delta
+        k1 = 0.5*(delta+v_max)/delta
+        k2 = -0.25/delta
+        return k0 + k1*v_init + k2*v_init*v_init
 
 
 cdef class GasEOS(object):
@@ -251,20 +262,23 @@ cdef class GasFluxCalculator(object):
     self.flux_type == 1
     """
     
-    def __init__(self, flux_type=1, left_border_type=1, right_border_type=1):
+    def __init__(self, flux_type=1, left_border_type=1, right_border_type=1, x_order=1):
         """Конструктор класса
         
         Keyword Arguments:
             flux_type {int} -- тип солвера 1-Точный Римановский солвер (default: {1})
             left_border_type {int} -- Тип правой стенки 1-непроницаемая стенка (default: {1})
             right_border_type {int} -- -- (default: {1})
+            x_order - как брать значения для распада разрыва (1-просто значения в соседних ячейках, 2-как в статье богданова-миллера)
         """
 
         self.set_flux_type(flux_type)
         self.left_border_type = left_border_type
         self.right_border_type = right_border_type
+        self.x_order = x_order
         self.epsF=1e-6
         self.n_iter_max = 17
+        self.delta_L = 0.025
 
     cpdef void set_flux_type(self, int new_flux_type):
         if new_flux_type == 1:
@@ -329,19 +343,125 @@ cdef class GasFluxCalculator(object):
         if layer.rr_vals.shape[1] != self.rr_vals_len or layer.rr_bint.shape[1] != self.rr_bint_len:
             self.create_rr_arrs(layer)
         cdef size_t i
+        cdef double p_1, p_2, ro_1, ro_2, u_1, u_2, c_1, c_2
+        if self.x_order == 1:
+            for i in range(1, layer.n_cells):
+                mega_foo_fill_rr(
+                    p_1=layer.ps[i-1], ro_1=layer.ros[i-1], u_1=layer.us[i-1], c_1=layer.cs[i-1], \
+                    p_2=layer.ps[i],   ro_2=layer.ros[i],   u_2=layer.us[i],   c_2=layer.cs[i], \
+                    p_0=layer.gasEOS.p_0, gamma=layer.gasEOS.gamma, 
+                    rr_vals=layer.rr_vals[i], rr_bint=layer.rr_bint[i], 
+                    eps_F=self.epsF, n_iter_max=self.n_iter_max)
 
-        for i in range(1, layer.n_cells):
-            mega_foo_fill_rr(
-                p_1=layer.ps[i-1], ro_1=layer.ros[i-1], u_1=layer.us[i-1], c_1=layer.cs[i-1], \
-                p_2=layer.ps[i],   ro_2=layer.ros[i],   u_2=layer.us[i],   c_2=layer.cs[i], \
-                p_0=layer.gasEOS.p_0, gamma=layer.gasEOS.gamma, 
-                rr_vals=layer.rr_vals[i], rr_bint=layer.rr_bint[i], 
-                eps_F=self.epsF, n_iter_max=self.n_iter_max)
+                layer.D_left[i] = layer.rr_vals[i, 4]
+                layer.D_right[i-1] = layer.rr_vals[i, 0]
+                layer.U_kr[i] = layer.rr_vals[i, 2]
+        else:
+            for i in range(1, layer.n_cells):
+                p_1 = self.get_v_left_forRiman(layer.ps, i)
+                p_2 = self.get_v_right_forRiman(layer.ps, i)
 
-            layer.D_left[i] = layer.rr_vals[i, 4]
-            layer.D_right[i-1] = layer.rr_vals[i, 0]
-            layer.U_kr[i] = layer.rr_vals[i, 2]
-    
+                ro_1 = self.get_v_left_forRiman(layer.ros, i)
+                ro_2 = self.get_v_right_forRiman(layer.ros, i)
+
+                u_1 = self.get_v_left_forRiman(layer.us, i)
+                u_2 = self.get_v_right_forRiman(layer.us, i)
+                
+                c_1 = self.get_v_left_forRiman(layer.cs, i)
+                c_2 = self.get_v_right_forRiman(layer.cs, i)
+                mega_foo_fill_rr(
+                    p_1=p_1, ro_1=ro_1, u_1=u_1, c_1=c_1, \
+                    p_2=p_2, ro_2=ro_2, u_2=u_2, c_2=c_2, \
+                    p_0=layer.gasEOS.p_0, gamma=layer.gasEOS.gamma, 
+                    rr_vals=layer.rr_vals[i], rr_bint=layer.rr_bint[i], 
+                    eps_F=self.epsF, n_iter_max=self.n_iter_max)
+
+                layer.D_left[i] = layer.rr_vals[i, 4]
+                layer.D_right[i-1] = layer.rr_vals[i, 0]
+                layer.U_kr[i] = layer.rr_vals[i, 2]
+
+    cpdef double get_v_right_forRiman(self, double[:] vs, int i):
+        """
+        cpdef (double, double) get_v1_v2_forRiman(self, double[:] vs, size_t i)
+
+        метод получения значений для задачи распада разрыва по методу Бгданова-Миллера) (рис. 3, 4)
+
+        vs - массив со значениями
+        i - индекс границы, где нужно найти значения слева и справа
+
+        return v_right - значения для распада разрыва справа от границы i
+               v_right - интер-экстраполированное значение vs[i] 
+        """
+        cdef double v1, v2, v3, v4, v_right
+        cdef int imax = vs.shape[0]-1
+        # значения справа
+        v1 = vs[i-1]
+        v2 = vs[i]
+        if i+1>imax:
+            v3 = vs[imax]
+        else:
+            v3 = vs[i+1]
+        if i+2>imax:
+            v4 = vs[imax]
+        else:
+            v4 = vs[i+2]
+        v_right = self.get_interextra_value(v1, v2, v3, v4)
+        v_right = get_final_limited_value(v_right, v1, v2, self.delta_L)
+        return v_right
+
+
+    cpdef double get_v_left_forRiman(self, double[:] vs, int i):
+        """
+        cpdef double get_v_left_forRiman(self, double[:] vs, int i)
+
+        метод получения значений для задачи распада разрыва по методу Бгданова-Миллера) (рис. 3, 4)
+
+        vs - массив со значениями
+        i - индекс границы, где нужно найти значения слева и справа
+
+        return v_left - значение для распада разрыва слева от границы i.
+               v_left - интер-экстраполированное значение vs[i-1]
+        """
+        # значения справа
+        cdef double v1, v2, v3, v4, v_left
+        v1 = vs[i]
+        v2 = vs[i-1]
+        if i-2<0:
+            v3 = vs[0]
+        else:
+            v3 = vs[i-2]
+        if i-3<0:
+            v4 = vs[0]
+        else:
+            v4 = vs[i-3]
+        v_left = self.get_interextra_value(v1, v2, v3, v4)
+        v_left = get_final_limited_value(v_left, v1, v2, self.delta_L)
+
+        return v_left
+
+    cpdef double get_interextra_value(self, double v1, double v2, double v3, double v4):
+        """
+        cpdef double get_interextra_value(self, double v1, double v2, double v3, double v4)
+
+        Получить интерполнированное значение для задачи распада разрыва по методу Богданова-Миллера (рис. 3)
+        между ячейками 1 и 2 для ячейки 2
+        v1 v2 v3 v4  - значения в ячейках
+        return - интер-экстраполированное значение (справа) для v2 ячейки
+        """
+
+        cdef double e2, e3, i3, e_min, e_max
+        e2 = get_extrapol_2e_v15(v2, v3)
+        e3 = get_extraopl_3e_v15(v2, v3, v4)
+        i3 = get_interp_3i_v15(v1, v2, v3)
+        e_min = min2(e2, e3)
+        e_max = max2(e2, e3)
+        if i3 >= e_min and i3 <= e_max:
+            return i3
+        if i3 > e_max:
+            return e_max
+        if i3 < e_min:
+            return e_min
+
     cpdef void fill_fluxesURP(self, GasLayer layer):
         if self.flux_type == 1:
             self.fill_fluxesURP_Godunov(layer)

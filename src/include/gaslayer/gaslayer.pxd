@@ -56,7 +56,12 @@ cpdef (double, double, double) AUSM_gas_(
 cpdef  double min2(double a, double b) nogil
 
 cpdef  double max2(double a, double b) nogil
-    
+
+cpdef double get_extrapol_2e_v15(double v2, double v3) nogil
+cpdef double get_extraopl_3e_v15(double v2, double v3, double v4) nogil
+cpdef double get_interp_3i_v15(double v1, double v2, double v3) nogil
+cpdef double get_final_limited_value(double v_init, double v1, double v2, double delta_L=*) nogil
+
 cdef class GasEOS:
     cdef public double gamma, kappa, p_0, c_0
     cdef public int kind 
@@ -66,8 +71,8 @@ cdef class GasEOS:
 
 
 cdef class GasFluxCalculator:
-    cdef public int flux_type, left_border_type, right_border_type, n_iter_max, rr_vals_len, rr_bint_len
-    cdef public double epsF
+    cdef public int x_order, flux_type, left_border_type, right_border_type, n_iter_max, rr_vals_len, rr_bint_len
+    cdef public double epsF, delta_L
     cpdef void set_flux_type(self, int new_flux_type)
     cpdef void create_rr_arrs(self, GasLayer layer)
     cpdef void fill_rr_vals(self, GasLayer layer)
@@ -75,7 +80,9 @@ cdef class GasFluxCalculator:
     cpdef void fill_rr_vals_Riman(self, GasLayer layer)
     cpdef void fill_fluxesURP_Godunov(self, GasLayer layer)
     cpdef void fill_fluxesURP(self, GasLayer layer)
-    
+    cpdef double get_interextra_value(self, double v1, double v2, double v3, double v4)
+    cpdef double get_v_right_forRiman(self, double[:] vs, int i)
+    cpdef double get_v_left_forRiman(self, double[:] vs, int i)
 
     
 
