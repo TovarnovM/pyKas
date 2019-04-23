@@ -72,7 +72,7 @@ cdef class GasEOS:
 
 cdef class GasFluxCalculator:
     cdef public int x_order, flux_type, left_border_type, right_border_type, n_iter_max, rr_vals_len, rr_bint_len
-    cdef public double epsF, delta_L
+    cdef public double epsF, delta_L, alpha_1, alpha_2
     cpdef void set_flux_type(self, int new_flux_type)
     cpdef void create_rr_arrs(self, GasLayer layer)
     cpdef void fill_rr_vals(self, GasLayer layer)
@@ -81,8 +81,9 @@ cdef class GasFluxCalculator:
     cpdef void fill_fluxesURP_Godunov(self, GasLayer layer)
     cpdef void fill_fluxesURP(self, GasLayer layer)
     cpdef double get_interextra_value(self, double v1, double v2, double v3, double v4)
-    cpdef double get_v_right_forRiman(self, double[:] vs, int i)
-    cpdef double get_v_left_forRiman(self, double[:] vs, int i)
+    cpdef double get_v_right_forRiman(self, double[:] vs, double[:] bettas, int i)
+    cpdef double get_v_left_forRiman(self, double[:] vs, double[:] bettas, int i)
+    cpdef double get_bogdanov_v(self, double v1, double v2, double v3, double v4, double betta_max)
 
     
 
@@ -104,7 +105,7 @@ cdef class GridStrecher:
 cdef class GasLayer:
     cdef public double[:] xs_cells, xs_borders, Vs_borders, U_kr,\
         ros, ps, us, es, cs, taus, D_left, D_right,  \
-        ds, S, W
+        ds, S, W, bettas
     cdef public double[:,:] qs, hs, fluxes, rr_vals
         #pars # 0 - ros, 1 - ps, 2 - us  
     cdef public bint[:,:] rr_bint

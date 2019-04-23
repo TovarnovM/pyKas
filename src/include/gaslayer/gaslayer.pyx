@@ -3,7 +3,7 @@
 
 from tube cimport Tube, InterpXY
 import cython
-from libc.math cimport pi, sqrt, copysign, exp
+from libc.math cimport pi, sqrt, copysign, exp, fabs
 from godunov cimport get_e_13_1, get_p_13_1, get_c_13_8, mega_foo_cython, \
                      get_ray_URP, MegaFooResult, border_wall_URPDD_result, Border_URPDD_Result, \
                      get_p_0, border_wall_fill_rr, mega_foo_fill_rr
@@ -262,7 +262,16 @@ cdef class GasFluxCalculator(object):
     self.flux_type == 1
     """
     
-    def __init__(self, flux_type=1, left_border_type=1, right_border_type=1, x_order=1):
+    def __init__(self, 
+                flux_type=1, 
+                left_border_type=1, 
+                right_border_type=1, 
+                x_order=1,
+                n_iter_max = 17,
+                epsF=1e-6,
+                delta_L=0.025,
+                alpha_1=8,
+                alpha_2=4):
         """Конструктор класса
         
         Keyword Arguments:
@@ -276,9 +285,11 @@ cdef class GasFluxCalculator(object):
         self.left_border_type = left_border_type
         self.right_border_type = right_border_type
         self.x_order = x_order
-        self.epsF=1e-6
-        self.n_iter_max = 17
-        self.delta_L = 0.025
+        self.epsF=epsF
+        self.n_iter_max = n_iter_max
+        self.delta_L = delta_L
+        self.alpha_1 = alpha_1
+        self.alpha_2 = alpha_2
 
     cpdef void set_flux_type(self, int new_flux_type):
         if new_flux_type == 1:
@@ -343,7 +354,7 @@ cdef class GasFluxCalculator(object):
         if layer.rr_vals.shape[1] != self.rr_vals_len or layer.rr_bint.shape[1] != self.rr_bint_len:
             self.create_rr_arrs(layer)
         cdef size_t i
-        cdef double p_1, p_2, ro_1, ro_2, u_1, u_2, c_1, c_2
+        cdef double p_1, p_2, ro_1, ro_2, u_1, u_2, c_1, c_2, betta1, betta2, betta3
         if self.x_order == 1:
             for i in range(1, layer.n_cells):
                 mega_foo_fill_rr(
@@ -358,17 +369,27 @@ cdef class GasFluxCalculator(object):
                 layer.U_kr[i] = layer.rr_vals[i, 2]
         else:
             for i in range(1, layer.n_cells):
-                p_1 = self.get_v_left_forRiman(layer.ps, i)
-                p_2 = self.get_v_right_forRiman(layer.ps, i)
+                c_1 = layer.cs[i-1]
+                c_2 = layer.cs[i]
+                ro_1 = layer.ros[i-1]
+                ro_2 = layer.ros[i]
+                betta1 = fabs(layer.us[i-1] - layer.us[i])/min2(c_1, c_2)
+                betta2 = fabs(layer.ps[i-1] - layer.ps[i])/min2(ro_1*c_1*c_1, ro_2*c_2*c_2)
+                betta3 = fabs(ro_1*c_1 - ro_2*c_2)/min2(ro_1*c_1, ro_2*c_2)
+                layer.bettas[i] = max2(betta1, max2(betta2, betta3))
 
-                ro_1 = self.get_v_left_forRiman(layer.ros, i)
-                ro_2 = self.get_v_right_forRiman(layer.ros, i)
+            for i in range(1, layer.n_cells):
+                p_1 = self.get_v_left_forRiman(layer.ps, layer.bettas, i)
+                p_2 = self.get_v_right_forRiman(layer.ps, layer.bettas, i)
 
-                u_1 = self.get_v_left_forRiman(layer.us, i)
-                u_2 = self.get_v_right_forRiman(layer.us, i)
+                ro_1 = self.get_v_left_forRiman(layer.ros, layer.bettas, i)
+                ro_2 = self.get_v_right_forRiman(layer.ros, layer.bettas, i)
+
+                u_1 = self.get_v_left_forRiman(layer.us, layer.bettas, i)
+                u_2 = self.get_v_right_forRiman(layer.us, layer.bettas, i)
                 
-                c_1 = self.get_v_left_forRiman(layer.cs, i)
-                c_2 = self.get_v_right_forRiman(layer.cs, i)
+                c_1 = self.get_v_left_forRiman(layer.cs, layer.bettas, i)
+                c_2 = self.get_v_right_forRiman(layer.cs, layer.bettas, i)
                 mega_foo_fill_rr(
                     p_1=p_1, ro_1=ro_1, u_1=u_1, c_1=c_1, \
                     p_2=p_2, ro_2=ro_2, u_2=u_2, c_2=c_2, \
@@ -380,7 +401,7 @@ cdef class GasFluxCalculator(object):
                 layer.D_right[i-1] = layer.rr_vals[i, 0]
                 layer.U_kr[i] = layer.rr_vals[i, 2]
 
-    cpdef double get_v_right_forRiman(self, double[:] vs, int i):
+    cpdef double get_v_right_forRiman(self, double[:] vs, double[:] bettas, int i):
         """
         cpdef (double, double) get_v1_v2_forRiman(self, double[:] vs, size_t i)
 
@@ -392,25 +413,29 @@ cdef class GasFluxCalculator(object):
         return v_right - значения для распада разрыва справа от границы i
                v_right - интер-экстраполированное значение vs[i] 
         """
-        cdef double v1, v2, v3, v4, v_right
+        cdef double v1, v2, v3, v4, betta12, betta23, betta34, betta_max
         cdef int imax = vs.shape[0]-1
         # значения справа
         v1 = vs[i-1]
+        betta12 = bettas[i]
         v2 = vs[i]
         if i+1>imax:
             v3 = vs[imax]
+            betta23 = bettas[imax]
         else:
             v3 = vs[i+1]
+            betta23 = bettas[i+1]
         if i+2>imax:
             v4 = vs[imax]
+            betta34 = bettas[imax]
         else:
             v4 = vs[i+2]
-        v_right = self.get_interextra_value(v1, v2, v3, v4)
-        v_right = get_final_limited_value(v_right, v1, v2, self.delta_L)
-        return v_right
+            betta34 = bettas[i+2]
+        betta_max = max2(betta12, max2(betta23, betta34))
+        return self.get_bogdanov_v(v1, v2, v3, v4, betta_max)
 
 
-    cpdef double get_v_left_forRiman(self, double[:] vs, int i):
+    cpdef double get_v_left_forRiman(self, double[:] vs, double[:] bettas, int i):
         """
         cpdef double get_v_left_forRiman(self, double[:] vs, int i)
 
@@ -423,21 +448,35 @@ cdef class GasFluxCalculator(object):
                v_left - интер-экстраполированное значение vs[i-1]
         """
         # значения справа
-        cdef double v1, v2, v3, v4, v_left
+        cdef double v1, v2, v3, v4, v_left, betta12, betta23, betta34, betta_max
         v1 = vs[i]
+        betta12 = bettas[i]
         v2 = vs[i-1]
         if i-2<0:
             v3 = vs[0]
+            betta23 = bettas[1]
         else:
             v3 = vs[i-2]
+            betta23 = bettas[i-1]
         if i-3<0:
             v4 = vs[0]
+            betta34 = bettas[1]
         else:
             v4 = vs[i-3]
-        v_left = self.get_interextra_value(v1, v2, v3, v4)
-        v_left = get_final_limited_value(v_left, v1, v2, self.delta_L)
+            betta34 = bettas[i-2]
+        betta_max = max2(betta12, max2(betta23, betta34))
+        return self.get_bogdanov_v(v1, v2, v3, v4, betta_max)
+        
 
-        return v_left
+    cpdef double get_bogdanov_v(self, double v1, double v2, double v3, double v4, double betta_max):
+        if betta_max >= self.alpha_1:
+            return v2
+        cdef double res = self.get_interextra_value(v1, v2, v3, v4)
+        res = get_final_limited_value(res, v1, v2, self.delta_L)
+        if betta_max < self.alpha_2:
+            return res
+        cdef double t = (betta_max-self.alpha_2)/(self.alpha_1-self.alpha_2)
+        return t*res + (1-t)*v2
 
     cpdef double get_interextra_value(self, double v1, double v2, double v3, double v4):
         """
@@ -667,6 +706,8 @@ cdef class GasLayer(object):
         # self.mega_foo_results = np.zeros((n_cells+1, ), dtype=np.double)
         self.flux_calculator.create_rr_arrs(self)
 
+        self.bettas = np.zeros(n_cells+1, dtype=np.double)
+
     cpdef void copy_params_to(self, GasLayer to_me):
         to_me.time = self.time
 
@@ -697,7 +738,8 @@ cdef class GasLayer(object):
         to_me.hs[:] = self.hs   
 
         to_me.rr_bint[:] = self.rr_bint
-        to_me.rr_vals[:] = self.rr_vals     
+        to_me.rr_vals[:] = self.rr_vals   
+        to_me.bettas[:] = self.bettas  
 
     cpdef GasLayer copy(self):
         cdef GasLayer res = GasLayer(self.n_cells, self.tube, self.gasEOS, self.flux_calculator, self.grid_strecher, self.n_qs)
@@ -864,7 +906,8 @@ cdef class GasLayer(object):
             'hs':np.array(self.hs),
             'fluxes':np.array(self.fluxes),
             'rr_vals':np.array(self.rr_vals),
-            'rr_bint':np.array(self.rr_bint)
+            'rr_bint':np.array(self.rr_bint),
+            'bettas':np.array(self.bettas)
        }
     def from_dict(self, d):
         self.time = np.array(d['time'])
@@ -895,6 +938,7 @@ cdef class GasLayer(object):
         self.hs = np.array(d['hs'])
         self.rr_vals = np.array(d['rr_vals'])
         self.rr_bint = np.array(d['rr_bint'])
+        self.bettas = np.array(d['bettas'])
     
     
 
