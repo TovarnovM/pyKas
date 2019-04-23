@@ -113,8 +113,8 @@ def _plot3():
         return d['ro_2'], d['p_2'], d['u_2']
     
     gas_eos = GasEOS(gamma=1.4, kind=1)
-    grid_strecher = GridStrecher(strech_type=1,st2_window_part=0.05, st2_adapt_prop=0.1)
-    gas_flux_calculator = GasFluxCalculator(x_order=2, alpha_1=8, alpha_2=4)
+    grid_strecher = GridStrecher(strech_type=2,st2_window_part=0.05, st2_adapt_prop=0.01, D_mnj=0.5)
+    gas_flux_calculator = GasFluxCalculator(x_order=2,alpha_1=8, alpha_2=4)
     tube = Tube([0,1], [0.1, 0.1])
     n_cells = 100
     layer = GasLayer(n_cells, tube=tube, gasEOS=gas_eos, flux_calculator=gas_flux_calculator, grid_strecher=grid_strecher, n_qs=3)
@@ -134,7 +134,8 @@ def _plot3():
         plt.scatter(lr_d['xs_cells'], lr_d['ps'])
         plt.scatter(lr_d['xs_cells'], lr_d['us'])
         plt.scatter(lr_d['xs_cells'], lr_d['es'])
-        # plt.scatter(lr_d['xs_borders'], lr_d['fluxes'][2])
+        # plt.scatter(lr_d['xs_borders'], lr_d['bettas'])
+        # plt.scatter(lr_d['xs_borders'], lr_d['fluxes'][0])
 
         dd = get_distrs_to_time(layer.time, **d)
         plt.plot(dd['xs'], dd['ros'], label=r'$\rho$')
@@ -151,14 +152,23 @@ def _plot3():
         # d['ts'][0] = 0.001
         # layer.time = 0.01
         # break
-        tau = layer.get_tau_min()*0.1
-        layer1 = layer.step_simple(tau, 0,0)
-        if layer1 == layer:
-            break
-        # layer1 = layer.step_Godunov_corrector2(layer1, 0, 0)
-        # if layer1 == layer:
-        #     break
-        layer = layer1
+        tau = layer.get_tau_min()*0.4
+        layer1 = layer.step_simple(tau, 0, 0)
+        while layer1 == layer:
+            tau = tau*0.5
+            layer1 = layer.step_simple(tau, 0, 0)
+        
+        layer2 = layer.corrector_bogdanov(layer1, 0, 0)
+        while layer2 == layer:
+            tau = tau*0.5
+            layer1 = layer.step_simple(tau, 0, 0)
+            while layer1 == layer:
+                tau = tau*0.5
+                layer1 = layer.step_simple(tau, 0, 0)
+            layer2 = layer.corrector_bogdanov(layer1, 0, 0)    
+            layer = layer2
+        layer = layer2
+        # print(np.max(np.array(layer.bettas)))
     print(time.time() - t0)  
 
 

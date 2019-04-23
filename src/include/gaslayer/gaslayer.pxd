@@ -89,7 +89,7 @@ cdef class GasFluxCalculator:
 
 cdef class GridStrecher:
     cdef public int strech_type
-    cdef public double st2_window_part, st2_adapt_prop
+    cdef public double st2_window_part, st2_adapt_prop, D_mnj
     cdef public double[:] bufarr,bufarr_border
     cdef public InterpXY interp_smooth, interp_adapt
     cpdef bint evaluate(self, double tau, GasLayer layer)
@@ -129,5 +129,6 @@ cdef class GasLayer:
     cpdef void fill_taus(self)
     cpdef void fill_rr(self)
     cpdef void fill_fluxesURP(self)
-
+    cpdef GasLayer corrector(self, GasLayer lr_simple05, double tau, double v_left, double v_right)
+    cpdef GasLayer corrector_bogdanov(self, GasLayer lr_simple, double v_left, double v_right)
 

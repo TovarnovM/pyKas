@@ -526,7 +526,7 @@ cdef class GridStrecher(object):
     st2_window_part, st2_adapt_prop - параметры для адаптивной сетки
     """
 
-    def __init__(self, strech_type=1, st2_window_part=0.1, st2_adapt_prop=1):
+    def __init__(self, strech_type=1, st2_window_part=0.01, st2_adapt_prop=1, D_mnj=0.99):
         self.strech_type = strech_type
         self.st2_window_part = st2_window_part
         self.st2_adapt_prop = st2_adapt_prop
@@ -534,6 +534,7 @@ cdef class GridStrecher(object):
         self.bufarr_border = np.zeros(8)
         self.interp_smooth = InterpXY([1,2,3], [1,2,3])
         self.interp_adapt = InterpXY([1,2,3,4], [1,2,3,4])
+        self.D_mnj =D_mnj
 
     cpdef bint evaluate(self, double tau, GasLayer layer):
         cdef size_t i
@@ -563,6 +564,7 @@ cdef class GridStrecher(object):
         cdef size_t i
         for i in range(layer0.Vs_borders.shape[0]):
             layer0.Vs_borders[i] = (layer1.xs_borders[i] - layer0.xs_borders[i])/tau
+        layer1.Vs_borders[:] = layer0.Vs_borders
         return True
 
     cpdef void strech_layer_adaptive(self, GasLayer layer, GasLayer layer_prev, double tau):
@@ -573,20 +575,22 @@ cdef class GridStrecher(object):
         self.smooth_arr(layer.xs_cells, layer.es, self.bufarr, self.st2_window_part)
         self.adaptine_borders(layer.xs_borders, self.bufarr, self.bufarr_border)
         cdef size_t i
-        cdef double old_x, adapt_x, limit
+        cdef double vi, D_1, D_2, mnj, v_min, v_max
+        mnj = self.D_mnj
         for i in range(1, layer.xs_borders.shape[0]-1):
-            old_x = layer.xs_borders[i]
-            adapt_x = self.bufarr_border[i]
-            if adapt_x > old_x:
-                limit = (min2(layer.xs_borders[i+1], layer_prev.xs_borders[i+1])-old_x)*self.st2_adapt_prop
-                if adapt_x > limit:
-                    adapt_x = limit+old_x
-            else: 
-                limit = (-max2(layer.xs_borders[i-1], layer_prev.xs_borders[i-1])+old_x)*self.st2_adapt_prop
-                if adapt_x < limit:
-                    adapt_x = limit+old_x
-            
-            layer.xs_borders[i] = old_x + adapt_x-old_x
+            vi = (layer.xs_borders[i] - layer_prev.xs_borders[i])/tau
+            D_1 = layer_prev.rr_vals[i, 0]
+            D_2 = layer_prev.rr_vals[i, 4]
+            v_min = (layer_prev.xs_borders[i] - layer_prev.xs_borders[i-1] - layer_prev.rr_vals[i-1, 4]*tau)/tau
+            v_max = (layer_prev.xs_borders[i+1] + layer_prev.rr_vals[i+1, 0]*tau - layer_prev.xs_borders[i])/tau
+
+            v_min = max2(v_min, D_1)
+            v_max = min2(v_max, D_2)
+            if vi < mnj*v_min:
+                vi = mnj*v_min
+            elif vi > mnj*v_max:
+                vi = mnj*v_max
+            layer.xs_borders[i] = layer_prev.xs_borders[i] + vi*tau
         self.fill_xs_cells(layer.xs_borders, layer.xs_cells)
 
 
@@ -612,6 +616,8 @@ cdef class GridStrecher(object):
     cpdef void smooth_arr(self, double[:] xs, double[:] vs, double[:] vs_smoothed, double window_part=0.1):
         if self.interp_smooth.length != vs.shape[0]:
             self.interp_smooth.set_length(vs.shape[0])
+        # vs_smoothed[:] = vs
+        # return
         cdef size_t i
         self.interp_smooth.xs[:] = xs 
         self.interp_smooth.ys[0] = 0 
@@ -880,6 +886,73 @@ cdef class GasLayer(object):
                 layer1.qs[j, i] = (self.qs[j, i]*self.W[i] - tau*(self.S[i+1]*self.fluxes[j, i+1] - self.S[i]*self.fluxes[j, i]) + tau*self.hs[j, i]*dx)/layer1.W[i]
         layer1.init_ropue()
         return layer1
+
+    cpdef GasLayer corrector(self, GasLayer lr_simple05, double tau, double v_left, double v_right):
+        lr_simple05.Vs_borders[0] = v_left
+        lr_simple05.Vs_borders[self.n_cells] = v_right
+        lr_simple05.fill_rr()
+        cpdef GasLayer layer2 = lr_simple05.copy()
+        cdef double tau2 = self.time+tau-lr_simple05.time
+        cdef bint suc = self.grid_strecher.sync_layers(lr_simple05, layer2, tau2, v_left, v_right)
+        if not suc:
+            print('suc 354')
+            return self
+        lr_simple05.init_h()
+        lr_simple05.fill_taus()
+        layer2.init_SsdW()
+        layer2.taus[:] = lr_simple05.taus
+        if lr_simple05.get_tau_min() < tau:
+            print('suc 355')
+            return self
+        cdef size_t i, j
+        cdef double dx
+        lr_simple05.fill_fluxesURP()
+        lr_simple05.fill_fluxes()
+        for i in range(layer2.xs_cells.shape[0]):
+            dx = lr_simple05.xs_borders[i+1] - lr_simple05.xs_borders[i]
+            for j in range(layer2.n_qs):
+                layer2.qs[j, i] = (
+                    self.qs[j, i]*self.W[i] - tau*(lr_simple05.S[i+1]*lr_simple05.fluxes[j, i+1] - lr_simple05.S[i]*lr_simple05.fluxes[j, i]) 
+                    + tau*lr_simple05.hs[j, i]*dx
+                    )/layer2.W[i]
+        layer2.init_ropue()
+        return layer2
+
+    cpdef GasLayer corrector_bogdanov(self, GasLayer lr_simple, double v_left, double v_right):
+        lr_simple.fill_rr()
+        cpdef GasLayer layer2 = self.copy()
+        cdef double tau = lr_simple.time - self.time
+        cdef double vl = 0.5*(v_left + lr_simple.Vs_borders[0])
+        cdef double vr = 0.5*(v_right + lr_simple.Vs_borders[lr_simple.n_cells])
+        cdef bint suc = self.grid_strecher.sync_layers(self, layer2, tau, vl, vr)
+        if not suc:
+            print('suc 254')
+            return self
+        lr_simple.Vs_borders[:] = layer2.Vs_borders
+        lr_simple.init_h()
+        lr_simple.fill_taus()
+        layer2.init_SsdW()
+        layer2.taus[:] = lr_simple.taus
+        if lr_simple.get_tau_min() < tau:
+            print('suc 255')
+            return self
+        cdef size_t i, j
+        cdef double dx, dx2
+        lr_simple.fill_fluxesURP()
+        lr_simple.fill_fluxes()
+        for i in range(layer2.xs_cells.shape[0]):
+            dx = lr_simple.xs_borders[i+1] - lr_simple.xs_borders[i]
+            dx2 = self.xs_borders[i+1] - self.xs_borders[i]
+            for j in range(layer2.n_qs):
+                layer2.qs[j, i] = (
+                    self.qs[j, i]*self.W[i] 
+                    - tau * (0.25*(lr_simple.S[i+1]+self.S[i+1])*(lr_simple.fluxes[j, i+1]+self.fluxes[j, i+1]) 
+                           - 0.25*(lr_simple.S[i]+self.S[i])*(lr_simple.fluxes[j, i]+self.fluxes[j, i])) 
+                    + tau * 0.5*(lr_simple.hs[j, i]*dx + self.hs[j, i]*dx2)
+                    )/layer2.W[i]
+        layer2.init_ropue()
+        return layer2
+
 
 
     def to_dict(self):
