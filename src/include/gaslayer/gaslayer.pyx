@@ -560,6 +560,7 @@ cdef class GridStrecher(object):
         if not suc:
             return False
         if self.strech_type == 2:
+            # TODO Адаптивная сетка аццтой
             self.strech_layer_adaptive(layer1, layer_prev=layer0, tau=tau)
         cdef size_t i
         for i in range(layer0.Vs_borders.shape[0]):
@@ -572,25 +573,36 @@ cdef class GridStrecher(object):
             self.bufarr = np.zeros(layer.xs_cells.shape[0])
         if self.bufarr_border.shape[0] != layer.xs_borders.shape[0]:
             self.bufarr_border = np.zeros(layer.xs_borders.shape[0])
-        self.smooth_arr(layer.xs_cells, layer.es, self.bufarr, self.st2_window_part)
+        self.smooth_arr(layer.xs_cells, layer.ros, self.bufarr, self.st2_window_part)
         self.adaptine_borders(layer.xs_borders, self.bufarr, self.bufarr_border)
         cdef size_t i
-        cdef double vi, D_1, D_2, mnj, v_min, v_max
+        cdef double vi, D_1, D_2, mnj, v_min, v_max, xtmp, tmp1, t
         mnj = self.D_mnj
         for i in range(1, layer.xs_borders.shape[0]-1):
-            vi = (layer.xs_borders[i] - layer_prev.xs_borders[i])/tau
+            vi = (self.bufarr_border[i] - layer_prev.xs_borders[i])/tau
             D_1 = layer_prev.rr_vals[i, 0]
             D_2 = layer_prev.rr_vals[i, 4]
-            v_min = (layer_prev.xs_borders[i] - layer_prev.xs_borders[i-1] - layer_prev.rr_vals[i-1, 4]*tau)/tau
-            v_max = (layer_prev.xs_borders[i+1] + layer_prev.rr_vals[i+1, 0]*tau - layer_prev.xs_borders[i])/tau
+
+            t = 0.9
+            xtmp = (1-t)*layer_prev.xs_borders[i-1] + t*layer_prev.xs_borders[i]
+            v_min = (xtmp - layer_prev.xs_borders[i])/tau
+
+            t = 0.9
+            xtmp = (1-t)*layer_prev.xs_borders[i+1] + t*layer_prev.xs_borders[i]
+            v_max = (xtmp - layer_prev.xs_borders[i])/tau
 
             v_min = max2(v_min, D_1)
             v_max = min2(v_max, D_2)
+
+            # v_min = D_1
+            # v_max = D_2
+
             if vi < mnj*v_min:
                 vi = mnj*v_min
             elif vi > mnj*v_max:
                 vi = mnj*v_max
-            layer.xs_borders[i] = layer_prev.xs_borders[i] + vi*tau
+            self.bufarr_border[i] = layer_prev.xs_borders[i] + vi*tau
+        layer.xs_borders[:] =  self.bufarr_border
         self.fill_xs_cells(layer.xs_borders, layer.xs_cells)
 
 
@@ -616,8 +628,10 @@ cdef class GridStrecher(object):
     cpdef void smooth_arr(self, double[:] xs, double[:] vs, double[:] vs_smoothed, double window_part=0.1):
         if self.interp_smooth.length != vs.shape[0]:
             self.interp_smooth.set_length(vs.shape[0])
-        # vs_smoothed[:] = vs
-        # return
+        
+        vs_smoothed[:] = vs
+        return
+
         cdef size_t i
         self.interp_smooth.xs[:] = xs 
         self.interp_smooth.ys[0] = 0 

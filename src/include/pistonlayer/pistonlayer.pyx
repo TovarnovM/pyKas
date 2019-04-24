@@ -11,6 +11,7 @@ from libc.math cimport pi, sqrt, copysign, exp
 import numpy as np
 cimport numpy as np
 
+# TODO Добавить обработку события, когда p<0
 cdef class ElPistLayer(GasLayer):
     def __init__(self, n_cells, Tube tube, ElPistEOS epistEOS, GasFluxCalculator flux_calculator, GridStrecher grid_strecher):
         super().__init__(n_cells, tube, epistEOS, flux_calculator, grid_strecher, 3)

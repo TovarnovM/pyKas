@@ -113,10 +113,10 @@ def _plot3():
         return d['ro_2'], d['p_2'], d['u_2']
     
     gas_eos = GasEOS(gamma=1.4, kind=1)
-    grid_strecher = GridStrecher(strech_type=2,st2_window_part=0.05, st2_adapt_prop=0.01, D_mnj=0.5)
-    gas_flux_calculator = GasFluxCalculator(x_order=2,alpha_1=8, alpha_2=4)
+    grid_strecher = GridStrecher(strech_type=2,st2_window_part=0.05, st2_adapt_prop=0.2, D_mnj=1)
+    gas_flux_calculator = GasFluxCalculator(x_order=2,alpha_1=3, alpha_2=1)
     tube = Tube([0,1], [0.1, 0.1])
-    n_cells = 100
+    n_cells = 300
     layer = GasLayer(n_cells, tube=tube, gasEOS=gas_eos, flux_calculator=gas_flux_calculator, grid_strecher=grid_strecher, n_qs=3)
     layer.xs_borders[:] = np.linspace(x1, x2, n_cells+1)
     layer.init_ropue_fromfoo(init_foo)
@@ -128,7 +128,10 @@ def _plot3():
     # grid_strecher.smooth_arr(layer.xs_cells, layer.es, layer.es, grid_strecher.st2_window_part)
     # grid_strecher.adaptine_borders(layer.xs_borders, layer.es, layer.xs_borders)
     # layer.init_ropue_fromfoo(init_foo)
-    def plot_layer(lr):
+    # grid_strecher.smooth_arr(layer.xs_cells, layer.es, layer.es, grid_strecher.st2_window_part)
+    # grid_strecher.adaptine_borders(layer.xs_borders, layer.es, layer.xs_borders)
+    # layer.init_ropue_fromfoo(init_foo)
+    def plot_layer(lr, plt_ideal=True):
         lr_d = layer.to_dict()
         plt.scatter(lr_d['xs_cells'], lr_d['ros'])
         plt.scatter(lr_d['xs_cells'], lr_d['ps'])
@@ -136,12 +139,12 @@ def _plot3():
         plt.scatter(lr_d['xs_cells'], lr_d['es'])
         # plt.scatter(lr_d['xs_borders'], lr_d['bettas'])
         # plt.scatter(lr_d['xs_borders'], lr_d['fluxes'][0])
-
-        dd = get_distrs_to_time(layer.time, **d)
-        plt.plot(dd['xs'], dd['ros'], label=r'$\rho$')
-        plt.plot(dd['xs'], dd['ps'], label=r'$p$')
-        plt.plot(dd['xs'], dd['us'], label=r'$u$')
-        plt.plot(dd['xs'], dd['es'], label=r'$e$')
+        if plt_ideal:
+            dd = get_distrs_to_time(layer.time, **d)
+            plt.plot(dd['xs'], dd['ros'], label=r'$\rho$')
+            plt.plot(dd['xs'], dd['ps'], label=r'$p$')
+            plt.plot(dd['xs'], dd['us'], label=r'$u$')
+            plt.plot(dd['xs'], dd['es'], label=r'$e$')
         plt.grid(True)
         plt.legend()
         plt.show()
@@ -152,22 +155,30 @@ def _plot3():
         # d['ts'][0] = 0.001
         # layer.time = 0.01
         # break
-        tau = layer.get_tau_min()*0.4
-        layer1 = layer.step_simple(tau, 0, 0)
-        while layer1 == layer:
-            tau = tau*0.5
-            layer1 = layer.step_simple(tau, 0, 0)
+        layer.fill_rr()
+        layer1 = layer.copy() 
+        tau = layer.get_tau_min()*0.3
+        suc = layer.grid_strecher.sync_layers(layer, layer1, tau, 0, 0)
+
+        # plt.plot(np.array(layer.xs_borders), label='layer.xs_borders')
+        # plt.plot(np.array(layer1.xs_borders), label='layer1.xs_borders')
+        # plt.plot(np.array(layer.Vs_borders), label='layer.Vs_borders')
+        # plt.plot(np.array(layer1.Vs_borders), label='layer1.Vs_borders')
+        # plt.grid(True)
+        # plt.legend()
+        # plt.show()
+
+        layer.fill_taus()
         
+        
+        layer1 = layer.step_simple(tau, 0, 0)     
+        if layer == layer1:
+            break  
         layer2 = layer.corrector_bogdanov(layer1, 0, 0)
-        while layer2 == layer:
-            tau = tau*0.5
-            layer1 = layer.step_simple(tau, 0, 0)
-            while layer1 == layer:
-                tau = tau*0.5
-                layer1 = layer.step_simple(tau, 0, 0)
-            layer2 = layer.corrector_bogdanov(layer1, 0, 0)    
-            layer = layer2
+        if layer == layer2:
+            break
         layer = layer2
+        # plot_layer(layer, False)
         # print(np.max(np.array(layer.bettas)))
     print(time.time() - t0)  
 
