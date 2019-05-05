@@ -92,7 +92,8 @@ cdef class ElPistEOS(GasEOS):
     def __repr__(self):
         return f'''ElPistEOS(k={self.gamma}, c_0={self.c_0}, ro_0={self.ro_0}, 
         sigma_star={self.sigma_star*1e-6}, k_0={self.k_0}, b_1={self.b_1}, 
-        b_2={self.b_2}, tau_0={self.tau_0*1e-6}, mu={self.mu}, tau_s={self.tau_s*1e-6})'''
+        b_2={self.b_2}, tau_0={self.tau_0*1e-6}, mu={self.mu}, tau_s={self.tau_s*1e-6},
+        zeroP={bool(self.zeroP)}, zeroE={bool(self.zeroE)})'''
 
     def __str__(self):
         return repr(self)
