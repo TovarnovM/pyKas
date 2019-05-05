@@ -6,7 +6,7 @@ from tube cimport Tube, InterpXY
 from gaslayer cimport GasLayer, GasEOS, GasFluxCalculator, GridStrecher
 
 import cython
-from libc.math cimport pi, sqrt, copysign, exp, pow
+from libc.math cimport pi, sqrt, copysign, exp, pow, fabs
 import numpy as np
 cimport numpy as np
 
@@ -106,18 +106,24 @@ cdef class Powder(GasEOS):
     
     cpdef double get_e_powder(self, double ro, double p, double z):
         cdef double psi = self.psi.get_v(z)
-        return (p/(self.gamma-1)) * (1/ro - ((1-psi)/self.ro + self.kappa*psi)) +(1-psi)*self.f/(self.gamma-1)
+        cdef double e = (p/(self.gamma-1)) * (1/ro - ((1-psi)/self.ro + self.kappa*psi)) +(1-psi)*self.f/(self.gamma-1)
+        return e if e > 0 else 0
     
     cpdef double get_p_powder(self, double ro, double e, double z):
         cdef double psi = self.psi.get_v(z)
         cdef double chsl = e * (self.gamma-1) - (1-psi)*self.f
         cdef double znam = 1/ro - ((1-psi)/self.ro + self.kappa*psi)
-        return chsl/znam
+        if fabs(znam) < 1e-13:
+            return 0
+        cdef double p = chsl/znam
+        return p if p > 0 else 0
     
     cpdef double get_csound_powder(self, double ro, double p, double z): 
         cdef double psi = self.psi.get_v(z)
         cdef double chsl = self.gamma * p
         cdef double znam = 1/ro - ((1-psi)/self.ro + self.kappa*psi)
+        if znam < 1e-13:
+            return sqrt(self.gamma*p/ro)
         return sqrt(chsl/znam)/ro
 
     cpdef double get_z_k(self):

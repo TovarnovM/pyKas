@@ -236,6 +236,12 @@ cdef class GasEOS(object):
         self.c_0 = c_0
         self.kind = kind
 
+    def __repr__(self):
+        return f'GasEOS(gamma={self.gamma}, kappa={self.kappa}, p_0={self.p0}, c_0={self.c_0}, kind={self.kind})'
+
+    def __str__(self):
+        return repr(self)
+
     cpdef double get_e(self, double ro, double p):
         if self.kind == 1:
             return rop_to_e(ro, p, self.gamma, self.kappa)

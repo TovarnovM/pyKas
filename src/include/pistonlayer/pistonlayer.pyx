@@ -74,7 +74,8 @@ cdef class ElPistLayer(GasLayer):
 
 cdef class ElPistEOS(GasEOS):
     def __init__(self, k=1.63098, c_0=2308, ro_0=919.03, sigma_star=25.2, \
-                k_0=0.054, b_1=0.027, b_2=0.00675, tau_0=1.36, mu=0.001, tau_s=1):
+                k_0=0.054, b_1=0.027, b_2=0.00675, tau_0=1.36, mu=0.001, tau_s=1, \
+                zeroP=True, zeroE=True):
         
         super().__init__(gamma=k, kappa=0, p_0=get_p_0(ro_0, c_0, k), c_0=c_0, kind=2)
         self.ro_0 = ro_0
@@ -85,7 +86,28 @@ cdef class ElPistEOS(GasEOS):
         self.tau_0 = tau_0 * 1e6
         self.mu = mu
         self.tau_s = tau_s * 1e6
+        self.zeroP = zeroP
+        self.zeroE = zeroE
+    
+    def __repr__(self):
+        return f'''ElPistEOS(k={self.gamma}, c_0={self.c_0}, ro_0={self.ro_0}, 
+        sigma_star={self.sigma_star*1e-6}, k_0={self.k_0}, b_1={self.b_1}, 
+        b_2={self.b_2}, tau_0={self.tau_0*1e-6}, mu={self.mu}, tau_s={self.tau_s*1e-6})'''
 
+    def __str__(self):
+        return repr(self)
+
+    cpdef double get_e(self, double ro, double p):
+        cdef double e = (p-self.c_0*self.c_0*(ro-self.ro_0))/((self.gamma-1)*ro)
+        if self.zeroE:
+            return e if e > 0 else 0
+        return e
+
+    cpdef double get_p(self, double ro, double e):
+        cdef double p = e*ro*(self.gamma-1) + self.c_0*self.c_0*(ro-self.ro_0)
+        if self.zeroP:
+            return p if p > 0 else 0
+        return p
 
     cpdef double get_tauu(self, double sigma, double u):
         if sigma < self.sigma_star:
