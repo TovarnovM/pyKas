@@ -17,7 +17,7 @@ cdef class Powder(GasEOS):
     cpdef double get_z_k(self)
 
 cdef class PowderOvLayer(GasLayer):
-    cdef public double some
+    cdef public double t_ign
     cdef public double[:] zs
     cpdef void copy_params_to_Ov(self, PowderOvLayer to_me)
     cpdef GasLayer copy(self)

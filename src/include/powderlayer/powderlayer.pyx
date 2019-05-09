@@ -131,13 +131,15 @@ cdef class Powder(GasEOS):
 
 
 cdef class PowderOvLayer(GasLayer):
-    def __init__(self, n_cells, Tube tube, Powder powder, GasFluxCalculator flux_calculator, GridStrecher grid_strecher):
+    def __init__(self, n_cells, Tube tube, Powder powder, GasFluxCalculator flux_calculator, GridStrecher grid_strecher, double t_ign=0):
         super().__init__(n_cells, tube, powder, flux_calculator, grid_strecher, 4)
         self.zs = np.zeros(n_cells, dtype=np.double)
+        self.t_ign = t_ign
 
     cpdef void copy_params_to_Ov(self, PowderOvLayer to_me):
         self.copy_params_to(to_me)
         to_me.zs[:] = self.zs
+        to_me.t_ign = self.t_ign
 
     cpdef GasLayer copy(self):
         cdef PowderOvLayer res = PowderOvLayer(self.n_cells, self.tube, <Powder>self.gasEOS, self.flux_calculator, self.grid_strecher)
@@ -196,7 +198,10 @@ cdef class PowderOvLayer(GasLayer):
             self.hs[0, i] = 0
             self.hs[1, i] = self.ps[i] * self.ds[i] 
             self.hs[2, i] = 0
-            self.hs[3, i] = self.ros[i] * 0.5*(self.S[i]+self.S[i+1]) * pow(self.ps[i], powder.nu) / powder.I_k
+            self.hs[3, i] = 0
+        if self.time >= self.t_ign:
+            for i in range(self.hs.shape[1]):
+                self.hs[3, i] = self.ros[i] * 0.5*(self.S[i]+self.S[i+1]) * pow(self.ps[i], powder.nu) / powder.I_k
 
     cpdef void fill_fluxes(self):
         cdef size_t i
