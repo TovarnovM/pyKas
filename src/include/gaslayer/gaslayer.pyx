@@ -788,6 +788,7 @@ cdef class GasLayer(object):
             self.init_q()
         if init_SsdW:
             self.init_SsdW()
+        self.init_taus_acustic()
     
     cpdef void init_SsdW(self):
         self.tube.fill_S(self.xs_borders, self.S)
@@ -1032,6 +1033,15 @@ cdef class GasLayer(object):
         self.rr_vals = np.array(d['rr_vals'])
         self.rr_bint = np.array(d['rr_bint'])
         self.bettas = np.array(d['bettas'])
+
+    def __str__(self):
+        dxs = np.asarray(self.xs_borders)[1:] - np.asarray(self.xs_borders)[:-1]
+        return f"{self.__class__.__name__}(n_cells={self.n_cells}); {{'p_max':{np.max(self.ps)}, 'tau_min': {self.get_tau_min()}, \
+        'u_max': {np.max(self.us)}, 'cs_max': {np.max(self.cs)}, 'dx_min': {np.min(dxs)}, 'x_1': {self.xs_borders[0]}, 'x_2': {self.xs_borders[-1]},\
+        'V_1':  {self.Vs_borders[0]}, 'V_2':  {self.Vs_borders[-1]}  }}"
+
+    def __repr__(self):
+        return str(self)
     
     
 

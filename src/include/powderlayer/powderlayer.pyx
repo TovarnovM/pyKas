@@ -161,6 +161,7 @@ cdef class PowderOvLayer(GasLayer):
             self.init_q()
         if init_SsdW:
             self.init_SsdW()
+        self.init_taus_acustic()
 
     cpdef void init_q(self):
         cdef size_t i
@@ -240,3 +241,6 @@ cdef class PowderOvLayer(GasLayer):
     def from_dict(self, d):
         super().from_dict()
         self.zs = np.array(d['zs'])
+
+    def __str__(self):
+        return super().__str__() + f"{{ 'powder': r'{self.gasEOS.name}', 'z_max': {np.max(self.zs)} }}"
