@@ -269,3 +269,23 @@ cdef class Tube(object):
         Возвращает объем трубы между точками x1 и x2
         """
         return self.w.get_v(x2) - self.w.get_v(x1)
+
+    def plot(self, fig, ax, y0=0, **kwargs):
+        """Отрисовать трубу 
+
+            color_muzzle = kwargs.get('color_muzzle', 'black')
+            lw_muzzle = kwargs.get('lw_muzzle', 2)
+            lw_osei = kwargs.get('lw_osei', 1)
+            marker = kwargs.get('marker', 'o')
+            markersize = kwargs.get('markersize', 5)
+        """
+        xs, ys = np.array(self.get_xs()), np.array(self.get_ds())/2
+        color_muzzle = kwargs.get('color_muzzle', 'black')
+        lw_muzzle = kwargs.get('lw_muzzle', 2)
+        lw_osei = kwargs.get('lw_osei', 1)
+        marker = kwargs.get('marker', 'o')
+        markersize = kwargs.get('markersize', 5)
+        ax.plot(xs, ys+y0, color=color_muzzle, lw=lw_muzzle, marker=marker, markersize=markersize)
+        ax.plot(xs[[0,0]], [y0, ys[0]+y0], color='black', lw=lw_osei)
+        ax.plot(xs[[-1,-1]], [y0, ys[-1]+y0], color='black', lw=lw_osei)
+        ax.plot(xs[[0,-1]], [y0,y0], color='black', lw=lw_osei, ls='-.', marker=marker, markersize=markersize)

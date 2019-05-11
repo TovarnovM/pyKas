@@ -103,6 +103,7 @@ cdef class Powder(GasEOS):
         self.dpsi = InterpXY(zs, dpsis)    
         self.psi = InterpXY(zs, psis)
         self.z_k = self.get_z_k()
+        
     
     cpdef double get_e_powder(self, double ro, double p, double z):
         cdef double psi = self.psi.get_v(z)
@@ -135,6 +136,7 @@ cdef class PowderOvLayer(GasLayer):
         super().__init__(n_cells, tube, powder, flux_calculator, grid_strecher, 4)
         self.zs = np.zeros(n_cells, dtype=np.double)
         self.t_ign = t_ign
+        self.color_4_plot = '#6b400e'
 
     cpdef void copy_params_to_Ov(self, PowderOvLayer to_me):
         self.copy_params_to(to_me)

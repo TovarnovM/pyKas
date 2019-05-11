@@ -695,6 +695,7 @@ cdef class GasLayer(object):
     def __init__(self, n_cells, Tube tube, GasEOS gasEOS, GasFluxCalculator flux_calculator, GridStrecher grid_strecher, int n_qs=3):
         self.n_cells = n_cells
         self.n_qs = n_qs
+        self.color_4_plot = '#bababa'
         # self.n_pars = n_pars
         self.tube = tube
         self.gasEOS = gasEOS
@@ -790,6 +791,12 @@ cdef class GasLayer(object):
             self.init_SsdW()
         self.init_taus_acustic()
     
+    cpdef double get_p_left(self):
+        return self.ps[0]
+
+    cpdef double get_p_right(self):
+        return self.ps[-1]
+
     cpdef void init_SsdW(self):
         self.tube.fill_S(self.xs_borders, self.S)
         self.tube.fill_dsdx(self.xs_borders, self.ds)
@@ -1043,7 +1050,25 @@ cdef class GasLayer(object):
     def __repr__(self):
         return str(self)
     
-    
+    def plot(self, fig, ax, y0=0, **kwargs):
+        """[summary]
+        
+        Arguments:
+            fig {[type]} -- [description]
+            ax {[type]} -- [description]
+        
+        Keyword Arguments:
+            y0 {int} -- [description] (default: {0})
+        """
+        from matplotlib.patches import Polygon
+        ix = np.array(self.xs_borders)
+        iy = np.array(self.tube.get_ds(ix))/2 + y0
+        verts = [(ix[0], y0)] + list(zip(ix, iy)) + [(ix[-1], y0)]
+        color=kwargs.get('color', self.color_4_plot)
+        alpha=kwargs.get('alpha', 0.5)
+        poly = Polygon(verts, color=color, alpha=alpha)
+        ax.add_patch(poly) 
+        
 
 
 

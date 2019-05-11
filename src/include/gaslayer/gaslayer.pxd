@@ -115,6 +115,7 @@ cdef class GasLayer:
     cdef public double time
     cdef public GasFluxCalculator flux_calculator
     cdef public GridStrecher grid_strecher
+    cdef public str color_4_plot
     cpdef void copy_params_to(self, GasLayer to_me)
     cpdef GasLayer copy(self)
     cpdef void init_ropue_fromfoo(self, foo_ropu, bint init_q=*, bint init_SsdW=*)
@@ -131,4 +132,5 @@ cdef class GasLayer:
     cpdef void fill_fluxesURP(self)
     cpdef GasLayer corrector(self, GasLayer lr_simple05, double tau, double v_left, double v_right)
     cpdef GasLayer corrector_bogdanov(self, GasLayer lr_simple, double v_left, double v_right)
-
+    cpdef double get_p_left(self)
+    cpdef double get_p_right(self)
