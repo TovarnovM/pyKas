@@ -692,6 +692,56 @@ cdef class GridStrecher(object):
 
 
 cdef class GasLayer(object):
+    @classmethod
+    def get_standart(cls, tube: Tube, x_1: float, gas_layer_dict, calc_settings):
+        """Получить и проиницилаизировать стандартный, равномерный газовый слой
+        
+        Arguments:
+            tube {Tube} -- труба)
+            x_1 {float} -- левая граница газовой области
+            gas_layer_dict {dict} -- gas_layer_dict_sample = {
+                                        'type': 'gas',
+                                        'name': 'air',
+                                        'gamma': 1.4,
+                                        'kappa': 0.0010838,
+                                        'R': 287,
+                                        'T_0': 300, # K
+                                        'W_0': 0.0002,  # м^3 объем газа
+                                        'p_0': 100e5, # начальное давление газа
+                                        'u_0': 0,     #начальная скорость
+                                    }
+            calc_settings {dict} -- calc_settings_sample = {
+                                        'cell_dx': 0.0025,
+                                        'n_cells_min': 13,
+                                        'n_cells_max': 300,
+                                        'GasFluxCalculator_kwargs': {},
+                                        'GridStrecher_kwargs': {}
+                                    }
+        """
+        def get_n_cells(x_1, x_2, calc_settings):
+            n_cells = round(abs(x_2-x_1)/calc_settings['cell_dx'])
+            n_cells = min(calc_settings['n_cells_max'], n_cells)
+            n_cells = max(calc_settings['n_cells_min'], n_cells)
+            return n_cells
+        flux_calculator = GasFluxCalculator(**calc_settings['GasFluxCalculator_kwargs'])
+        grid_strecher = GridStrecher(**calc_settings['GridStrecher_kwargs'])
+        
+        p_0 = gas_layer_dict['p_0']
+        ro_0 = p_0/(gas_layer_dict['R']*gas_layer_dict['T_0'] + p_0*gas_layer_dict['kappa'])
+        gas_eos = GasEOS(gamma=gas_layer_dict['gamma'], kappa=gas_layer_dict['kappa'], kind=1)
+        
+        x_2 = tube.get_x2(x_1, gas_layer_dict['W_0'])
+        n_cells = get_n_cells(x_1, x_2, calc_settings)
+        u_0 = gas_layer_dict['u_0']
+
+        glayer = cls(n_cells=n_cells, tube=tube, gasEOS=gas_eos, flux_calculator=flux_calculator, grid_strecher=grid_strecher)
+        glayer.xs_borders = np.linspace(x_1, x_2, n_cells+1)
+        def foo_ropu(*args):
+            return ro_0, p_0, u_0
+        glayer.init_ropue_fromfoo(foo_ropu)
+        return glayer
+
+
     def __init__(self, n_cells, Tube tube, GasEOS gasEOS, GasFluxCalculator flux_calculator, GridStrecher grid_strecher, int n_qs=3):
         self.n_cells = n_cells
         self.n_qs = n_qs

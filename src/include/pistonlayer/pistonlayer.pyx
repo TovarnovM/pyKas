@@ -11,8 +11,63 @@ from libc.math cimport pi, sqrt, copysign, exp
 import numpy as np
 cimport numpy as np
 
-# TODO Добавить обработку события, когда p<0
+
 cdef class ElPistLayer(GasLayer):
+    @classmethod
+    def get_standart(cls, tube: Tube, x_1: float, pist_layer_dict, calc_settings):
+        """Получить и проиницилаизировать стандартный, равномерный полиэтиленовый слой
+        
+        Arguments:
+            tube {Tube} -- труба)
+            x_1 {float} -- левая граница полиэтиленовой области
+            pist_layer_dict {dict} -- pist_layer_dict_sample = {
+                                                'type': 'pist',
+                                                'omega': 0.03,  # кг
+                                                'p_0': 1e5, # начальное давление в полиэтилене
+                                                'u_0': 0,     #начальная скорость
+                                                'ElPistEOS_kwargs': dict(
+                                                    k=1.63098, 
+                                                    c_0=2308, 
+                                                    ro_0=919.03, 
+                                                    sigma_star=25.2, 
+                                                    k_0=0.054, 
+                                                    b_1=0.027, 
+                                                    b_2=0.00675, 
+                                                    tau_0=1.36, 
+                                                    mu=0.001, 
+                                                    tau_s=1,                 
+                                                    zeroP=False, 
+                                                    zeroE=True)
+                                            }
+            calc_settings {dict} -- calc_settings_sample = {
+                                        'cell_dx': 0.0025,
+                                        'n_cells_min': 13,
+                                        'n_cells_max': 300,
+                                        'GasFluxCalculator_kwargs': {},
+                                        'GridStrecher_kwargs': {}
+                                    }
+        """
+        def get_n_cells(x_1, x_2, calc_settings):
+            n_cells = round(abs(x_2-x_1)/calc_settings['cell_dx'])
+            n_cells = min(calc_settings['n_cells_max'], n_cells)
+            n_cells = max(calc_settings['n_cells_min'], n_cells)
+            return n_cells
+        flux_calculator = GasFluxCalculator(**calc_settings['GasFluxCalculator_kwargs'])
+        grid_strecher = GridStrecher(**calc_settings['GridStrecher_kwargs'])
+        epistEOS = ElPistEOS(**pist_layer_dict['ElPistEOS_kwargs'])
+        ro_0 = pist_layer_dict['ElPistEOS_kwargs']['ro_0']
+        
+        W0 = pist_layer_dict['omega']/ro_0
+        x_2 = tube.get_x2(x_1, W0)
+        n_cells = get_n_cells(x_1, x_2, calc_settings)
+        pist_layer = cls(n_cells=n_cells, tube=tube, epistEOS=epistEOS, flux_calculator=flux_calculator, grid_strecher=grid_strecher)
+        pist_layer.xs_borders = np.linspace(x_1, x_2, n_cells+1)
+        u_0 = pist_layer_dict['u_0']
+        def foo_ropu(*args):
+            return ro_0, pist_layer_dict['p_0'], 0
+        pist_layer.init_ropue_fromfoo(foo_ropu)
+        return pist_layer
+
     def __init__(self, n_cells, Tube tube, ElPistEOS epistEOS, GasFluxCalculator flux_calculator, GridStrecher grid_strecher):
         super().__init__(n_cells, tube, epistEOS, flux_calculator, grid_strecher, 3)
         self.tauxx_flux = np.zeros(n_cells+1, dtype=np.double)

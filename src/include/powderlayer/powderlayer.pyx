@@ -9,6 +9,7 @@ import cython
 from libc.math cimport pi, sqrt, copysign, exp, pow, fabs
 import numpy as np
 cimport numpy as np
+import json
 
 cpdef inline void roue_to_q_(
     double ro,
@@ -34,9 +35,26 @@ cpdef inline (double, double, double) q123_to_roue(double q1, double q2, double 
     cdef double e = q3 / q1 - 0.5 * u * u
     return ro, u, e
 
+class Singleton(type):
+    """Метакласс для объектов с паттеном синглтон
+    """
+
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+class PowderBD(metaclass=Singleton):
+    def __init__(self):
+        import os
+        with open(os.path.dirname(os.path.abspath(__file__))+'\\gpowders.json') as f:
+            self.all_powders_dict = json.load(f)
+
+
 cdef class Powder(GasEOS):
     @classmethod
-    def from_bd(cls, d, n_points=300):
+    def from_bd(cls, dict_or_name, n_points=300):
         """Создать образец Powder из словаря БД
         
         Arguments:
@@ -55,17 +73,24 @@ cdef class Powder(GasEOS):
                             'lambda_2': -1.024,
                             'k_f': 0.0003,
                             'k_l': 0.0016   }
+
+
+                        ИЛИ это просто имя пороха типа r'4\7'
         """
-        Z_k = d['Z_k']
-        k1 = d['k_1']
-        l1 = d['lambda_1']
-        k2 = d['k_2']
-        l2 = d['lambda_2']
+        if isinstance(dict_or_name, str):
+            dict_or_name = PowderBD().all_powders_dict[dict_or_name]
+        Z_k = dict_or_name['Z_k']
+        k1 = dict_or_name['k_1']
+        l1 = dict_or_name['lambda_1']
+        k2 = dict_or_name['k_2']
+        l2 = dict_or_name['lambda_2']
         zs = np.linspace(0, Z_k, n_points)
         dpsidz = np.empty_like(zs)
         for i, z in enumerate(zs):
             dpsidz[i] = k1*(1+2*l1*z) if z<=1 else k2*(1+2*l2*(z-1)) if z<Z_k else 0
-        return cls(name=d['name'], I_k=d['I_k'], alpha_k=d['alpha_k'], ro=d['ro'], f=d['f'], etta=d['etta'], T_1=d['T_1'], zs=zs, dpsi_dz=dpsidz)
+        return cls(name=dict_or_name['name'], I_k=dict_or_name['I_k'], alpha_k=dict_or_name['alpha_k'], 
+                   ro=dict_or_name['ro'], f=dict_or_name['f'], etta=dict_or_name['etta'], 
+                   T_1=dict_or_name['T_1'], zs=zs, dpsi_dz=dpsidz)
 
     def __init__(self, name, I_k, alpha_k, ro, f, etta, T_1, zs, dpsi_dz):
         """Конструктор
@@ -132,6 +157,68 @@ cdef class Powder(GasEOS):
 
 
 cdef class PowderOvLayer(GasLayer):
+    @classmethod
+    def get_standart(cls, tube: Tube, x_1: float, powder_layer_dict, calc_settings):
+        """Получить и проиницилаизировать стандартный, равномерный полиэтиленовый слой
+        
+        Arguments:
+            tube {Tube} -- труба)
+            x_1 {float} -- левая граница полиэтиленовой области
+            powder_layer_dict {dict} -- powder_layer_dict_sample = {
+                                            'type': 'PowderOvLayer',
+                                            'powder': {
+                                                'name': '4\\7',
+                                                'f': 1.027,
+                                                'etta': 0.228,
+                                                'alpha_k': 1.008,
+                                                'T_1': 3006.0,
+                                                'ro': 1.6,
+                                                'I_k': 0.32,
+                                                'Z_k': 1.488,
+                                                'k_1': 0.811,
+                                                'lambda_1': 0.081,
+                                                'k_2': 0.505,
+                                                'lambda_2': -1.024,
+                                                'k_f': 0.0003,
+                                                'k_l': 0.0016
+                                            },
+                                            'omega': 35,  # грамм
+                                            'delta': 700, # г/cm^3
+                                            'p_0': 5e6, # начальное давление
+                                            't_ign': 0.00001, # начало горения
+                                            'u_0': 0,     #начальная скорость
+                                        }
+            calc_settings {dict} -- calc_settings_sample = {
+                                        'cell_dx': 0.0025,
+                                        'n_cells_min': 13,
+                                        'n_cells_max': 300,
+                                        'GasFluxCalculator_kwargs': {},
+                                        'GridStrecher_kwargs': {}
+                                    }
+        """
+        def get_n_cells(x_1, x_2, calc_settings):
+            n_cells = round(abs(x_2-x_1)/calc_settings['cell_dx'])
+            n_cells = min(calc_settings['n_cells_max'], n_cells)
+            n_cells = max(calc_settings['n_cells_min'], n_cells)
+            return n_cells
+        powder = Powder.from_bd(powder_layer_dict['powder'])
+        flux_calculator = GasFluxCalculator(**calc_settings['GasFluxCalculator_kwargs'])
+        grid_strecher = GridStrecher(**calc_settings['GridStrecher_kwargs'])
+        omega = powder_layer_dict['omega']*1e-3
+        delta = powder_layer_dict['delta']
+        w = omega/delta
+        x_2 = tube.get_x2(x_1, w)
+        n_cells = get_n_cells(x_1, x_2, calc_settings)
+        pow_layer = PowderOvLayer(n_cells=n_cells, tube=tube, powder=powder, 
+                                flux_calculator=flux_calculator, grid_strecher=grid_strecher,
+                                t_ign=powder_layer_dict['t_ign'])
+        pow_layer.xs_borders = np.linspace(x_1, x_2, n_cells+1)
+        u_0 = powder_layer_dict['u_0']
+        def foo_ropu(*args):
+            return delta, powder_layer_dict['p_0'], u_0, 0
+        pow_layer.init_ropue_fromfoo(foo_ropu)
+        return pow_layer
+
     def __init__(self, n_cells, Tube tube, Powder powder, GasFluxCalculator flux_calculator, GridStrecher grid_strecher, double t_ign=0):
         super().__init__(n_cells, tube, powder, flux_calculator, grid_strecher, 4)
         self.zs = np.zeros(n_cells, dtype=np.double)
