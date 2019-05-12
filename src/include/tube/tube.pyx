@@ -270,15 +270,19 @@ cdef class Tube(object):
         """
         return self.w.get_v(x2) - self.w.get_v(x1)
 
-    def plot(self, fig, ax, y0=0, **kwargs):
+    def plot(self, fig, ax, **kwargs):
         """Отрисовать трубу 
 
+            fig, ax = plt.subplots()
+            
+            y0 = kwargs.get('y0', 0)
             color_muzzle = kwargs.get('color_muzzle', 'black')
             lw_muzzle = kwargs.get('lw_muzzle', 2)
             lw_osei = kwargs.get('lw_osei', 1)
             marker = kwargs.get('marker', 'o')
             markersize = kwargs.get('markersize', 5)
         """
+        y0 = kwargs.get('y0', 0)
         xs, ys = np.array(self.get_xs()), np.array(self.get_ds())/2
         color_muzzle = kwargs.get('color_muzzle', 'black')
         lw_muzzle = kwargs.get('lw_muzzle', 2)

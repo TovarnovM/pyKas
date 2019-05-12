@@ -1100,17 +1100,23 @@ cdef class GasLayer(object):
     def __repr__(self):
         return str(self)
     
-    def plot(self, fig, ax, y0=0, **kwargs):
-        """[summary]
+    def plot(self, fig, ax, **kwargs):
+        """Отрисовать (условно слой)
         
         Arguments:
-            fig {[type]} -- [description]
-            ax {[type]} -- [description]
-        
-        Keyword Arguments:
-            y0 {int} -- [description] (default: {0})
+            fig, ax = plt.subplots()
+
+            kwargs моугт содержать
+
+            y0 = kwargs.get('y0', 0)
+            color=kwargs.get('color', self.color_4_plot)
+            alpha=kwargs.get('alpha', 0.5)
+            plot_tube=kwargs.get('plot_tube', False)
         """
         from matplotlib.patches import Polygon
+        if kwargs.get('plot_tube', False):
+            self.tube.plot(fig, ax, **kwargs)
+        y0 = kwargs.get('y0', 0)
         ix = np.array(self.xs_borders)
         iy = np.array(self.tube.get_ds(ix))/2 + y0
         verts = [(ix[0], y0)] + list(zip(ix, iy)) + [(ix[-1], y0)]
