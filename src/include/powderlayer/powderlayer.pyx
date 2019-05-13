@@ -165,7 +165,7 @@ cdef class PowderOvLayer(GasLayer):
             tube {Tube} -- труба)
             x_1 {float} -- левая граница полиэтиленовой области
             powder_layer_dict {dict} -- powder_layer_dict_sample = {
-                                            'type': 'PowderOvLayer',
+                                            'type': 'powder',
                                             'powder': {
                                                 'name': '4\\7',
                                                 'f': 1.027,
@@ -332,4 +332,4 @@ cdef class PowderOvLayer(GasLayer):
         self.zs = np.array(d['zs'])
 
     def __str__(self):
-        return super().__str__() + f"{{ 'powder': r'{self.gasEOS.name}', 'z_max': {np.max(self.zs)} }}"
+        return super().__str__() + f"\n        {{ 'powder': r'{self.gasEOS.name}', 'z_max': {np.max(self.zs)}, 't_ign'={self.t_ign} }}"

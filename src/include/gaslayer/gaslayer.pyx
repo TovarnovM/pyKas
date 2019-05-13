@@ -243,16 +243,21 @@ cdef class GasEOS(object):
         return repr(self)
 
     cpdef double get_e(self, double ro, double p):
+        cdef double e
         if self.kind == 1:
-            return rop_to_e(ro, p, self.gamma, self.kappa)
+            e = rop_to_e(ro, p, self.gamma, self.kappa)
         else:
-            return get_e_13_1(p, ro, self.p_0, self.c_0, self.gamma)
+            e = get_e_13_1(p, ro, self.p_0, self.c_0, self.gamma)
+        return e if e > 0 else 0
 
     cpdef double get_p(self, double ro, double e):
+        cdef double p
         if self.kind == 1:
-            return roe_to_p(ro, e, self.gamma, self.kappa)
+            p = roe_to_p(ro, e, self.gamma, self.kappa)
         else:
-            return get_p_13_1(e, ro, self.p_0, self.c_0, self.gamma)
+            p = get_p_13_1(e, ro, self.p_0, self.c_0, self.gamma)
+        return p if p > 0 else 0  
+        
 
     cpdef double get_csound(self, double ro, double p):
         if self.kind == 1:
@@ -560,19 +565,30 @@ cdef class GridStrecher(object):
 
     cpdef bint sync_layers(self, GasLayer layer0, GasLayer layer1, double tau, double v_left, double v_right):
         layer1.time = layer0.time + tau
-        # self.fill_Vs_borders_proportional(v_left, v_right, layer0.xs_borders, layer0.Vs_borders)
+        if self.strech_type == 1:
+            self.fill_Vs_borders_proportional(v_left, v_right, layer0.xs_borders, layer0.Vs_borders)
         self.fill_Vs_borders_proportional(v_left, v_right, layer1.xs_borders, layer1.Vs_borders)
         cdef bint suc = self.evaluate(tau, layer1)
         if not suc:
             return False
+        cdef size_t i
         if self.strech_type == 2:
             # TODO Адаптивная сетка аццтой
             self.strech_layer_adaptive(layer1, layer_prev=layer0, tau=tau)
-        cdef size_t i
-        for i in range(layer0.Vs_borders.shape[0]):
-            layer0.Vs_borders[i] = (layer1.xs_borders[i] - layer0.xs_borders[i])/tau
+            
+            for i in range(layer0.Vs_borders.shape[0]):
+                layer0.Vs_borders[i] = (layer1.xs_borders[i] - layer0.xs_borders[i])/tau
         layer1.Vs_borders[:] = layer0.Vs_borders
         return True
+
+    cpdef void sync_xs_borders(self, double[:] xs_borders, double xl, double xr):
+        cdef double change = (xr-xl)/(xs_borders[-1]-xs_borders[0])
+        if abs(change-1) < 1e-9:
+            return
+        cdef size_t i
+        for i in range(xs_borders.shape[0]):
+            xs_borders[i] = xl + (xs_borders[i]-xs_borders[0])*change
+        xs_borders[-1] = xr
 
     cpdef void strech_layer_adaptive(self, GasLayer layer, GasLayer layer_prev, double tau):
         if self.bufarr.shape[0] != layer.xs_cells.shape[0]:
@@ -938,6 +954,11 @@ cdef class GasLayer(object):
             else:
                 self.taus[i] = tau_right
 
+    def step_up(self, tau, sync_xs=True):
+        if sync_xs:
+            self.grid_strecher.sync_xs_borders(self.xs_borders, self.xl, self.xr)
+        return self.step_simple(tau, self.Vs_borders[0], self.Vs_borders[self.n_cells])
+
     cpdef GasLayer step_simple(self, double tau, double v_left, double v_right):
         self.Vs_borders[0] = v_left
         self.Vs_borders[self.n_cells] = v_right
@@ -1093,9 +1114,12 @@ cdef class GasLayer(object):
 
     def __str__(self):
         dxs = np.asarray(self.xs_borders)[1:] - np.asarray(self.xs_borders)[:-1]
-        return f"{self.__class__.__name__}(n_cells={self.n_cells}); {{'p_max':{np.max(self.ps)}, 'tau_min': {self.get_tau_min()}, \
-        'u_max': {np.max(self.us)}, 'cs_max': {np.max(self.cs)}, 'dx_min': {np.min(dxs)}, 'x_1': {self.xs_borders[0]}, 'x_2': {self.xs_borders[-1]},\
-        'V_1':  {self.Vs_borders[0]}, 'V_2':  {self.Vs_borders[-1]}  }}"
+        return \
+        f"""{self.__class__.__name__}(n_cells={self.n_cells}); 
+        {{'p_max':{np.max(self.ps)}, 'tau_min': {self.get_tau_min()}, 
+        'u_max': {np.max(self.us)}, 'cs_max': {np.max(self.cs)}, 'dx_min': {np.min(dxs)}, 
+        'x_1': {self.xs_borders[0]}, 'x_2': {self.xs_borders[-1]},
+        'V_1':  {self.Vs_borders[0]}, 'V_2':  {self.Vs_borders[-1]}  }}"""
 
     def __repr__(self):
         return str(self)

@@ -101,6 +101,7 @@ cdef class GridStrecher:
     cpdef void fill_Vs_borders_proportional(self, double v_left, double v_right, double[:] xs_borders, double[:] Vs_borders)
     cpdef void strech_layer_adaptive(self, GasLayer layer, GasLayer layer_prev, double tau)
     cpdef bint sync_layers(self, GasLayer layer0, GasLayer layer1, double tau, double v_left, double v_right)
+    cpdef void sync_xs_borders(self, double[:] xs_borders, double xl, double xr)
 
 cdef class GasLayer:
     cdef public double[:] xs_cells, xs_borders, Vs_borders, U_kr,\
@@ -112,7 +113,7 @@ cdef class GasLayer:
     cdef public int n_cells, n_qs
     cdef public Tube tube
     cdef public GasEOS gasEOS
-    cdef public double time
+    cdef public double time, xl, xr
     cdef public GasFluxCalculator flux_calculator
     cdef public GridStrecher grid_strecher
     cdef public str color_4_plot

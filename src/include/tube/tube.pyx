@@ -145,6 +145,21 @@ cdef class Tube(object):
         deltax4ws - double - на сколько метров от крайних точек можно так же считать объемы
     """
     
+    @classmethod
+    def get_standart(cls, tube_dict):
+        """
+            tube_dict_sample = {
+                'tube_points': [[0, 0.023], [1, 0.023], [1.3, 0.023*0.5], [1.5, 0.023*0.5]]
+            }        
+        """
+        if 'tube_points' not in tube_dict:
+            raise Exception(f'В функции get_tube(**tube_dict) неправильные аргументы tube_dict={tube_dict}')
+        xs, ds = [], []
+        for x, d in tube_dict['tube_points']:
+            xs.append(x)
+            ds.append(d)
+        return cls(xs, ds)
+    
     def __init__(self, xs, ds, deltax4ws=1000.0):
         """
         xs - array like - координаты точек по оси
@@ -204,6 +219,8 @@ cdef class Tube(object):
         """
         return np.array(self.d.xs)
 
+    def get_x_right(self):
+        return self.d.xs[-1]
 
     cpdef void fill_dsdx(self, double[:] xs, double[:] dsdx):
         cdef size_t i
