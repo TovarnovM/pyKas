@@ -64,7 +64,7 @@ cdef class ElPistLayer(GasLayer):
         pist_layer.xs_borders = np.linspace(x_1, x_2, n_cells+1)
         u_0 = pist_layer_dict['u_0']
         def foo_ropu(*args):
-            return ro_0, pist_layer_dict['p_0'], 0
+            return ro_0, pist_layer_dict['p_0'], u_0
         pist_layer.init_ropue_fromfoo(foo_ropu)
         return pist_layer
 

@@ -883,6 +883,7 @@ cdef class GasLayer(object):
         cdef double ro, p, u, e
         for i in range(n):
             ro, u, e = q123_to_roue(self.qs[0, i], self.qs[1, i], self.qs[2, i])
+            e = e if e > 0 else 0
             p = self.gasEOS.get_p(ro, e)
             self.ros[i] = ro
             self.ps[i] = p

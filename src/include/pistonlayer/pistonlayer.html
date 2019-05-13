@@ -400,8 +400,8 @@ static struct __pyx_vtabstruct_11pistonlayer_ElPistLayer *__pyx_vtabptr_11piston
   if (<span class='py_c_api'>PyDict_SetItem</span>((PyObject *)__pyx_ptype_11pistonlayer_ElPistLayer-&gt;tp_dict, __pyx_n_s_get_standart, __pyx_t_2) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 17, __pyx_L1_error)</span>
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
   <span class='py_c_api'>PyType_Modified</span>(__pyx_ptype_11pistonlayer_ElPistLayer);
-</pre><pre class="cython line score-71" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">017</span>:     <span class="k">def</span> <span class="nf">get_standart</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">tube</span><span class="p">:</span> <span class="n">Tube</span><span class="p">,</span> <span class="n">x_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">pist_layer_dict</span><span class="p">,</span> <span class="n">calc_settings</span><span class="p">):</span></pre>
-<pre class='cython code score-71 '>/* Python wrapper */
+</pre><pre class="cython line score-70" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">017</span>:     <span class="k">def</span> <span class="nf">get_standart</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">tube</span><span class="p">:</span> <span class="n">Tube</span><span class="p">,</span> <span class="n">x_1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">pist_layer_dict</span><span class="p">,</span> <span class="n">calc_settings</span><span class="p">):</span></pre>
+<pre class='cython code score-70 '>/* Python wrapper */
 static PyObject *__pyx_pw_11pistonlayer_11ElPistLayer_1get_standart(PyObject *__pyx_v_cls, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static char __pyx_doc_11pistonlayer_11ElPistLayer_get_standart[] = "\320\237\320\276\320\273\321\203\321\207\320\270\321\202\321\214 \320\270 \320\277\321\200\320\276\320\270\320\275\320\270\321\206\320\270\320\273\320\260\320\270\320\267\320\270\321\200\320\276\320\262\320\260\321\202\321\214 \321\201\321\202\320\260\320\275\320\264\320\260\321\200\321\202\320\275\321\213\320\271, \321\200\320\260\320\262\320\275\320\276\320\274\320\265\321\200\320\275\321\213\320\271 \320\277\320\276\320\273\320\270\321\215\321\202\320\270\320\273\320\265\320\275\320\276\320\262\321\213\320\271 \321\201\320\273\320\276\320\271\n        \n        Arguments:\n            tube {Tube} -- \321\202\321\200\321\203\320\261\320\260)\n            x_1 {float} -- \320\273\320\265\320\262\320\260\321\217 \320\263\321\200\320\260\320\275\320\270\321\206\320\260 \320\277\320\276\320\273\320\270\321\215\321\202\320\270\320\273\320\265\320\275\320\276\320\262\320\276\320\271 \320\276\320\261\320\273\320\260\321\201\321\202\320\270\n            pist_layer_dict {dict} -- pist_layer_dict_sample = {\n                                                'type': 'pist',\n                                                'omega': 0.03,  # \320\272\320\263\n                                                'p_0': 1e5, # \320\275\320\260\321\207\320\260\320\273\321\214\320\275\320\276\320\265 \320\264\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \320\262 \320\277\320\276\320\273\320\270\321\215\321\202\320\270\320\273\320\265\320\275\320\265\n                                                'u_0': 0,     #\320\275\320\260\321\207\320\260\320\273\321\214\320\275\320\260\321\217 \321\201\320\272\320\276\321\200\320\276\321\201\321\202\321\214\n                                                'ElPistEOS_kwargs': dict(\n                                                    k=1.63098, \n                                                    c_0=2308, \n                                                    ro_0=919.03, \n                                                    sigma_star=2""5.2, \n                                                    k_0=0.054, \n                                                    b_1=0.027, \n                                                    b_2=0.00675, \n                                                    tau_0=1.36, \n                                                    mu=0.001, \n                                                    tau_s=1,                 \n                                                    zeroP=False, \n                                                    zeroE=True)\n                                            }\n            calc_settings {dict} -- calc_settings_sample = {\n                                        'cell_dx': 0.0025,\n                                        'n_cells_min': 13,\n                                        'n_cells_max': 300,\n                                        'GasFluxCalculator_kwargs': {},\n                                        'GridStrecher_kwargs': {}\n                                    }\n        ";
 static PyObject *__pyx_pw_11pistonlayer_11ElPistLayer_1get_standart(PyObject *__pyx_v_cls, PyObject *__pyx_args, PyObject *__pyx_kwds) {
@@ -500,7 +500,6 @@ static PyObject *__pyx_pf_11pistonlayer_11ElPistLayer_get_standart(PyTypeObject 
   double __pyx_v_x_2;
   PyObject *__pyx_v_n_cells = NULL;
   PyObject *__pyx_v_pist_layer = NULL;
-  CYTHON_UNUSED PyObject *__pyx_v_u_0 = NULL;
   PyObject *__pyx_v_foo_ropu = 0;
   PyObject *__pyx_r = NULL;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
@@ -536,7 +535,6 @@ static PyObject *__pyx_pf_11pistonlayer_11ElPistLayer_get_standart(PyTypeObject 
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_v_W0);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_v_n_cells);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_v_pist_layer);
-  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_v_u_0);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_v_foo_ropu);
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(((PyObject *)__pyx_cur_scope));
   <span class='refnanny'>__Pyx_XGIVEREF</span>(__pyx_r);
@@ -551,6 +549,7 @@ struct __pyx_obj_11pistonlayer___pyx_scope_struct__get_standart {
   PyObject_HEAD
   PyObject *__pyx_v_pist_layer_dict;
   PyObject *__pyx_v_ro_0;
+  PyObject *__pyx_v_u_0;
 };
 
 </pre><pre class="cython line score-0">&#xA0;<span class="">018</span>:         <span class="sd">&quot;&quot;&quot;Получить и проиницилаизировать стандартный, равномерный полиэтиленовый слой</span></pre>
@@ -934,7 +933,8 @@ static PyObject *__pyx_pf_11pistonlayer_11ElPistLayer_12get_standart_get_n_cells
 </pre><pre class="cython line score-2" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">065</span>:         <span class="n">u_0</span> <span class="o">=</span> <span class="n">pist_layer_dict</span><span class="p">[</span><span class="s">&#39;u_0&#39;</span><span class="p">]</span></pre>
 <pre class='cython code score-2 '>  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_Dict_GetItem</span>(__pyx_cur_scope-&gt;__pyx_v_pist_layer_dict, __pyx_n_u_u_0);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
-  __pyx_v_u_0 = __pyx_t_1;
+  <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_t_1);
+  __pyx_cur_scope-&gt;__pyx_v_u_0 = __pyx_t_1;
   __pyx_t_1 = 0;
 </pre><pre class="cython line score-24" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">066</span>:         <span class="k">def</span> <span class="nf">foo_ropu</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span></pre>
 <pre class='cython code score-24 '>/* Python wrapper */
@@ -986,12 +986,13 @@ static PyObject *__pyx_pf_11pistonlayer_11ElPistLayer_12get_standart_2foo_ropu(P
   __pyx_v_foo_ropu = __pyx_t_1;
   __pyx_t_1 = 0;
   __pyx_codeobj__4 = (PyObject*)<span class='pyx_c_api'>__Pyx_PyCode_New</span>(0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARARGS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_include_pistonlayer_pistonlayer, __pyx_n_s_foo_ropu, 66, __pyx_empty_bytes);<span class='error_goto'> if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 66, __pyx_L1_error)</span>
-</pre><pre class="cython line score-17" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">067</span>:             <span class="k">return</span> <span class="n">ro_0</span><span class="p">,</span> <span class="n">pist_layer_dict</span><span class="p">[</span><span class="s">&#39;p_0&#39;</span><span class="p">],</span> <span class="mf">0</span></pre>
-<pre class='cython code score-17 '>  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
+</pre><pre class="cython line score-19" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">067</span>:             <span class="k">return</span> <span class="n">ro_0</span><span class="p">,</span> <span class="n">pist_layer_dict</span><span class="p">[</span><span class="s">&#39;p_0&#39;</span><span class="p">],</span> <span class="n">u_0</span></pre>
+<pre class='cython code score-19 '>  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
   if (unlikely(!__pyx_cur_scope-&gt;__pyx_v_ro_0)) { <span class='pyx_c_api'>__Pyx_RaiseClosureNameError</span>("ro_0"); <span class='error_goto'>__PYX_ERR(0, 67, __pyx_L1_error)</span> }
   if (unlikely(!__pyx_cur_scope-&gt;__pyx_v_pist_layer_dict)) { <span class='pyx_c_api'>__Pyx_RaiseClosureNameError</span>("pist_layer_dict"); <span class='error_goto'>__PYX_ERR(0, 67, __pyx_L1_error)</span> }
   __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_Dict_GetItem</span>(__pyx_cur_scope-&gt;__pyx_v_pist_layer_dict, __pyx_n_u_p_0);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 67, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
+  if (unlikely(!__pyx_cur_scope-&gt;__pyx_v_u_0)) { <span class='pyx_c_api'>__Pyx_RaiseClosureNameError</span>("u_0"); <span class='error_goto'>__PYX_ERR(0, 67, __pyx_L1_error)</span> }
   __pyx_t_2 = <span class='py_c_api'>PyTuple_New</span>(3);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 67, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
   <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_cur_scope-&gt;__pyx_v_ro_0);
@@ -999,9 +1000,9 @@ static PyObject *__pyx_pf_11pistonlayer_11ElPistLayer_12get_standart_2foo_ropu(P
   <span class='py_macro_api'>PyTuple_SET_ITEM</span>(__pyx_t_2, 0, __pyx_cur_scope-&gt;__pyx_v_ro_0);
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_t_1);
   <span class='py_macro_api'>PyTuple_SET_ITEM</span>(__pyx_t_2, 1, __pyx_t_1);
-  <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_int_0);
-  <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_int_0);
-  <span class='py_macro_api'>PyTuple_SET_ITEM</span>(__pyx_t_2, 2, __pyx_int_0);
+  <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_cur_scope-&gt;__pyx_v_u_0);
+  <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_cur_scope-&gt;__pyx_v_u_0);
+  <span class='py_macro_api'>PyTuple_SET_ITEM</span>(__pyx_t_2, 2, __pyx_cur_scope-&gt;__pyx_v_u_0);
   __pyx_t_1 = 0;
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
