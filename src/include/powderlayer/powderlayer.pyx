@@ -297,30 +297,57 @@ cdef class PowderOvLayer(GasLayer):
         cdef size_t i
         cdef Powder powder = <Powder>self.gasEOS
         cdef double rayE, rayU, rayR, rayP, rayZ, M_j, J_j, E_j, ray_W
-        for i in range(self.fluxes.shape[1]):
-            ray_W = self.Vs_borders[i]
-            rayU = self.fluxes[0, i]
-            rayR = self.fluxes[1, i]
-            rayP = self.fluxes[2, i]
+        cdef double[:] rr_val
+        cdef double Mrf, pf, cs, r1, r2, u1, u2, H1, H2, vbi
+        cdef double z1, z2
+        if self.flux_calculator.flux_type == 1:
+            for i in range(self.fluxes.shape[1]):
+                ray_W = self.Vs_borders[i]
+                rayU = self.fluxes[0, i]
+                rayR = self.fluxes[1, i]
+                rayP = self.fluxes[2, i]
 
-            if i == 0:
-                rayZ = self.zs[0]
-            elif i == self.fluxes.shape[1]-1:
-                rayZ = self.zs[self.zs.shape[0]-1]
-            elif ray_W > self.U_kr[i]:
-                rayZ = self.zs[i]
-            else:
-                rayZ = self.zs[i-1]
+                if i == 0:
+                    rayZ = self.zs[0]
+                elif i == self.fluxes.shape[1]-1:
+                    rayZ = self.zs[self.zs.shape[0]-1]
+                elif ray_W > self.U_kr[i]:
+                    rayZ = self.zs[i]
+                else:
+                    rayZ = self.zs[i-1]
 
-            rayE = powder.get_e_powder(rayR, rayP, rayZ)
+                rayE = powder.get_e_powder(rayR, rayP, rayZ)
 
-            M_j = rayR * (rayU - ray_W)
-            J_j = rayP + M_j * rayU
-            E_j = (rayE + 0.5*rayU*rayU)*M_j + rayP*rayU
-            self.fluxes[0, i] = M_j
-            self.fluxes[1, i] = J_j
-            self.fluxes[2, i] = E_j
-            self.fluxes[3, i] = M_j * rayZ
+                M_j = rayR * (rayU - ray_W)
+                J_j = rayP + M_j * rayU
+                E_j = (rayE + 0.5*rayU*rayU)*M_j + rayP*rayU
+                self.fluxes[0, i] = M_j
+                self.fluxes[1, i] = J_j
+                self.fluxes[2, i] = E_j
+                self.fluxes[3, i] = M_j * rayZ
+        if self.flux_calculator.flux_type == 2:
+            z1 = self.zs[0]
+            for i in range(self.fluxes.shape[1]):
+                rr_val = self.rr_vals[i]
+                Mrf = rr_val[0]
+                pf = rr_val[1]
+                cs = rr_val[2]
+                r1 = rr_val[3]
+                r2 = rr_val[4]
+                u1 = rr_val[5] 
+                u2 = rr_val[6]
+                H1 = rr_val[7]
+                H2 = rr_val[8]
+                vbi = rr_val[9]
+                if i != self.fluxes.shape[1]-1:
+                    z2 = self.zs[i]
+
+                self.fluxes[0, i] = 0.5*(cs*Mrf*(r1+r2)-cs*abs(Mrf)*(r2-r1))
+                self.fluxes[1, i] = 0.5*(cs*Mrf*(r1*u1+r2*u2)-cs*abs(Mrf)*(r2*u2-r1*u1)) + pf
+                self.fluxes[2, i] = 0.5*(cs*Mrf*(r1*H1+r2*H2)-cs*abs(Mrf)*(r2*H2-r1*H1)) + pf*vbi
+                self.fluxes[3, i] = 0.5*(cs*Mrf*(r1*z1+r2*z2)-cs*abs(Mrf)*(r2*z2-r1*z1))
+
+                z1 = z2
 
     def to_dict(self):
         res = super().to_dict()

@@ -98,7 +98,7 @@ cpdef inline double rop_to_csound(
 
 
 
-cpdef (double, double, double) AUSM_gas_(
+cpdef void AUSM_gas(
     double p1, 
     double ro1, 
     double u1, 
@@ -109,7 +109,8 @@ cpdef (double, double, double) AUSM_gas_(
     double u2, 
     double e2, 
     double c2,
-    double vbi) nogil:
+    double vbi,
+    double[:] rr_val) nogil:
 
     cdef double r1=ro1
     cdef double r2=ro2
@@ -142,16 +143,24 @@ cpdef (double, double, double) AUSM_gas_(
         M4m = -0.25*((Mr2-1.0)*(Mr2-1.0))*(1.0+2.0*0.25*(Mr2+1.0)*(Mr2+1.0))
         P5m = 0.25*((Mr2-1.0)*(Mr2-1.0))*((2.0+Mr2)-3.0*Mr2*0.25*(Mr2+1.0)*(Mr2+1.0))
     
-    cdef double phi1 = 1.0
-    cdef double phi2 = 1.0
+
     cdef double Mrf = M4p + M4m
-    cdef double pf = P5p*phi1*p1 + P5m*phi2*p2
+    cdef double pf = P5p*p1 + P5m*p2
 
-    cdef double flux1 = 0.5*(cs*Mrf*(phi1*r1+phi2*r2)-cs*abs(Mrf)*(phi2*r2-phi1*r1))
-    cdef double flux2 = copysign(0.5*(cs*Mrf*(phi1*r1*u1+phi2*r2*u2)-cs*abs(Mrf)*(phi2*r2*u2-phi1*r1*u1)) + pf, Mrf)
-    cdef double flux3 = 0.5*(cs*Mrf*(phi1*r1*H1+phi2*r2*H2)-cs*abs(Mrf)*(phi2*r2*H2-phi1*r1*H1)) + pf*vbi
+    # cdef double flux1 = 0.5*(cs*Mrf*(r1+r2)-cs*abs(Mrf)*(r2-r1))
+    # cdef double flux2 = 0.5*(cs*Mrf*(r1*u1+r2*u2)-cs*abs(Mrf)*(r2*u2-r1*u1)) + pf
+    # cdef double flux3 = 0.5*(cs*Mrf*(r1*H1+r2*H2)-cs*abs(Mrf)*(r2*H2-r1*H1)) + pf*vbi
 
-    return flux1, flux2, flux3
+    rr_val[0] = Mrf
+    rr_val[1] = pf
+    rr_val[2] = cs
+    rr_val[3] = r1
+    rr_val[4] = r2
+    rr_val[5] = u1
+    rr_val[6] = u2
+    rr_val[7] = H1
+    rr_val[8] = H2
+    rr_val[9] = vbi
 
 
 cpdef inline double get_extrapol_2e_v15(double v2, double v3) nogil:
@@ -307,6 +316,10 @@ cdef class GasFluxCalculator(object):
             self.flux_type = new_flux_type
             self.rr_vals_len = 8
             self.rr_bint_len = 3
+        elif new_flux_type == 2:
+            self.flux_type = new_flux_type
+            self.rr_vals_len = 10
+            self.rr_bint_len = 1
         else:
             print("Неправильный тип расчета потока!!! Будет использоваться 1")
             self.set_flux_type(1)
@@ -320,6 +333,8 @@ cdef class GasFluxCalculator(object):
         if self.flux_type == 1:
             self.fill_rr_vals_borders_fill_fluxesURP(layer)
             self.fill_rr_vals_Riman(layer)
+        # elif self.flux_type == 2:
+        #     self.
 
     cpdef void fill_rr_vals_borders_fill_fluxesURP(self, GasLayer layer):
         cdef double p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2,rU, rR, rP,ray_W
@@ -515,6 +530,60 @@ cdef class GasFluxCalculator(object):
     cpdef void fill_fluxesURP(self, GasLayer layer):
         if self.flux_type == 1:
             self.fill_fluxesURP_Godunov(layer)
+        elif self.flux_type == 2:
+            self.fill_fluxesURP_AUSM(layer)
+
+    cpdef void fill_fluxesURP_AUSM(self, GasLayer layer):
+        if layer.rr_vals.shape[1] != self.rr_vals_len:
+            self.create_rr_arrs(layer)
+        cdef size_t i
+        cdef double p1, ro1, u1, e1, c1, p2, ro2, u2, e2, c2,vbi, cs
+        cdef double[:] rr_val
+        if self.left_border_type == 1:
+            p2 = layer.ps[0]
+            ro2 = layer.ros[0]
+            u2 = layer.us[0]
+            e2 = layer.es[0]
+            c1 = layer.cs[0]
+            vbi = layer.Vs_borders[0]
+            p1 = p2
+            ro1 = ro2
+            u1 = -u2 + 2*vbi
+            e1 = e2
+            c2 = c1
+            rr_val = layer.rr_vals[0]
+            AUSM_gas(p1, ro1, u1, e1, c1,p2, ro2, u2, e2, c2,vbi,rr_val)
+
+        for i in range(1, layer.ps.shape[0]):
+            p1 = p2
+            ro1 = ro2
+            u1 = u2
+            e1 = e2
+            c1 = c2
+            p2 = layer.ps[i]
+            ro2 = layer.ros[i]
+            u2 = layer.us[i]
+            e2 = layer.es[i]
+            c2 = layer.cs[i]
+            vbi = layer.Vs_borders[i]
+            AUSM_gas(p1, ro1, u1, e1, c1,p2, ro2, u2, e2, c2,vbi,rr_val)
+        
+        if self.right_border_type == 1:
+            vbi = layer.Vs_borders[-1]
+            p1 = p2
+            ro1 = ro2
+            u1 = u2
+            e1 = e2
+            c1 = c2
+            rr_val = layer.rr_vals[-1]
+            p2 = p1
+            ro2 = ro1
+            u2 = -u1 + 2*vbi
+            e2 = e1
+            c2 = c1
+            
+            AUSM_gas(p1, ro1, u1, e1, c1,p2, ro2, u2, e2, c2,vbi,rr_val)
+
 
     cpdef void fill_fluxesURP_Godunov(self, GasLayer layer):
         cdef size_t i
@@ -917,19 +986,39 @@ cdef class GasLayer(object):
     cpdef void fill_fluxes(self):
         cdef size_t i
         cdef double rayE, rayU, rayR, rayP, M_j, J_j, E_j, ray_W
-        for i in range(self.fluxes.shape[1]):
-            ray_W = self.Vs_borders[i]
-            rayU = self.fluxes[0, i]
-            rayR = self.fluxes[1, i]
-            rayP = self.fluxes[2, i]
-            rayE = self.gasEOS.get_e(rayR, rayP)
+        cdef double[:] rr_val
+        cdef double Mrf, pf, cs, r1, r2, u1, u2, H1, H2, vbi
+        if self.flux_calculator.flux_type == 1:
+            for i in range(self.fluxes.shape[1]):
+                ray_W = self.Vs_borders[i]
+                rayU = self.fluxes[0, i]
+                rayR = self.fluxes[1, i]
+                rayP = self.fluxes[2, i]
+                rayE = self.gasEOS.get_e(rayR, rayP)
 
-            M_j = rayR * (rayU - ray_W)
-            J_j = rayP + M_j * rayU
-            E_j = (rayE + 0.5*rayU*rayU)*M_j + rayP*rayU
-            self.fluxes[0, i] = M_j
-            self.fluxes[1, i] = J_j
-            self.fluxes[2, i] = E_j
+                M_j = rayR * (rayU - ray_W)
+                J_j = rayP + M_j * rayU
+                E_j = (rayE + 0.5*rayU*rayU)*M_j + rayP*rayU
+                self.fluxes[0, i] = M_j
+                self.fluxes[1, i] = J_j
+                self.fluxes[2, i] = E_j
+        if self.flux_calculator.flux_type == 2:
+            for i in range(self.fluxes.shape[1]):
+                rr_val = self.rr_vals[i]
+                Mrf = rr_val[0]
+                pf = rr_val[1]
+                cs = rr_val[2]
+                r1 = rr_val[3]
+                r2 = rr_val[4]
+                u1 = rr_val[5] 
+                u2 = rr_val[6]
+                H1 = rr_val[7]
+                H2 = rr_val[8]
+                vbi = rr_val[9]
+
+                self.fluxes[0, i] = 0.5*(cs*Mrf*(r1+r2)-cs*abs(Mrf)*(r2-r1))
+                self.fluxes[1, i] = 0.5*(cs*Mrf*(r1*u1+r2*u2)-cs*abs(Mrf)*(r2*u2-r1*u1)) + pf
+                self.fluxes[2, i] = 0.5*(cs*Mrf*(r1*H1+r2*H2)-cs*abs(Mrf)*(r2*H2-r1*H1)) + pf*vbi
 
     cpdef void fill_rr(self):
         self.flux_calculator.fill_rr_vals(self)
@@ -937,23 +1026,26 @@ cdef class GasLayer(object):
     cpdef void fill_taus(self):
         cdef size_t i
         cdef double dx, v_otn_left, v_otn_right, tau_left, tau_right
-        for i in range(self.taus.shape[0]):
-            dx = self.xs_borders[i+1] - self.xs_borders[i]
-            v_otn_left = self.D_left[i] - self.Vs_borders[i+1]
-            if v_otn_left < 1e-12:
-                tau_left = 999999
-            else:
-                tau_left = dx / v_otn_left
-            
-            v_otn_right = self.Vs_borders[i] - self.D_right[i] 
-            if v_otn_right < 1e-12:
-                tau_right = 999999
-            else:
-                tau_right = dx / v_otn_right
-            if tau_left < tau_right:
-                self.taus[i] = tau_left
-            else:
-                self.taus[i] = tau_right
+        if self.flux_calculator.flux_type == 1:
+            for i in range(self.taus.shape[0]):
+                dx = self.xs_borders[i+1] - self.xs_borders[i]
+                v_otn_left = self.D_left[i] - self.Vs_borders[i+1]
+                if v_otn_left < 1e-12:
+                    tau_left = 999999
+                else:
+                    tau_left = dx / v_otn_left
+                
+                v_otn_right = self.Vs_borders[i] - self.D_right[i] 
+                if v_otn_right < 1e-12:
+                    tau_right = 999999
+                else:
+                    tau_right = dx / v_otn_right
+                if tau_left < tau_right:
+                    self.taus[i] = tau_left
+                else:
+                    self.taus[i] = tau_right
+        else:
+            self.init_taus_acustic()
 
     def step_up(self, tau, sync_xs=True):
         if sync_xs:

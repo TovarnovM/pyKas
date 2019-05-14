@@ -40,7 +40,7 @@ cpdef  double rop_to_csound(
     double gamma,
     double b) nogil
 
-cpdef (double, double, double) AUSM_gas_(
+cpdef void AUSM_gas(
     double p1, 
     double ro1, 
     double u1, 
@@ -51,7 +51,8 @@ cpdef (double, double, double) AUSM_gas_(
     double u2, 
     double e2, 
     double c2,
-    double vbi) nogil
+    double vbi,
+    double[:] rr_val) nogil
 
 cpdef  double min2(double a, double b) nogil
 
@@ -84,7 +85,7 @@ cdef class GasFluxCalculator:
     cpdef double get_v_right_forRiman(self, double[:] vs, double[:] bettas, int i)
     cpdef double get_v_left_forRiman(self, double[:] vs, double[:] bettas, int i)
     cpdef double get_bogdanov_v(self, double v1, double v2, double v3, double v4, double betta_max)
-
+    cpdef void fill_fluxesURP_AUSM(self, GasLayer layer)
     
 
 cdef class GridStrecher:
