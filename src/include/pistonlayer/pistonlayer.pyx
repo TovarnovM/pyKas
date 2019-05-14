@@ -73,11 +73,11 @@ cdef class ElPistLayer(GasLayer):
         self.tauxx_flux = np.zeros(n_cells+1, dtype=np.double)
         self.color_4_plot = '#0022cf'
 
-    cpdef double get_p_left(self):
-        return self.ps[0] - self.tauxx_flux[0]
+    # cpdef double get_p_left(self):
+    #     return self.ps[0] - self.tauxx_flux[0]
 
-    cpdef double get_p_right(self):
-        return self.ps[-1]- self.tauxx_flux[-1]
+    # cpdef double get_p_right(self):
+    #     return self.ps[-1]- self.tauxx_flux[-1]
 
     cpdef void copy_params_to_elpist(self, ElPistLayer lr):
         self.copy_params_to(lr)

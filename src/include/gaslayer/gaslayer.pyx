@@ -566,6 +566,7 @@ cdef class GasFluxCalculator(object):
             e2 = layer.es[i]
             c2 = layer.cs[i]
             vbi = layer.Vs_borders[i]
+            rr_val = layer.rr_vals[i]
             AUSM_gas(p1, ro1, u1, e1, c1,p2, ro2, u2, e2, c2,vbi,rr_val)
         
         if self.right_border_type == 1:
