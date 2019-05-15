@@ -816,8 +816,14 @@ cdef class GasLayer(object):
         ro_0 = p_0/(gas_layer_dict['R']*gas_layer_dict['T_0'] + p_0*gas_layer_dict['kappa'])
         gas_eos = GasEOS(gamma=gas_layer_dict['gamma'], kappa=gas_layer_dict['kappa'], kind=1)
         
-        x_2 = tube.get_x2(x_1, gas_layer_dict['W_0'])
-        n_cells = get_n_cells(x_1, x_2, calc_settings)
+        if 'x_2' not in gas_layer_dict:
+            x_2 = tube.get_x2(x_1, gas_layer_dict['W_0'])
+        else:
+            x_2 = gas_layer_dict['x_2']
+        if 'n_cells' not in calc_settings:
+            n_cells = get_n_cells(x_1, x_2, calc_settings)
+        else:
+            n_cells = calc_settings['n_cells']
         u_0 = gas_layer_dict['u_0']
 
         glayer = cls(n_cells=n_cells, tube=tube, gasEOS=gas_eos, flux_calculator=flux_calculator, grid_strecher=grid_strecher)
@@ -1076,7 +1082,8 @@ cdef class GasLayer(object):
         for i in range(layer1.xs_cells.shape[0]):
             dx = self.xs_borders[i+1] - self.xs_borders[i]
             for j in range(layer1.n_qs):
-                layer1.qs[j, i] = (self.qs[j, i]*self.W[i] - tau*(self.S[i+1]*self.fluxes[j, i+1] - self.S[i]*self.fluxes[j, i]) + tau*self.hs[j, i]*dx)/layer1.W[i]
+                layer1.qs[j, i] = (self.qs[j, i]*self.W[i] - tau*(self.S[i+1]*self.fluxes[j, i+1] - self.S[i]*self.fluxes[j, i])
+                         + tau*self.hs[j, i]*dx)/layer1.W[i]
         layer1.init_ropue()
         return layer1
 

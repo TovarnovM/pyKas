@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 from pytest import approx
 
-from gaslayer import (AUSM_gas_, foo, q_to_roue, roe_to_p, rop_to_csound,
+from gaslayer import (AUSM_gas, foo, q_to_roue, roe_to_p, rop_to_csound,
                       rop_to_e, roue_to_q_)
 
 
@@ -340,4 +340,4 @@ def AUSM_python(p1, ro1, u1, e1, c1, p2, ro2, u2, e2, c2, vbi):
 if __name__ == "__main__":
     ro, e, gamma, b = 1, 2, 1.2, 0.001
     p = roe_to_p(ro, e, gamma, b)
-    test_AUSM_gas_()
+    # test_AUSM_gas()

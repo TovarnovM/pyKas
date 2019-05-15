@@ -5,7 +5,8 @@ from copy import deepcopy
 import cython
 import numpy as np
 
-from libc.math cimport pi
+from libc.math cimport pi, sqrt
+
 cimport numpy as np
 
 cdef class InterpXY(object):
@@ -245,12 +246,22 @@ cdef class Tube(object):
     
     cpdef void fill_W(self, double[:] xs, double[:] W):
         cdef size_t i
-        cdef double wi ,wi1
-        wi = self.w.get_v(xs[0])
+        cdef double s1, s2, x1, x2
+        x1 = xs[0]
+        s1 = self.s.get_v(x1)
         for i in range(W.shape[0]):
-            wi1  = self.w.get_v(xs[i+1])
-            W[i] = wi1 - wi
-            wi = wi1        
+            x2 = xs[i+1]
+            s2 = self.s.get_v(x2)
+            W[i] = (s1 + s2 + sqrt(s1 * s2)) * (x2-x1)/ 3
+            x1 = x2
+            s1 = s2
+        # cdef size_t i
+        # cdef double wi ,wi1
+        # wi = self.w.get_v(xs[0])
+        # for i in range(W.shape[0]):
+        #     wi1  = self.w.get_v(xs[i+1])
+        #     W[i] = wi1 - wi
+        #     wi = wi1        
 
     cpdef double[:] get_W(self, double[:] xs):
         """
