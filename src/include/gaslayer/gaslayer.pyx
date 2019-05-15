@@ -644,6 +644,7 @@ cdef class GridStrecher(object):
         cdef size_t i
         if self.strech_type == 2:
             # TODO Адаптивная сетка аццтой
+            #
             self.strech_layer_adaptive(layer1, layer_prev=layer0, tau=tau)
             
             for i in range(layer0.Vs_borders.shape[0]):
