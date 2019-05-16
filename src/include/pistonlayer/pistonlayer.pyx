@@ -73,11 +73,11 @@ cdef class ElPistLayer(GasLayer):
         self.tauxx_flux = np.zeros(n_cells+1, dtype=np.double)
         self.color_4_plot = '#0022cf'
 
-    # cpdef double get_p_left(self):
-    #     return self.ps[0] - self.tauxx_flux[0]
+    cpdef double get_p_left(self):
+        return self.ps[0] - self.tauxx_flux[0]
 
-    # cpdef double get_p_right(self):
-    #     return self.ps[-1]- self.tauxx_flux[-1]
+    cpdef double get_p_right(self):
+        return self.ps[-1]- self.tauxx_flux[-1]
 
     cpdef void copy_params_to_elpist(self, ElPistLayer lr):
         self.copy_params_to(lr)
@@ -108,6 +108,7 @@ cdef class ElPistLayer(GasLayer):
             else:
                 tauxx = 2/3*eos.get_kh(h)*skobka
             sigma_nn_w = - self.ps[i] - 0.5 * tauxx 
+            # sigma_nt_w = 0
             self.hs[0, i] = 0
             self.hs[1, i] = 2*pi*R*sigma_nt_w - self.ds[i]*sigma_nn_w
             self.hs[2, i] = 2*pi*R*sigma_nt_w*self.us[i]

@@ -8,3 +8,5 @@ env_pykas/
 src/tube.pyd
 src/gaslayer.pyd
 src/godunov.pyd
+jupyters/testy_new_wpowers.json
+jupyters/testy_newnew.json
