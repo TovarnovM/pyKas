@@ -17,7 +17,7 @@ cdef class InterpXY(object):
     ys - array like - значения ординат функции
     """
 
-    def __init__(self, xs, ys):
+    def __init__(self, xs, ys, union_tol=1e-9):
         """
         __init__(self, xs, ys)
         Класс для БЫСТРОЙ линейной интерполяции точечной одномерной функции
@@ -34,8 +34,9 @@ cdef class InterpXY(object):
         self.bs = bv
         self.sync_ks_bs()
         self.n = 0
+        self.union_tol = union_tol
 
-    cpdef void set_length(self, int length):
+    cdef void set_length(self, int length):
         if length == self.length:
             return
         self.length = length
@@ -136,6 +137,101 @@ cdef class InterpXY(object):
         for i in range(self.length):
             self.ks[i] = (self.ys[i + 1] - self.ys[i]) / (self.xs[i + 1] - self.xs[i])
             self.bs[i] = self.ys[i] - self.ks[i] * self.xs[i]
+
+    def __getitem__(self, key):
+        x = self.xs[key]
+        y = self.ys[key]
+        return (x, y)
+
+    def __setitem__(self, key, value):
+        x, y = value
+        self.xs[key] = x
+        self.ys[key] = y
+        self.sync_ks_bs()
+
+    def __iter__(self):
+        return zip(self.xs, self.ys)
+
+    def plot(self, fig, ax, **kwargs):
+        """Отрисовать интерполятор
+
+            fig, ax = plt.subplots()
+
+        """
+        ax.plot(self.xs, self.ys, **kwargs)
+
+    def __reversed__(self):
+        return zip(self.xs[::-1], self.ys[::-1])
+
+    cpdef double[:] union_arrs(self, double[:] a1, double[:] a2):
+        u = np.sort(np.union1d(a1, a2))
+        res = [u[0]]
+        for el in u:
+            if abs(el - res[-1]) > self.union_tol:
+                res.append(el)
+        return np.asarray(res)
+
+    def __add__(self, other):
+        if isinstance(other, InterpXY):
+            xs = self.union_arrs(self.xs, other.xs)
+            ys = [self(x) + other(x) for x in xs]
+            return InterpXY(xs, ys, self.union_tol)
+        else:
+            ys = np.asarray(self.ys) + other
+            return InterpXY(self.xs, ys, self.union_tol)
+
+    def __radd__(self, other):
+        return self+other
+    
+    def __abs__(self):
+        return InterpXY(self.xs, np.abs(self.ys), self.union_tol)
+
+    def __neg__(self):
+        return InterpXY(self.xs, -np.asarray(self.ys), self.union_tol)
+
+    def __mul__(self, other):
+        if isinstance(other, InterpXY):
+            xs = self.union_arrs(self.xs, other.xs)
+            ys = [self(x) * other(x) for x in xs]
+            return InterpXY(xs, ys, self.union_tol)
+        else:
+            ys = np.asarray(self.ys) * other
+            return InterpXY(self.xs, ys, self.union_tol)
+    
+    def __rmul__(self, other):
+        return self * other
+
+    def __sub__(self, other):
+        if isinstance(other, InterpXY):
+            xs = self.union_arrs(self.xs, other.xs)
+            ys = [self(x) - other(x) for x in xs]
+            return InterpXY(xs, ys, self.union_tol)
+        else:
+            ys = np.asarray(self.ys) - other
+            return InterpXY(self.xs, ys, self.union_tol)
+    
+    def __rsub__(self, other):
+        return -(self - other)
+
+    def __truediv__(self, other):
+        if isinstance(other, InterpXY):
+            xs = self.union_arrs(self.xs, other.xs)
+            ys = [self(x) / other(x) for x in xs]
+            return InterpXY(xs, ys, self.union_tol)
+        else:
+            ys = np.asarray(self.ys) / other
+            return InterpXY(self.xs, ys, self.union_tol)
+    
+    def __rtruediv__(self, other):
+        i = InterpXY([self.xs[0], self.xs[1]], [other, other], self.union_tol)
+        return i/self
+
+    cpdef double integrade(self, double x1, double x2):
+        
+    
+
+
+    
 
 cdef class Tube(object):
     """

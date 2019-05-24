@@ -3,13 +3,16 @@
 
 cdef class InterpXY:
     cdef public double[:] xs, ys, ks, bs
+    cdef public double union_tol
     cdef public int length, n 
     cpdef double get_v(self, double x)
     cpdef void fill_vs(self, double[:] xs, double[:] vs)
     cpdef double[:] get_vs(self, double[:] xs)
     cdef int set_n(self, double t)
     cdef void sync_ks_bs(self)
-    cpdef void set_length(self, int length)
+    cdef void set_length(self, int length)
+    cpdef double[:] union_arrs(self, double[:] a1, double[:] a2)
+    cpdef double integrade(self, double x1, double x2)
     
 cdef class Tube:
     cdef InterpXY d, s, w, w_reverse
