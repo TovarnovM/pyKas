@@ -9,12 +9,47 @@ from pytest import approx
 import numpy as np
 import matplotlib.pyplot as plt
 
+def test_integrate():
+    xs = [1,2,3,4,5]
+    ys = [1,2,0,-2,-1]
+    interp = InterpXY(xs, ys)
+    assert 0 == approx(interp.integrate(0,6))
+
+def test_integrate2():
+    xs = [1,2,3,4,5]
+    ys = [1,2,0,-2,-1]
+    interp = InterpXY(xs, ys)
+    assert 10 == approx(interp.integrate(-10,0))
+
+
+def test_integrate3():
+    xs = [1,2,3,4,5]
+    ys = [1,2,0,-2,-1]
+    interp = InterpXY(xs, ys)
+    assert -10 == approx(interp.integrate(10,20))
+
+def test_integrate4():
+    xs = [1,2,3,4,5]
+    ys = [1,2,0,-2,-1]
+    interp = InterpXY(xs, ys)
+    assert 0 == approx(interp.integrate(1.5,4.5))
+
 def _main():
     xs = [1,2,3,4,5]
     ys = [4,5,6,1,2]
-    interp = InterpXY(xs, ys)
+    interp1 = InterpXY(xs, ys)
+    interp2 = interp1 + 2
+
+    xs = [0,2,3,5.1,7]
+    ys = [1,2,6-3,4,0]
+    interp3 = InterpXY(xs, ys)
+
+    interp4 = interp3/interp2
+
     fig, ax = plt.subplots()
-    interp.plot(fig, ax, marker='o')
+    interp3.plot(fig, ax, marker='o')
+    interp2.plot(fig, ax, marker='x')
+    interp4.plot(fig, ax, marker='*')
     plt.show()
 
 def _main2():
@@ -23,4 +58,4 @@ def _main2():
     print(np.sort(np.union1d(a1,a2)))
 
 if __name__ == "__main__":
-    _main2()
+    _main()

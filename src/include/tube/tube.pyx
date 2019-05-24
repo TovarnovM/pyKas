@@ -134,7 +134,7 @@ cdef class InterpXY(object):
     cdef void sync_ks_bs(self):
         self.length = self.xs.shape[0]
         cdef size_t i
-        for i in range(self.length):
+        for i in range(self.length-1):
             self.ks[i] = (self.ys[i + 1] - self.ys[i]) / (self.xs[i + 1] - self.xs[i])
             self.bs[i] = self.ys[i] - self.ks[i] * self.xs[i]
 
@@ -226,8 +226,28 @@ cdef class InterpXY(object):
         i = InterpXY([self.xs[0], self.xs[1]], [other, other], self.union_tol)
         return i/self
 
-    cpdef double integrade(self, double x1, double x2):
+    cpdef double integrate(self, double x1, double x2):
+        cdef double res = 0
+        cdef double y1 = self.get_v(x1)
+        cdef double xx1 = x1
+        cdef double y2, xx2
+        cdef int i = self.set_n(x1) + 1
+        while i < self.xs.shape[0] and self.xs[i] < x2:
+            y2 = self.ys[i]
+            xx2 = self.xs[i]
+            res += 0.5*(y1+y2)*(xx2-xx1)
+            i += 1
+            xx1 = xx2
+            y1 = y2
+        y2 = self.get_v(x2)
+        xx2 = x2
+        res += 0.5*(y1+y2)*(xx2-xx1)
+        return res
         
+
+        
+        
+
     
 
 

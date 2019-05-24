@@ -12,7 +12,7 @@ cdef class InterpXY:
     cdef void sync_ks_bs(self)
     cdef void set_length(self, int length)
     cpdef double[:] union_arrs(self, double[:] a1, double[:] a2)
-    cpdef double integrade(self, double x1, double x2)
+    cpdef double integrate(self, double x1, double x2)
     
 cdef class Tube:
     cdef InterpXY d, s, w, w_reverse
