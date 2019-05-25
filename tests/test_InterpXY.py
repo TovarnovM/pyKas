@@ -8,6 +8,7 @@ from math import pi, sqrt
 from pytest import approx
 import numpy as np
 import matplotlib.pyplot as plt
+import pprint as pp
 
 def test_integrate():
     xs = [1,2,3,4,5]
@@ -63,27 +64,28 @@ def test_get_xs_zeros4():
     assert zeros is None
 
 def _main():
-    xs = [1,2,3,4,5]
-    ys = [4,5,6,1,2]
+    xs = [-2,2,3,4,9]
+    ys = [1,5,3,1,2]
     interp1 = InterpXY(xs, ys)
-    interp2 = interp1 + 2
 
     xs = [-1,2,3,5.1,7]
     ys = [-1,2,6,-3,0]
-    interp3 = InterpXY(xs, ys)
+    interp2 = InterpXY(xs, ys) + (-4,3)
 
-    interp4 = interp3/interp2
 
     fig, ax = plt.subplots()
-    interp3.plot(fig, ax, marker='o')
-    abs(interp3).plot(fig, ax, marker='x')
-    # interp4.plot(fig, ax, marker='*')
+    interp1.plot_diff(interp2, fig, ax)
+    # interp1.plot(fig, ax, marker='o')
+    # interp2.plot(fig, ax, marker='x')
+    # abs(interp1-interp2).plot(fig, ax, marker='*')
+    plt.grid(True)
+    pp.pprint(InterpXY.get_diff_report(interp1, interp2))
     plt.show()
 
 def _main2():
     a1 = np.array([1,2,3,4.1,-1])
     a2 = np.array([4,4.100000001])
-    print(np.sort(np.union1d(a1,a2)))
+    print(a1[a1.argsort()])
 
 if __name__ == "__main__":
     _main()

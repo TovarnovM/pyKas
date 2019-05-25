@@ -192,6 +192,13 @@ cdef class InterpXY(object):
             xs = self.union_arrs(self.xs, other.xs)
             ys = [self(x) + other(x) for x in xs]
             return InterpXY(xs, ys, self.union_tol)
+        elif isinstance(other, list) or isinstance(other, tuple):
+            xs = np.concatenate((self.xs, [other[0]]))
+            ys = np.concatenate((self.ys, [other[1]]))
+            arr1inds = xs.argsort()
+            xs = xs[arr1inds]
+            ys = ys[arr1inds] 
+            return InterpXY(xs, ys, self.union_tol)
         else:
             ys = np.asarray(self.ys) + other
             return InterpXY(self.xs, ys, self.union_tol)
@@ -205,8 +212,8 @@ cdef class InterpXY(object):
             xs = np.concatenate((self.xs, zeros))
             ys = np.concatenate((self.ys, np.zeros_like(zeros)))
             arr1inds = xs.argsort()
-            xs = xs[arr1inds[::-1]]
-            ys = ys[arr1inds[::-1]] 
+            xs = xs[arr1inds]
+            ys = ys[arr1inds] 
             return InterpXY(xs, np.abs(ys), self.union_tol)
         return InterpXY(self.xs, np.abs(self.ys), self.union_tol)
 
@@ -250,7 +257,11 @@ cdef class InterpXY(object):
         i = InterpXY([self.xs[0], self.xs[1]], [other, other], self.union_tol)
         return i/self
 
-    cpdef double integrate(self, double x1, double x2):
+    def integrate(self, x1=None, x2=None):
+        if x1 is None:
+            x1 = self.xs[0]
+        if x2 is None:
+            x2 = self.xs[-1]
         cdef double res = 0
         cdef double y1 = self.get_v(x1)
         cdef double xx1 = x1
@@ -267,7 +278,71 @@ cdef class InterpXY(object):
         xx2 = x2
         res += 0.5*(y1+y2)*(xx2-xx1)
         return res
+
+    def aver(self):
+        if self.xs.shape[0] < 2:
+            return self.ys[0]
+        integr = self.integrate()
+        return integr/(self.xs[-1]-self.xs[0])
+    
+    @classmethod
+    def get_diff_report(cls, int1, int2):
+        """Получить отчет о различиях двух InterpXY
         
+        Arguments:
+            int1 {InterpXY} -- относительно этого будет высчитываться относительные величины
+            int2 {InterpXY} -- [description]
+        
+        Returns:
+            dict() -- str --> float
+
+                res['diff_maxs_abs']    -- абсолютное отличие максимальных значений
+                res['diff_maxs_otn']    -- отностильеное отличие максимальных значений
+                res['diff_maxs_x_abs']  -- абсолютное отличие абсцисс максимальных значений
+                res['diff_maxs_x_otn']  -- относительное отличие абсцисс максимальных значений
+                res['max_diff']         -- максимальное отличие между функциями
+                res['max_diff_x']       -- координата максимального отклонения
+                res['diff_integrate']   -- интеграл модуля разлийий между функциями
+                res['diff_integrate_otn'] -- приведенный интеграл (относительно интеграла int1) модуля различий между функциями
+                res['diff_xs_abs']      -- разность между отрезками, на которых определены функции
+                res['diff_xs_otn']      -- относительная разность ...
+                res['diff_aver_abs']    -- разность медлу среднеинтегральными значениями
+                res['diff_aver_otn']    -- относительная разность ...
+        """
+        res = {}
+        res['diff_maxs_abs'] = np.max(int1.ys) - np.max(int2.ys)
+        res['diff_maxs_otn'] = res['diff_maxs_abs'] / np.max(int1.ys)
+        res['diff_maxs_x_abs'] = int1.xs[np.argmax(int1.ys)] - int2.xs[np.argmax(int2.ys)]
+        res['diff_maxs_x_otn'] = (res['diff_maxs_x_abs']-int1.xs[0]) / (int1.xs[-1]-int1.xs[0])
+        diff = abs(int1 - int2)
+        i_max = np.argmax(diff.ys)
+        res['max_diff'] = diff.ys[i_max]
+        res['max_diff_x'] = diff.xs[i_max]
+        res['diff_integrate'] = diff.integrate()
+        res['diff_integrate_otn'] = res['diff_integrate']/int1.integrate()
+        res['diff_xs_abs'] = (int1.xs[-1]-int1.xs[0]) - (int2.xs[-1]-int2.xs[0])
+        res['diff_xs_otn'] = res['diff_xs_abs'] / (int1.xs[-1]-int1.xs[0])
+        res['diff_aver_abs'] = int1.aver() - int2.aver()
+        res['diff_aver_otn'] = res['diff_aver_abs'] / int1.aver()
+        return res
+
+    def plot_diff(self, int2, fig, ax, **kwargs):
+        """Отрисовать различаи между функциями
+
+            fig, ax = plt.subplots()
+            kwargs = {'int1_kwargs': {...},
+                      'int2_kwargs': {...},
+                      'polygon_kwargs': {...}}
+        """
+        from matplotlib.patches import Polygon
+        ix = self.union_arrs(self.xs, int2.xs)
+        verts = [(x, self(x)) for x in ix]
+        verts+= [(x, int2(x)) for x in ix[::-1]]
+        self.plot(fig, ax, **dict({'lw':2}, **kwargs.get('int1_kwargs', {})))
+        int2.plot(fig, ax, **dict({'lw':2}, **kwargs.get('int2_kwargs', {})))
+        poly = Polygon(verts, **dict({'alpha':0.3}, **kwargs.get('polygon_kwargs', {})))
+
+        ax.add_patch(poly) 
 
         
         
