@@ -51,6 +51,12 @@ class PowderBD(metaclass=Singleton):
         with open(os.path.dirname(os.path.abspath(__file__))+'\\gpowders.json') as f:
             self.all_powders_dict = json.load(f)
 
+    def __getitem__(self, key):
+        return self.all_powders_dict[key]
+
+    def __iter__(self):
+        return iter(self.all_powders_dict)
+
 
 cdef class Powder(GasEOS):
     @classmethod

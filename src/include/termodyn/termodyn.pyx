@@ -209,6 +209,48 @@ def get_dpsi_array(k1=0.811, k2=0.505, l1=0.081, l2=-1.024, z_k=1.488, n=1000):
 def get_optsmany_sample():
     """
     Функция для получения примера опций для DirectBallMany
+
+    {
+        'powders': [
+            {
+                'omega': 13,      # масса навески пороха, г
+                'I_k': 0.32,      # импульс конца горения МПа*с
+                'alpha_k': 1.008, # коволюм
+                'ro': 1.6,        # плотность пороха г/см^3   
+                'f': 1.027,       # сила пороха, МДж/кг
+                'etta': 0.228,    # k -1
+                'T_1': 3006.0,    # темп. горения ?
+                'zs': zs1,        # точки z для интерполяции dpsi_dz
+                'dpsi_dz': dpsidz1# точки dpsi_dz для интерполяции dpsi_dz
+            },
+            {
+                'omega': 10,      # масса навески пороха, г
+                'I_k': 0.3,       # импульс конца горения МПа*с
+                'alpha_k': 1.053, # коволюм
+                'ro': 1.6,        # плотность пороха г/см^3   
+                'f': 0.988,       # сила пороха, МДж/кг
+                'etta': 0.24,     # k -1
+                'T_1': 2736.0,    # темп. горения ?
+                'zs': zs2,        # точки z для интерполяции dpsi_dz
+                'dpsi_dz': dpsidz2# точки dpsi_dz для интерполяции dpsi_dz
+            }
+        ],
+        'init_cond': {
+            'd':23,           # калибр, мм      
+            'K_zar': 1.08,    # коэфф, учитывающий доп работы
+            'q': 190,         # масса снаряда, г
+            'W_kam': 28.75,   # объем каморы, см^3
+            'sigma_T': 376,   # Постоянная коэффициента теплоотдачи, Дж*м/кг*К*с
+            'v_T': 0.7,       # Относительная разность температур
+            'p0': 5e6,        # Давление вспышки, Па
+            'p_f': 60e6       # Давление форсирования, Па
+        },
+        'integr_cond': {
+            'l_max': 0.887,   # длина ствола
+            't_max': 0.5,     # на всякий пожарынй
+            'dt': 6e-6        # шаг по времени
+        }
+    }
     """
     dpsidz1, zs1 = get_dpsi_array()
     dpsidz2, zs2 = get_dpsi_array(k1=0.653, k2=0.65, l1=0.247, l2=-0.791, z_k=1.602, n=1000)
@@ -260,7 +302,54 @@ cdef class DirectBallMany(object):
     """
     
     def __init__(self, opts_many):
+        """Кноструктор
+        
+        Arguments:
+            opts_many {[type]} -- 
+                            {
+                            'powders': [
+                                {
+                                    'omega': 13,      # масса навески пороха, г
+                                    'I_k': 0.32,      # импульс конца горения МПа*с
+                                    'alpha_k': 1.008, # коволюм
+                                    'ro': 1.6,        # плотность пороха г/см^3   
+                                    'f': 1.027,       # сила пороха, МДж/кг
+                                    'etta': 0.228,    # k -1
+                                    'T_1': 3006.0,    # темп. горения ?
+                                    'zs': zs1,        # точки z для интерполяции dpsi_dz
+                                    'dpsi_dz': dpsidz1# точки dpsi_dz для интерполяции dpsi_dz
+                                },
+                                {
+                                    'omega': 10,      # масса навески пороха, г
+                                    'I_k': 0.3,       # импульс конца горения МПа*с
+                                    'alpha_k': 1.053, # коволюм
+                                    'ro': 1.6,        # плотность пороха г/см^3   
+                                    'f': 0.988,       # сила пороха, МДж/кг
+                                    'etta': 0.24,     # k -1
+                                    'T_1': 2736.0,    # темп. горения ?
+                                    'zs': zs2,        # точки z для интерполяции dpsi_dz
+                                    'dpsi_dz': dpsidz2# точки dpsi_dz для интерполяции dpsi_dz
+                                }
+                            ],
+                            'init_cond': {
+                                'd':23,           # калибр, мм      
+                                'K_zar': 1.08,    # коэфф, учитывающий доп работы
+                                'q': 190,         # масса снаряда, г
+                                'W_kam': 28.75,   # объем каморы, см^3
+                                'sigma_T': 376,   # Постоянная коэффициента теплоотдачи, Дж*м/кг*К*с
+                                'v_T': 0.7,       # Относительная разность температур
+                                'p0': 5e6,        # Давление вспышки, Па
+                                'p_f': 60e6       # Давление форсирования, Па
+                            },
+                            'integr_cond': {
+                                'l_max': 0.887,   # длина ствола
+                                't_max': 0.5,     # на всякий пожарынй
+                                'dt': 6e-6        # шаг по времени
+                            }
+                        }
+        """
         self.opts = deepcopy(opts_many)
+        self.stop_foo = None
         
     def get_y0(self):
         """
@@ -274,6 +363,11 @@ cdef class DirectBallMany(object):
         res[0] = self.p0
         res[2] = w0_sv
         return res
+
+    def stop_condition(self, t,  y):
+        if self.stop_foo is not None:
+            return self.stop_foo(t, y) 
+        return t >= self.t_max or y[1] >= self.l_max
       
     @cython.boundscheck(False)
     @cython.wraparound(False)  
@@ -310,7 +404,7 @@ cdef class DirectBallMany(object):
         while True:
             ys.append(y)
             ts.append(t)
-            if t >= self.t_max or y[1] >= self.l_max:
+            if self.stop_condition(t, y):
                 break
             self.get_dydt(t, y, k1)
             self.get_dydt(t+0.5*dt, self.euler_step(0.5*dt, y, k1), k2)

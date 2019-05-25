@@ -18,6 +18,7 @@ cdef class DirectBallMany(object):
     cdef public dict opts
     cdef public list dpsi_dz_s
     cdef double[:] I_ks,alpha_ks,ros,omegas, fs, T_1s, ks
+    cdef public object stop_foo
     
     cdef double S,d,fi,q,F_0,k,R_g,v_T,sigma_T,p_f,p0,l_max,t_max,dt, omega, W_kam
     cdef int n_powders
