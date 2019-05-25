@@ -138,6 +138,22 @@ cdef class InterpXY(object):
             self.ks[i] = (self.ys[i + 1] - self.ys[i]) / (self.xs[i + 1] - self.xs[i])
             self.bs[i] = self.ys[i] - self.ks[i] * self.xs[i]
 
+    def get_xs_zeros(self):
+        """Возвращает список координат абсцисс, где функция обращается в 0
+        None, если функция не имеет нулей
+        """
+        res = []
+        for i in range(self.ys.shape[0]-1):
+            if self.ys[i] * self.ys[i+1] <= 0:
+                res.append(-self.bs[i]/self.ks[i])
+        if len(res) == 0:
+            return None
+        res2 = [res[0]]
+        for el in res:
+            if abs(el - res2[-1]) > self.union_tol:
+                res2.append(el)
+        return res2
+
     def __getitem__(self, key):
         x = self.xs[key]
         y = self.ys[key]
@@ -184,6 +200,14 @@ cdef class InterpXY(object):
         return self+other
     
     def __abs__(self):
+        zeros = self.get_xs_zeros()
+        if zeros:
+            xs = np.concatenate((self.xs, zeros))
+            ys = np.concatenate((self.ys, np.zeros_like(zeros)))
+            arr1inds = xs.argsort()
+            xs = xs[arr1inds[::-1]]
+            ys = ys[arr1inds[::-1]] 
+            return InterpXY(xs, np.abs(ys), self.union_tol)
         return InterpXY(self.xs, np.abs(self.ys), self.union_tol)
 
     def __neg__(self):
