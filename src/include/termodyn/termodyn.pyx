@@ -8,15 +8,21 @@ from libc.math cimport pi
 from tube cimport InterpXY
 
 
-def get_dpsi_array(k1=0.811, k2=0.505, l1=0.081, l2=-1.024, z_k=1.488, n=1000):
+def get_dpsi_array(k1=0.811, k2=0.505, l1=0.081, l2=-1.024, z_k=1.488, n=1000, norm_to_psi1=False):
     """
     k1=0.811, k2=0.505, l1=0.081, l2=-1.024, z_k=1.488, n=1000
-    return dpsidz, zs
+    norm_to_psi1 - нужно ли нормировать dpsi_dz_s, чтобы ее интеграл по z был равен ровно 1
+
+    return (dpsidz,   zs)
+           (np.array, np.array) 
     """
     zs = np.linspace(0, z_k, n)
     dpsidz = np.empty_like(zs)
     for i, z in enumerate(zs):
         dpsidz[i] = k1*(1+2*l1*z) if z<=1 else k2*(1+2*l2*(z-1)) if z<z_k else 0
+    if norm_to_psi1:
+        ixy = InterpXY(zs, dpsidz)
+        dpsidz /= ixy.integrate()
     return dpsidz, zs
 
 
