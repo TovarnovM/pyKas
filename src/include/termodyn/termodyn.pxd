@@ -16,5 +16,5 @@ cdef class DirectBallMany(object):
     cdef void get_dydt(self, double t, double[:] y, double[:] res)
     cdef int p_f_foo(self, double p, double V)
     cdef double get_dpsi(self, double z, double dzdt)
-    cpdef (double, double, double, double) set_k_and_stuff(self, double[:] y)
+    cpdef (double, double, double, double, double) set_k_and_stuff(self, double[:] y)
     cpdef bint stop_condition(self, double t, double[:] y)

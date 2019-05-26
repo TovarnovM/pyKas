@@ -328,14 +328,17 @@ cdef class DirectBallMany(object):
         self.t_max = integr_cond['t_max']
         self.dt = integr_cond['dt']
 
-    cpdef (double, double, double, double) set_k_and_stuff(self, double[:] y):
+    cpdef (double, double, double, double, double) set_k_and_stuff(self, double[:] y):
         """Функция обновляет показатели адиабаты, и газвоую постоянную, согласно массам сговревших порохов
         и массе воспламенителя
+
+        Возвращает показатель адиабаты смеси, температуру, газовую постоянную, силу смеси и ее свободный объем
 
         y[] # [p,  l, W, V, psi0, z0, psi1, z1, ..., psiN, zN]
             # [0,  1, 2, 3,    4,  5,    6,  7, ...,  4+2*N, 5+2*N]
 
-        return (k, T, R_g, f_sred)
+        return (k, T, R_g, f_sred, W)
+                0  1   2      3    4
         """
         cdef double omega_sum = self.omega_vospl
         cdef double psi_i, ves
@@ -354,9 +357,12 @@ cdef class DirectBallMany(object):
             T_1 += ves * self.T_1s[i]
             f_sred += ves * self.fs[i]
             W -= self.alpha_ks[i] * psi_i * self.omegas[i]
+        
         self.R_g = f_sred / T_1
         self.T_cur = y[0]*W/(omega_sum*self.R_g)
-        return (self.k, self.T_cur, self.R_g, f_sred)
+        if self.T_cur < self.T_stenki:
+            self.T_cur = self.T_stenki+0.01
+        return (self.k, self.T_cur, self.R_g, f_sred, W)
     
     @cython.boundscheck(False)
     @cython.wraparound(False)    
