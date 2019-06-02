@@ -27,7 +27,7 @@ def get_dpsi_array(k1=0.811, k2=0.505, l1=0.081, l2=-1.024, z_k=1.488, n=1000, n
 
 
 
-def get_optsmany_sample():
+def get_optsmany_sample(norm_to_psi1=False, n=1000):
     """
     Функция для получения примера опций для DirectBallMany
 
@@ -77,8 +77,8 @@ def get_optsmany_sample():
         }
     }
     """
-    dpsidz1, zs1 = get_dpsi_array()
-    dpsidz2, zs2 = get_dpsi_array(k1=0.653, k2=0.65, l1=0.247, l2=-0.791, z_k=1.602, n=1000)
+    dpsidz1, zs1 = get_dpsi_array(norm_to_psi1=norm_to_psi1)
+    dpsidz2, zs2 = get_dpsi_array(k1=0.653, k2=0.65, l1=0.247, l2=-0.791, z_k=1.602, n=n, norm_to_psi1=norm_to_psi1)
     return {
         'powders': [
             {
@@ -370,7 +370,7 @@ cdef class DirectBallMany(object):
         # [p,  l, W, V, psi0, z0, psi1, z1, ..., psiN, zN]
         # [0,  1, 2, 3,    4,  5,    6,  7, ...,  4+2*N, 5+2*N]
         cdef double p = y[0]
-        cdef double psi_i, z_i
+        cdef double psi_i, z_i, dpsi_dz
         cdef int i
         for i in range(self.n_powders):
             psi_i = y[4+2*i]
@@ -381,14 +381,21 @@ cdef class DirectBallMany(object):
                 res[4+2*i] = 0.0
                 continue
             z_i = y[5+2*i]
+            dpsi_dz = self.dpsi_dz_s[i].get_v(z_i) 
+            if dpsi_dz < 1e-9:
+                # dz_i
+                res[5+2*i] = 0.0
+                # dpsi_i
+                res[4+2*i] = 0.0
+                continue
             # dz_i
             res[5+2*i] = p / self.I_ks[i]
             # dpsi_i
-            res[4+2*i] = self.dpsi_dz_s[i].get_v(z_i) * res[5+2*i]
+            res[4+2*i] = dpsi_dz * res[5+2*i]
         
         
         cdef double l = y[1]
-        cdef double W = y[2]
+        cdef double W = y[2] if y[2] > 0 else 1e-9
         cdef double V = y[3]
         
         cdef double dW = self.S*V
