@@ -598,6 +598,32 @@ cdef class GasFluxCalculator(object):
                 p_2=layer.ps[i], ro_2=layer.ros[i], u_2=layer.us[i], c_2=layer.cs[i], gamma=layer.gasEOS.gamma)
 
 
+    def get_Vs_border_svobodn(self, layer, p_left=0, p_right=0):
+        p12 = layer.ps[0]
+        u12 = layer.us[0]
+        c12 = layer.cs[0]
+        eos = layer.gasEOS
+        kappa = eos.gamma
+        if p_left < p12:
+            U_0 = u12 - 2/(kappa-1)*c12*(1-pow((p_left+eos.p_0)/(p12+eos.p_0), (kappa-1)/(2*kappa)))
+        else:
+            ro12 = layer.ros[0]
+            a12 = sqrt(ro12*(0.5*(kappa+1)*(p_left+eos.p_0) + 0.5*(kappa-1)*(p12+eos.p_0)))
+            U_0 = u12 + (p_left-p12)/a12
+        
+        p12 = layer.ps[-1]
+        u12 = -layer.us[-1]
+        c12 = layer.cs[-1]
+        if p_left < p12:
+            U_1 = u12 - 2/(kappa-1)*c12*(1-pow((p_left+eos.p_0)/(p12+eos.p_0), (kappa-1)/(2*kappa)))
+        else:
+            ro12 = layer.ros[-1]
+            a12 = sqrt(ro12*(0.5*(kappa+1)*(p_left+eos.p_0) + 0.5*(kappa-1)*(p12+eos.p_0)))
+            U_1 = u12 + (p_left-p12)/a12
+        return U_0, -U_1
+
+
+
 cdef class GridStrecher(object):
     """Класс дял управления координатами и скоростями одномерных сеток
 
