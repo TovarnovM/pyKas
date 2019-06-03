@@ -395,7 +395,7 @@ cdef class DirectBallMany(object):
         
         
         cdef double l = y[1]
-        cdef double W = y[2] if y[2] > 0 else 1e-9
+        cdef double W = y[2] if y[2] > 1e-9 else 1e-9
         cdef double V = y[3]
         
         cdef double dW = self.S*V

@@ -536,3 +536,151 @@ cdef class Tube(object):
         ax.plot(xs[[0,0]], [y0, ys[0]+y0], color='black', lw=lw_osei)
         ax.plot(xs[[-1,-1]], [y0, ys[-1]+y0], color='black', lw=lw_osei)
         ax.plot(xs[[0,-1]], [y0,y0], color='black', lw=lw_osei, ls='-.', marker=marker, markersize=markersize)
+
+
+    
+
+class BorderSimple(object):
+    border_dict_sample = {
+    'mass': 0.1, # kg
+    'p_f': 100e6, #Pa
+    't_init': -1,
+    'w_border': 0.005, #m
+    }
+#     @staticmethod
+#     def connect(b_left: BorderSimple, b_right: BorderSimple, f_destroy=0, l_0=None):
+#         if l_0 is None:
+#             l_0 = b_right.get_x_left() - b_left.get_x_right() 
+        
+    @classmethod
+    def get_standart(cls, border_dict):
+        return cls(None, None, **border_dict)
+        
+    def __init__(self, 
+                 lr_left, 
+                 lr_right, 
+                 mass, 
+                 p_f, 
+                 t_init=-1, 
+                 w_border=0, **kwargs):
+        
+        self.lr_left= lr_left
+        self.lr_right = lr_right
+        self.mass = mass
+        self.p_f = p_f
+        self.t_init = t_init
+        self.w_border = w_border
+        self.color_4_plot = 'black'
+        
+    def __str__(self):
+        return f'BorderSimple(mass={self.mass}, p_f={self.p_f}, t_init={self.t_init}, w_border={self.w_border})'
+    
+    def get_p_s_left(self):
+        if self.lr_left is not None:
+            return self.lr_left.get_p_right(), self.lr_left.S[-1]
+        return 0, 0
+        
+    def get_p_s_right(self):
+        if self.lr_right is not None:
+            return self.lr_right.get_p_left(), self.lr_right.S[0]
+        return 0, 0
+    
+    def get_right_layer_x1(self):
+        return self.lr_left.xs_borders[-1] + self.w_border
+    
+    def get_x_left(self):
+        if self.lr_left is not None:
+            return self.lr_left.xs_borders[-1]
+        if self.lr_right is not None:
+            return self.get_x_right() - self.w_border
+        return 0
+    
+    def get_x_right(self):
+        if self.lr_right is not None:
+            return self.lr_right.xs_borders[0]
+        if self.lr_left is not None:
+            return self.get_x_left() + self.w_border
+        return 0
+    
+    def get_v0(self):
+        v0 = None
+        if self.lr_left is not None:
+            v0 = self.lr_left.Vs_borders[-1]
+        if self.lr_right is not None:
+            if v0 is not None:
+                if abs(self.lr_right.xs_borders[0] - self.get_right_layer_x1()) > 1e-5:
+                    raise AttributeError(f'Слои не синхронизированы по координатам!\n{self.lr_left}\n{self.lr_right}')
+                vr = self.lr_right.Vs_borders[0]
+                if abs(vr-v0) > 1e-10:
+                    raise AttributeError(f'Слои не синхронизированы по скорости!\n{self.lr_left}\n{self.lr_right}')
+            v0 = self.lr_right.Vs_borders[0]
+        return v0
+    
+    def get_v0_f0_a0(self):
+        v0 = self.get_v0()
+        (pl, sl), (pr, sr) = self.get_p_s_left(), self.get_p_s_right()
+        f0 = pl*sl - pr*sr
+        if abs(v0) < 1e-13 and abs(pl - pr) < self.p_f:
+            a0 = 0
+        else:
+            a0 = f0/self.mass
+        return v0, f0, a0
+    
+    def update_Vs(self, tau: float):
+        v0, f0, a0 = self.get_v0_f0_a0()
+        v1 = v0 + tau*a0
+        if self.lr_left is not None:
+            self.lr_left.Vs_borders[-1] = v1
+        if self.lr_right is not None:
+            self.lr_right.Vs_borders[0] = v1
+            
+    def update_xs(self):
+        if self.lr_left is not None and self.lr_right is not None:
+            self.lr_right.xl = self.lr_left.xs_borders[-1] + self.w_border
+            self.lr_left.xr = self.lr_left.xs_borders[-1]
+        elif self.lr_left is None:
+            self.lr_right.xl = self.lr_right.xs_borders[0]
+        elif self.lr_right is None:
+            self.lr_left.xr = self.lr_left.xs_borders[-1]
+            
+    def plot(self, fig, ax, **kwargs):
+        """
+        fig, ax = plt.subplots()
+
+        n_points = kwargs.get('n_points', 10)
+        y0 = kwargs.get('y0', 0)
+        color=kwargs.get('color', self.color_4_plot)
+        lw = kwargs.get('lw', 2)
+        kwargs.get('plot_tube', False)
+        """
+        from matplotlib.patches import Polygon
+        n_points = kwargs.get('n_points', 10)
+        y0 = kwargs.get('y0', 0)
+        color=kwargs.get('color', self.color_4_plot)
+        lw = kwargs.get('lw', 2)
+        if self.lr_left is not None:
+            tube = self.lr_left.tube
+        elif self.lr_right is not None:
+            tube = self.lr_right.tube
+        else:
+            raise AttributeError(f'Нет слоев( ')
+        if kwargs.get('plot_tube', False):
+            tube.plot(fig, ax, **kwargs)
+        if abs(self.w_border) < 1e-9:
+            x = self.get_x_left()
+            ax.plot([x, x], [y0, tube.get_d(x)/2+y0], color=color, lw=lw)
+            return
+        ix = np.linspace(self.get_x_left(), self.get_x_right(), n_points)
+        iy = np.array(tube.get_ds(ix))/2 + y0
+        verts = [(ix[0], y0)] + list(zip(ix, iy)) + [(ix[-1], y0)]
+        poly = Polygon(verts, facecolor='1', edgecolor='0.1', hatch=r'//')
+        ax.add_patch(poly)
+        
+    def copy(self):
+        return BorderSimple(lr_left=self.lr_left, 
+                 lr_right=self.lr_right, 
+                 mass=self.mass, 
+                 p_f=self.p_f, 
+                 t_init=self.t_init, 
+                 w_border=self.w_border)
+    

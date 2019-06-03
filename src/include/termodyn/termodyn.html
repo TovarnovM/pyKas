@@ -3582,9 +3582,9 @@ static PyObject *__pyx_pf_8termodyn_14DirectBallMany_12set_k_and_stuff(struct __
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">397</span>:         <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">l</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span></pre>
 <pre class='cython code score-0 '>  __pyx_t_22 = 1;
   __pyx_v_l = (*((double *) ( /* dim=0 */ (__pyx_v_y.data + __pyx_t_22 * __pyx_v_y.strides[0]) )));
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">398</span>:         <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">W</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mf">2</span><span class="p">]</span> <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="mf">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0</span> <span class="k">else</span> <span class="mf">1e-9</span></pre>
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">398</span>:         <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">W</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mf">2</span><span class="p">]</span> <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="mf">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1e-9</span> <span class="k">else</span> <span class="mf">1e-9</span></pre>
 <pre class='cython code score-0 '>  __pyx_t_23 = 2;
-  if ((((*((double *) ( /* dim=0 */ (__pyx_v_y.data + __pyx_t_23 * __pyx_v_y.strides[0]) ))) &gt; 0.0) != 0)) {
+  if ((((*((double *) ( /* dim=0 */ (__pyx_v_y.data + __pyx_t_23 * __pyx_v_y.strides[0]) ))) &gt; 1e-9) != 0)) {
     __pyx_t_24 = 2;
     __pyx_t_15 = (*((double *) ( /* dim=0 */ (__pyx_v_y.data + __pyx_t_24 * __pyx_v_y.strides[0]) )));
   } else {
