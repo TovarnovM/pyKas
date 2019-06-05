@@ -26,4 +26,5 @@ cdef class Tube:
     cpdef void fill_S(self, double[:] xs, double[:] S)
     cpdef double[:] get_S(self, double[:] xs)
     cpdef double get_x2(self, double x1, double w)
+    cpdef double get_x1(self, double x2, double w)
     cpdef double get_W_between(self, double x1, double x2)

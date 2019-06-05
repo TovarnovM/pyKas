@@ -505,6 +505,14 @@ cdef class Tube(object):
         """
         cdef double w1 = self.w.get_v(x1)
         return self.w_reverse.get_v(w1 + w)
+
+    cpdef double get_x1(self, double x2, double w):
+        """
+        double get_x2(self, double x2, double w)
+        возвращает координату x1, такую, что объем трубы между x1 и x2 равен w
+        """
+        cdef double w2 = self.w.get_v(x2)
+        return self.w_reverse.get_v(w2 - w)
     
     cpdef double get_W_between(self, double x1, double x2):
         """

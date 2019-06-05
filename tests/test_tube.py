@@ -77,6 +77,17 @@ def test_tube_dsdx_2():
         x1, x2 = min(x1, x2), max(x1, x2)
         assert t.get_dsdx(np.array([x1, x2])) == approx([(pi*2**2/4-pi*4**2/4)/2])
 
+def test_tube_get_x2x1():
+    xs = [0,2,4,6]
+    ds = [1,2,4,2]
+    tube = Tube(xs, ds)
+    for i in range(1000):
+        x1 = np.random.uniform(0,6)
+        w = np.random.uniform(1,10)
+        x2 = tube.get_x2(x1, w)
+        xx1 = tube.get_x1(x2, w)
+        assert x1 == approx(xx1)
+
 if __name__ == "__main__":
     xs = [1,2,4]
     ixy = InterpXY([1,2,3], [4,5,6])
