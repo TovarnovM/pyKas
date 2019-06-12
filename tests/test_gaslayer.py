@@ -50,6 +50,61 @@ def test_create_gasLayer(gasLayer, gasLayer2):
     assert gasLayer is not None
     assert gasLayer2 is not None
 
+def test_grid_strecher_type3():
+    gs3 = GridStrecher(strech_type=3, index_anchor=-1)
+    gs1 = GridStrecher(strech_type=1, index_anchor=-1)
+    
+    xs3 = np.linspace(-10, 10)
+    xs1 = np.linspace(-10, 10)
+    vs3 = np.zeros_like(xs3)
+    vs1 = np.zeros_like(xs1)
+
+    for i in range(1000):
+        vl, vr = np.random.uniform(-100, 100, size=2)
+        gs3.fill_Vs_borders_anchor(vl, vr, xs3, vs3)
+        gs1.fill_Vs_borders_proportional(vl, vr, xs1, vs1)
+        assert vs3 == approx(vs1)
+
+def test_grid_strecher_type3_2():
+    gs3 = GridStrecher(strech_type=3, index_anchor=50)
+    gs1 = GridStrecher(strech_type=1, index_anchor=-1)
+    
+    xs3 = np.linspace(-10, 10, 100)
+    xs1 = np.linspace(-10, 10, 100)
+    vs3 = np.zeros_like(xs3)
+    vs1 = np.zeros_like(xs1)
+
+    for i in range(1000):
+        gs3.index_anchor = np.random.randint(1,99)
+        vl, vr = np.random.uniform(-100, 100, size=2)
+        gs3.fill_Vs_borders_anchor(vl, vr, xs3, vs3)
+        gs1.fill_Vs_borders_proportional(vl, vr, xs1, vs1)
+        assert vs3 != approx(vs1)
+        assert vs3[gs3.index_anchor] == 0
+        assert vs3[0] == approx(vs1[0])
+        assert vs3[-1] == approx(vs1[-1])
+
+def test_grid_strecher_type3_3():
+    gs3 = GridStrecher(strech_type=3, index_anchor=50)
+    gs1 = GridStrecher(strech_type=1, index_anchor=-1)
+    n=5
+    xs3 = np.linspace(-10, 10, n)
+    xs1 = np.linspace(-10, 10, n)
+    vs3 = np.zeros_like(xs3)
+    vs1 = np.zeros_like(xs1)
+
+    for i in range(1000):
+        
+        ai = np.random.randint(1,n-1)
+        gs3.index_anchor = ai
+        vl, vr = np.random.uniform(-100, 100, size=2)
+        gs3.fill_Vs_borders_anchor(vl, vr, xs3, vs3)
+        gs1.fill_Vs_borders_proportional(0, vr, xs1[ai:], vs1[ai:])
+        gs1.fill_Vs_borders_proportional(vl, 0, xs1[:ai+1], vs1[:ai+1])
+        ai = 1
+        assert vs3 == approx(vs1)
+        
+
 def test_GridStrecher_init_regular(grid_strecher):
     for _ in range(33):
         v1,v2 = np.random.uniform(-9999,9999,2)

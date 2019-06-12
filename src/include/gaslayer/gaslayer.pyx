@@ -629,11 +629,12 @@ cdef class GridStrecher(object):
 
     self.strech_type == 1 - обычная равномерная сетка
                      == 2 - адаптивная сетка (еще не совсем гуд)
+                     == 3 - с фиксированной точкой оО
 
     st2_window_part, st2_adapt_prop - параметры для адаптивной сетки
     """
 
-    def __init__(self, strech_type=1, st2_window_part=0.01, st2_adapt_prop=1, D_mnj=0.99):
+    def __init__(self, strech_type=1, st2_window_part=0.01, st2_adapt_prop=1, D_mnj=0.99, index_anchor=-1):
         self.strech_type = strech_type
         self.st2_window_part = st2_window_part
         self.st2_adapt_prop = st2_adapt_prop
@@ -642,6 +643,7 @@ cdef class GridStrecher(object):
         self.interp_smooth = InterpXY([1,2,3], [1,2,3])
         self.interp_adapt = InterpXY([1,2,3,4], [1,2,3,4])
         self.D_mnj =D_mnj
+        self.index_anchor = index_anchor
 
     cpdef bint evaluate(self, double tau, GasLayer layer):
         cdef size_t i
@@ -661,20 +663,28 @@ cdef class GridStrecher(object):
 
     cpdef bint sync_layers(self, GasLayer layer0, GasLayer layer1, double tau, double v_left, double v_right):
         layer1.time = layer0.time + tau
+        cdef size_t i
+        cdef bint suc
         if self.strech_type == 1:
             self.fill_Vs_borders_proportional(v_left, v_right, layer0.xs_borders, layer0.Vs_borders)
-        self.fill_Vs_borders_proportional(v_left, v_right, layer1.xs_borders, layer1.Vs_borders)
-        cdef bint suc = self.evaluate(tau, layer1)
-        if not suc:
-            return False
-        cdef size_t i
-        if self.strech_type == 2:
+            self.fill_Vs_borders_proportional(v_left, v_right, layer1.xs_borders, layer1.Vs_borders)
+            suc = self.evaluate(tau, layer1)
+            if not suc:
+                return False
+        elif self.strech_type == 2:
             # TODO Адаптивная сетка аццтой
             #
             self.strech_layer_adaptive(layer1, layer_prev=layer0, tau=tau)
             
             for i in range(layer0.Vs_borders.shape[0]):
                 layer0.Vs_borders[i] = (layer1.xs_borders[i] - layer0.xs_borders[i])/tau
+        elif self.strech_type == 3:
+            self.fill_Vs_borders_anchor(v_left, v_right, layer0.xs_borders, layer0.Vs_borders)
+            layer1.xs_borders[:] = layer0.xs_borders
+            layer1.Vs_borders[:] = layer0.Vs_borders
+            suc = self.evaluate(tau, layer1)
+            if not suc:
+                return False
         layer1.Vs_borders[:] = layer0.Vs_borders
         return True
 
@@ -732,6 +742,30 @@ cdef class GridStrecher(object):
         Vs_borders[0] = v_left
         for i in range(1, Vs_borders.shape[0]-1):
             Vs_borders[i] = v_left + mnj * (xs_borders[i]-xs_borders[0])
+        Vs_borders[Vs_borders.shape[0]-1] = v_right
+
+    cpdef void fill_Vs_borders_anchor(self, double v_left, double v_right, double[:] xs_borders, double[:] Vs_borders):
+        if self.index_anchor < 0:
+            self.fill_Vs_borders_proportional(v_left, v_right, xs_borders, Vs_borders)
+            return
+        elif self.index_anchor == 0:
+            self.fill_Vs_borders_proportional(0, v_right, xs_borders, Vs_borders)
+            return
+        elif self.index_anchor == xs_borders.shape[0]-1:
+            self.fill_Vs_borders_proportional(v_left, 0, xs_borders, Vs_borders)
+            return
+        cdef size_t i
+        cdef double dV = 0 - v_left
+        cdef double mnj = dV/(xs_borders[self.index_anchor]-xs_borders[0])
+        Vs_borders[0] = v_left
+        for i in range(1, self.index_anchor):
+            Vs_borders[i] = v_left + mnj * (xs_borders[i]-xs_borders[0])
+        Vs_borders[self.index_anchor] = 0
+
+        dV = v_right
+        mnj = dV/(xs_borders[xs_borders.shape[0]-1]-xs_borders[self.index_anchor])
+        for i in range(self.index_anchor+1, Vs_borders.shape[0]-1):
+            Vs_borders[i] = mnj * (xs_borders[i]-xs_borders[self.index_anchor])
         Vs_borders[Vs_borders.shape[0]-1] = v_right
 
     cpdef void fill_euler_vel0_regular(self, double tau, double[:] xs0, double[:] xs1, double[:] vel0_fill):

@@ -89,7 +89,7 @@ cdef class GasFluxCalculator:
     
 
 cdef class GridStrecher:
-    cdef public int strech_type
+    cdef public int strech_type, index_anchor
     cdef public double st2_window_part, st2_adapt_prop, D_mnj
     cdef public double[:] bufarr,bufarr_border
     cdef public InterpXY interp_smooth, interp_adapt
@@ -100,6 +100,7 @@ cdef class GridStrecher:
     cpdef void smooth_arr(self, double[:] xs, double[:] vs, double[:] vs_smoothed, double window_part=*)
     cpdef void adaptine_borders(self, double[:] xs_borders, double[:] vs, double[:] xs_adapt)
     cpdef void fill_Vs_borders_proportional(self, double v_left, double v_right, double[:] xs_borders, double[:] Vs_borders)
+    cpdef void fill_Vs_borders_anchor(self, double v_left, double v_right, double[:] xs_borders, double[:] Vs_borders)
     cpdef void strech_layer_adaptive(self, GasLayer layer, GasLayer layer_prev, double tau)
     cpdef bint sync_layers(self, GasLayer layer0, GasLayer layer1, double tau, double v_left, double v_right)
     cpdef void sync_xs_borders(self, double[:] xs_borders, double xl, double xr)
