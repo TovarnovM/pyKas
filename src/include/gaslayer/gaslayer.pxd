@@ -137,3 +137,6 @@ cdef class GasLayer:
     cpdef GasLayer corrector_bogdanov(self, GasLayer lr_simple, double v_left, double v_right)
     cpdef double get_p_left(self)
     cpdef double get_p_right(self)
+    cpdef double get_E_potential(self)
+    cpdef double get_E_kinetic(self)
+    cpdef double get_E_sum(self)

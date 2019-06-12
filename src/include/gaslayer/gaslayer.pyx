@@ -988,10 +988,10 @@ cdef class GasLayer(object):
             self.ros[i], self.ps[i], self.us[i] = ro, p, u
             self.es[i] = eos.get_e(ro, p)
             self.cs[i] = eos.get_csound(ro, p)
-        if init_q:
-            self.init_q()
         if init_SsdW:
             self.init_SsdW()
+        if init_q:
+            self.init_q()
         self.init_taus_acustic()
     
     cpdef double get_p_left(self):
@@ -1311,7 +1311,22 @@ cdef class GasLayer(object):
         poly = Polygon(verts, color=color, alpha=alpha)
         ax.add_patch(poly) 
         
+    cpdef double get_E_potential(self):
+        cdef size_t i
+        cdef double s = 0
+        for i in range(self.W.shape[0]):
+            s += self.W[i]*self.ros[i]*self.es[i]
+        return s
 
+    cpdef double get_E_kinetic(self):
+        cdef size_t i
+        cdef double s = 0
+        for i in range(self.W.shape[0]):
+            s += self.W[i]*self.ros[i]*self.us[i]*self.us[i]/2
+        return s
+
+    cpdef double get_E_sum(self):
+        return self.get_E_kinetic() + self.get_E_potential()
 
 
 
