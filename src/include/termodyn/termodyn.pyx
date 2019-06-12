@@ -342,6 +342,7 @@ cdef class DirectBallMany(object):
         """
         cdef double omega_sum = self.omega_vospl
         cdef double psi_i, ves
+        cdef int i
         for i in range(self.n_powders):
             psi_i = y[4+2*i]
             omega_sum += psi_i * self.omegas[i]
