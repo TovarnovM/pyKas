@@ -898,7 +898,7 @@ cdef class GasLayer(object):
     def __init__(self, n_cells, Tube tube, GasEOS gasEOS, GasFluxCalculator flux_calculator, GridStrecher grid_strecher, int n_qs=3):
         self.n_cells = n_cells
         self.n_qs = n_qs
-        self.color_4_plot = '#bababa'
+        self.color_4_plot = '#0000CC'
         # self.n_pars = n_pars
         self.tube = tube
         self.gasEOS = gasEOS
@@ -1328,5 +1328,13 @@ cdef class GasLayer(object):
     cpdef double get_E_sum(self):
         return self.get_E_kinetic() + self.get_E_potential()
 
-
+    cpdef np.ndarray get_Ts(self, double R):
+        cdef np.ndarray res = np.zeros_like(self.ps)
+        cdef double kappa = self.gasEOS.kappa
+        cdef double p, ro
+        for i in range(len(res)):
+            p = self.ps[i]
+            ro = self.ros[i]
+            res[i] = (p/ro-p*kappa)/R
+        return res
 

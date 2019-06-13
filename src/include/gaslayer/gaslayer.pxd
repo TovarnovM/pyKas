@@ -2,6 +2,7 @@
 # cython: language_level=3, boundscheck=False, nonecheck=False, cdivision=True, initializedcheck=False
 
 from tube cimport Tube, InterpXY
+cimport numpy as np
 
 cpdef double foo()
 
@@ -140,3 +141,4 @@ cdef class GasLayer:
     cpdef double get_E_potential(self)
     cpdef double get_E_kinetic(self)
     cpdef double get_E_sum(self)
+    cpdef np.ndarray get_Ts(self, double R)
