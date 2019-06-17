@@ -430,6 +430,16 @@ class ChromoController(object):
                 child = self.find_zero_golden_method(rnd.choice([chromo1, chromo2]), child)
         return child
 
+    def mutate_with_prob(self, chromo, prob):
+        keys = []
+
+        for key in self:
+            if np.random.uniform() <= prob:
+                keys.append(key)
+        if len(keys) == 0:
+            keys = [np.random.choice(list(self))]
+        return self.mutate(chromo, keys)
+
     def mutate(self, chromo, keys):
         """
         метод проведения мутации хромосомы 
@@ -439,7 +449,9 @@ class ChromoController(object):
         
         return  хромосома-мутант
         """
-        mutant = dict(chromo)
+        mutant = {}
+        for k in self:
+            mutant[k] = chromo[k]
         for key in keys:
             mutant[key] = self[key].mutate(chromo[key])
         if not (self.constraints is None):
@@ -613,6 +625,12 @@ def get_test_chr_contr():
     chr_contr = ChromoController([dr1, dr2, dr3, ir1, sr1, sr2])
     return chr_contr
 
+def main1():
+    cc = get_test_chr_contr()
+    c1 = cc.get_chromo()
+    c2 = cc.get_chromo()
+    c3 = cc.mutate_with_prob(c1, 0.5)
+    i = 10
 
 def main():
     dr1 = DRange(-1, 3, 'dr1')
@@ -644,4 +662,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main1()
