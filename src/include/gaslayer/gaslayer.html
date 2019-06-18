@@ -6610,7 +6610,7 @@ static PyObject *__pyx_pw_8gaslayer_17GasFluxCalculator_27get_Vs_border_svobodn(
 static PyObject *__pyx_pw_8gaslayer_17GasFluxCalculator_27get_Vs_border_svobodn(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_layer = 0;
   PyObject *__pyx_v_p_left = 0;
-  CYTHON_UNUSED PyObject *__pyx_v_p_right = 0;
+  PyObject *__pyx_v_p_right = 0;
   PyObject *__pyx_r = 0;
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("get_Vs_border_svobodn (wrapper)", 0);
@@ -6683,7 +6683,7 @@ static PyObject *__pyx_pw_8gaslayer_17GasFluxCalculator_27get_Vs_border_svobodn(
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_8gaslayer_17GasFluxCalculator_26get_Vs_border_svobodn(CYTHON_UNUSED struct __pyx_obj_8gaslayer_GasFluxCalculator *__pyx_v_self, PyObject *__pyx_v_layer, PyObject *__pyx_v_p_left, CYTHON_UNUSED PyObject *__pyx_v_p_right) {
+static PyObject *__pyx_pf_8gaslayer_17GasFluxCalculator_26get_Vs_border_svobodn(CYTHON_UNUSED struct __pyx_obj_8gaslayer_GasFluxCalculator *__pyx_v_self, PyObject *__pyx_v_layer, PyObject *__pyx_v_p_left, PyObject *__pyx_v_p_right) {
   PyObject *__pyx_v_p12 = NULL;
   PyObject *__pyx_v_u12 = NULL;
   PyObject *__pyx_v_c12 = NULL;
@@ -6901,15 +6901,15 @@ static PyObject *__pyx_pf_8gaslayer_17GasFluxCalculator_26get_Vs_border_svobodn(
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_4); __pyx_t_4 = 0;
   <span class='pyx_macro_api'>__Pyx_DECREF_SET</span>(__pyx_v_c12, __pyx_t_1);
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-8" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0617</span>:         <span class="k">if</span> <span class="n">p_left</span> <span class="o">&lt;</span> <span class="n">p12</span><span class="p">:</span></pre>
-<pre class='cython code score-8 '>  __pyx_t_1 = <span class='py_c_api'>PyObject_RichCompare</span>(__pyx_v_p_left, __pyx_v_p12, Py_LT); <span class='refnanny'>__Pyx_XGOTREF</span>(__pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 617, __pyx_L1_error)</span>
+</pre><pre class="cython line score-8" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0617</span>:         <span class="k">if</span> <span class="n">p_right</span> <span class="o">&lt;</span> <span class="n">p12</span><span class="p">:</span></pre>
+<pre class='cython code score-8 '>  __pyx_t_1 = <span class='py_c_api'>PyObject_RichCompare</span>(__pyx_v_p_right, __pyx_v_p12, Py_LT); <span class='refnanny'>__Pyx_XGOTREF</span>(__pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 617, __pyx_L1_error)</span>
   __pyx_t_3 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_1); if (unlikely(__pyx_t_3 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 617, __pyx_L1_error)</span>
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_3) {
 /* … */
     goto __pyx_L4;
   }
-</pre><pre class="cython line score-60" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0618</span>:             <span class="n">U_1</span> <span class="o">=</span> <span class="n">u12</span> <span class="o">-</span> <span class="mf">2</span><span class="o">/</span><span class="p">(</span><span class="n">kappa</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="o">*</span><span class="n">c12</span><span class="o">*</span><span class="p">(</span><span class="mf">1</span><span class="o">-</span><span class="nb">pow</span><span class="p">((</span><span class="n">p_left</span><span class="o">+</span><span class="n">eos</span><span class="o">.</span><span class="n">p_0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">p12</span><span class="o">+</span><span class="n">eos</span><span class="o">.</span><span class="n">p_0</span><span class="p">),</span> <span class="p">(</span><span class="n">kappa</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">2</span><span class="o">*</span><span class="n">kappa</span><span class="p">)))</span></pre>
+</pre><pre class="cython line score-60" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0618</span>:             <span class="n">U_1</span> <span class="o">=</span> <span class="n">u12</span> <span class="o">-</span> <span class="mf">2</span><span class="o">/</span><span class="p">(</span><span class="n">kappa</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="o">*</span><span class="n">c12</span><span class="o">*</span><span class="p">(</span><span class="mf">1</span><span class="o">-</span><span class="nb">pow</span><span class="p">((</span><span class="n">p_right</span><span class="o">+</span><span class="n">eos</span><span class="o">.</span><span class="n">p_0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">p12</span><span class="o">+</span><span class="n">eos</span><span class="o">.</span><span class="n">p_0</span><span class="p">),</span> <span class="p">(</span><span class="n">kappa</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">2</span><span class="o">*</span><span class="n">kappa</span><span class="p">)))</span></pre>
 <pre class='cython code score-60 '>    __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyInt_SubtractObjC</span>(__pyx_v_kappa, __pyx_int_1, 1, 0);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 618, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
     __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyNumber_Divide</span>(__pyx_int_2, __pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 618, __pyx_L1_error)</span>
@@ -6920,7 +6920,7 @@ static PyObject *__pyx_pf_8gaslayer_17GasFluxCalculator_26get_Vs_border_svobodn(
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_v_eos, __pyx_n_s_p_0);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 618, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_4);
-    __pyx_t_2 = <span class='py_c_api'>PyNumber_Add</span>(__pyx_v_p_left, __pyx_t_4);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 618, __pyx_L1_error)</span>
+    __pyx_t_2 = <span class='py_c_api'>PyNumber_Add</span>(__pyx_v_p_right, __pyx_t_4);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 618, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_v_eos, __pyx_n_s_p_0);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 618, __pyx_L1_error)</span>
@@ -6966,7 +6966,7 @@ static PyObject *__pyx_pf_8gaslayer_17GasFluxCalculator_26get_Vs_border_svobodn(
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_5); __pyx_t_5 = 0;
     <span class='pyx_macro_api'>__Pyx_XDECREF_SET</span>(__pyx_v_ro12, __pyx_t_2);
     __pyx_t_2 = 0;
-</pre><pre class="cython line score-70" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0621</span>:             <span class="n">a12</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ro12</span><span class="o">*</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">kappa</span><span class="o">+</span><span class="mf">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p_left</span><span class="o">+</span><span class="n">eos</span><span class="o">.</span><span class="n">p_0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">kappa</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p12</span><span class="o">+</span><span class="n">eos</span><span class="o">.</span><span class="n">p_0</span><span class="p">)))</span></pre>
+</pre><pre class="cython line score-70" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0621</span>:             <span class="n">a12</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ro12</span><span class="o">*</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">kappa</span><span class="o">+</span><span class="mf">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p_right</span><span class="o">+</span><span class="n">eos</span><span class="o">.</span><span class="n">p_0</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">kappa</span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">p12</span><span class="o">+</span><span class="n">eos</span><span class="o">.</span><span class="n">p_0</span><span class="p">)))</span></pre>
 <pre class='cython code score-70 '>    __pyx_t_2 = <span class='pyx_c_api'>__Pyx_PyInt_AddObjC</span>(__pyx_v_kappa, __pyx_int_1, 1, 0);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 621, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
     __pyx_t_5 = <span class='py_c_api'>PyNumber_Multiply</span>(__pyx_float_0_5, __pyx_t_2);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 621, __pyx_L1_error)</span>
@@ -6974,7 +6974,7 @@ static PyObject *__pyx_pf_8gaslayer_17GasFluxCalculator_26get_Vs_border_svobodn(
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_t_2 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_v_eos, __pyx_n_s_p_0);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 621, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
-    __pyx_t_1 = <span class='py_c_api'>PyNumber_Add</span>(__pyx_v_p_left, __pyx_t_2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 621, __pyx_L1_error)</span>
+    __pyx_t_1 = <span class='py_c_api'>PyNumber_Add</span>(__pyx_v_p_right, __pyx_t_2);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 621, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_t_2 = <span class='py_c_api'>PyNumber_Multiply</span>(__pyx_t_5, __pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 621, __pyx_L1_error)</span>
@@ -7005,8 +7005,8 @@ static PyObject *__pyx_pf_8gaslayer_17GasFluxCalculator_26get_Vs_border_svobodn(
     __pyx_t_7 = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(__pyx_t_1); if (unlikely((__pyx_t_7 == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 621, __pyx_L1_error)</span>
     <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_a12 = sqrt(__pyx_t_7);
-</pre><pre class="cython line score-20" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0622</span>:             <span class="n">U_1</span> <span class="o">=</span> <span class="n">u12</span> <span class="o">+</span> <span class="p">(</span><span class="n">p_left</span><span class="o">-</span><span class="n">p12</span><span class="p">)</span><span class="o">/</span><span class="n">a12</span></pre>
-<pre class='cython code score-20 '>    __pyx_t_1 = <span class='py_c_api'>PyNumber_Subtract</span>(__pyx_v_p_left, __pyx_v_p12);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 622, __pyx_L1_error)</span>
+</pre><pre class="cython line score-20" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0622</span>:             <span class="n">U_1</span> <span class="o">=</span> <span class="n">u12</span> <span class="o">+</span> <span class="p">(</span><span class="n">p_right</span><span class="o">-</span><span class="n">p12</span><span class="p">)</span><span class="o">/</span><span class="n">a12</span></pre>
+<pre class='cython code score-20 '>    __pyx_t_1 = <span class='py_c_api'>PyNumber_Subtract</span>(__pyx_v_p_right, __pyx_v_p12);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 622, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
     __pyx_t_4 = <span class='py_c_api'>PyFloat_FromDouble</span>(__pyx_v_a12);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 622, __pyx_L1_error)</span>
     <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_4);

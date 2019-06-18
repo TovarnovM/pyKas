@@ -614,12 +614,12 @@ cdef class GasFluxCalculator(object):
         p12 = layer.ps[-1]
         u12 = -layer.us[-1]
         c12 = layer.cs[-1]
-        if p_left < p12:
-            U_1 = u12 - 2/(kappa-1)*c12*(1-pow((p_left+eos.p_0)/(p12+eos.p_0), (kappa-1)/(2*kappa)))
+        if p_right < p12:
+            U_1 = u12 - 2/(kappa-1)*c12*(1-pow((p_right+eos.p_0)/(p12+eos.p_0), (kappa-1)/(2*kappa)))
         else:
             ro12 = layer.ros[-1]
-            a12 = sqrt(ro12*(0.5*(kappa+1)*(p_left+eos.p_0) + 0.5*(kappa-1)*(p12+eos.p_0)))
-            U_1 = u12 + (p_left-p12)/a12
+            a12 = sqrt(ro12*(0.5*(kappa+1)*(p_right+eos.p_0) + 0.5*(kappa-1)*(p12+eos.p_0)))
+            U_1 = u12 + (p_right-p12)/a12
         return U_0, -U_1
 
 

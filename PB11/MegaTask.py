@@ -377,6 +377,10 @@ def get_gas_grid_and_rborder(cr, tube, x_left):
         'CO_2': {
             'covolume': 0.0009702,
             'R': 189,
+            'gamma': 1.3},
+        'H2': {
+            'covolume': 0.0009702,
+            'R': 189,
             'gamma': 1.3}
 
     }
