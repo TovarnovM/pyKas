@@ -16,11 +16,18 @@ class Planner(object):
         self.set_plan_dict(plan_dict)
 
     def set_plan_dict(self, plan_dict):
+        id_curr=max([int(k) for k in plan_dict])
         with sqlitedict.SqliteDict(filename=self.filename) as sqldict:
             sqldict['plan_dict'] = plan_dict
+            sqldict['id_curr'] = id_curr+1
             sqldict.commit()
         self.plan_dict_cache=None
-    
+
+    @property
+    def id_curr(self):
+        with sqlitedict.SqliteDict(filename=self.filename) as sqldict:
+            return sqldict.get('id_curr', 0)
+            
     @property
     def plan_dict(self):
         if self.plan_dict_cache is None:
@@ -35,6 +42,19 @@ class Planner(object):
             return [val for val in plan_dict.values()]
         return None
 
+    def add_to_plan(self, *xs):
+        plan_dict = self.plan_dict
+        if plan_dict is None:
+            plan_dict = {}
+        id_curr = self.id_curr
+        ret_ids = []
+        for i, x in enumerate(xs, start=id_curr):
+            sid = f'{i}'
+            plan_dict[sid] = x
+            ret_ids.append(sid)
+        self.set_plan_dict(plan_dict)
+        return ret_ids        
+
     def get_calced_ids(self):
         """Возвращает множество id, которые уже посчитаны
         
@@ -42,7 +62,7 @@ class Planner(object):
             set(str) -- set посчитанных id
         """
         with sqlitedict.SqliteDict(filename=self.filename) as sqldict:
-            return { id_ for id_ in sqldict.keys() if id_ != 'plan_dict' }
+            return { id_ for id_ in sqldict.keys() if id_ not in  {'plan_dict', 'id_curr'} }
 
 
     def get_uncalced(self):
@@ -75,14 +95,19 @@ class Planner(object):
         plan_dict = self.plan_dict
         with sqlitedict.SqliteDict(filename=self.filename) as sqldict:
             if include_id:
-                return [(cid, plan_dict[cid], sqldict[cid]) for cid in calced_ids]
+                return [(cid, plan_dict[cid], sqldict[cid]['value']) for cid in calced_ids]
             else:
-                return [(plan_dict[cid], sqldict[cid]) for cid in calced_ids]
+                return [(plan_dict[cid], sqldict[cid]['value']) for cid in calced_ids]
 
     def save(self, id, value):
-        if id in self.plan_dict:
+        plan_dict = self.plan_dict
+        if id in plan_dict:
             with sqlitedict.SqliteDict(filename=self.filename) as sqldict:
-                sqldict[id] = value
+                sqldict[id] = { 
+                    'id': id,
+                    'x': plan_dict[id],
+                    'value': value
+                }
                 sqldict.commit()
         else:
             raise AttributeError(f'Такого ключа для сохранения нет {id}')
@@ -104,9 +129,10 @@ class Planner(object):
     
 if __name__ == "__main__":
     planner = Planner('test.db')
+    planner.delete_file()
     planner.set_plan([[1,2,3], [4,5,6], 7, 8, 9])
     plan = planner.plan_dict
-    planner.save(1, 'wewe')
+    planner.save('1', 'wewe')
     planner.get_uncalced()
     planner.delete_file()
 
