@@ -11,3 +11,4 @@ src/godunov.pyd
 jupyters/testy_new_wpowers.json
 jupyters/testy_newnew.json
 jupyters/space article/testy_newnew.json
+*dask-worker-space*
