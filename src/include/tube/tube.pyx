@@ -579,6 +579,7 @@ class BorderSimple(object):
         self.t_init = t_init
         self.w_border = w_border
         self.color_4_plot = 'black'
+        self.p_a_right = kwargs.get('p_a_right', 0)
         
     def __str__(self):
         return f'BorderSimple(mass={self.mass}, p_f={self.p_f}, t_init={self.t_init}, w_border={self.w_border})'
@@ -591,7 +592,7 @@ class BorderSimple(object):
     def get_p_s_right(self):
         if self.lr_right is not None:
             return self.lr_right.get_p_left(), self.lr_right.S[0]
-        return 0, 0
+        return self.p_a_right, self.lr_left.S[-1]
     
     def get_right_layer_x1(self):
         return self.lr_left.xs_borders[-1] + self.w_border
@@ -690,5 +691,6 @@ class BorderSimple(object):
                  mass=self.mass, 
                  p_f=self.p_f, 
                  t_init=self.t_init, 
-                 w_border=self.w_border)
+                 w_border=self.w_border,
+                 p_a_right=self.p_a_right)
     
