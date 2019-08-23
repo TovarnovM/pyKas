@@ -898,7 +898,8 @@ cdef class GasLayer(object):
     def __init__(self, n_cells, Tube tube, GasEOS gasEOS, GasFluxCalculator flux_calculator, GridStrecher grid_strecher, int n_qs=3):
         self.n_cells = n_cells
         self.n_qs = n_qs
-        self.color_4_plot = '#0000CC'
+        # https://coolors.co/17c54e-084d71-00b2e5-ff4c4c-757575 
+        self.color_4_plot = '#00B2E5'
         # self.n_pars = n_pars
         self.tube = tube
         self.gasEOS = gasEOS

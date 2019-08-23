@@ -9,9 +9,16 @@ from distutils.extension import Extension
 from clean_stuff import cleanstuff
 import numpy
 from shutil import copyfile
+import multiprocessing
 
 
-def compile_bicycle(packages):
+def setup_ext(ext_tup):
+    ext_name, ext = ext_tup
+    setup(name=ext_name,
+            ext_modules=[ext],
+    )
+
+def compile_bicycle(packages, n_parallel=12):
     true_mod_name='all'
     incl_dir = "include"
     wd = os.path.abspath(__file__) # os.path.dirname(os.path.dirname(os.getcwd()))
@@ -46,11 +53,16 @@ def compile_bicycle(packages):
                 **packages[pn]["Extention_kwargs"])
             for pn in packages]
 
-        ext_modules = cythonize(extentions, annotate=True)
-        setup(
-            name=true_mod_name,
-            ext_modules=ext_modules,
-        )
+
+        ext_modules = cythonize(extentions, annotate=True, nthreads=n_parallel)
+        pool = multiprocessing.Pool(processes=n_parallel)
+        pool.map(setup_ext, [(true_mod_name, ext) for ext in ext_modules])
+        pool.close()
+        pool.join()
+        # setup(
+        #     name=true_mod_name,
+        #     ext_modules=ext_modules,
+        # )
 
     finally:
         for dont_del, must_del in pxds:

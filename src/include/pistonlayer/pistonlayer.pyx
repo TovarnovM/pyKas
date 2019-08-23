@@ -71,7 +71,7 @@ cdef class ElPistLayer(GasLayer):
     def __init__(self, n_cells, Tube tube, ElPistEOS epistEOS, GasFluxCalculator flux_calculator, GridStrecher grid_strecher):
         super().__init__(n_cells, tube, epistEOS, flux_calculator, grid_strecher, 3)
         self.tauxx_flux = np.zeros(n_cells+1, dtype=np.double)
-        self.color_4_plot = '#990099'
+        self.color_4_plot = '#084D71'
 
     cpdef double get_p_left(self):
         return self.ps[0] - self.tauxx_flux[0]

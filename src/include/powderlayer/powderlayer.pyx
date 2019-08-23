@@ -229,7 +229,7 @@ cdef class PowderOvLayer(GasLayer):
         super().__init__(n_cells, tube, powder, flux_calculator, grid_strecher, 4)
         self.zs = np.zeros(n_cells, dtype=np.double)
         self.t_ign = t_ign
-        self.color_4_plot = '#6b400e'
+        self.color_4_plot = '#757575'
 
     cpdef void copy_params_to_Ov(self, PowderOvLayer to_me):
         self.copy_params_to(to_me)
