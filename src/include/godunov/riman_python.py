@@ -654,6 +654,7 @@ if __name__ == "__main__":
     for i, ic in enumerate(get_init_conds_4_tsts()):
         try:
             plot_distrs(**ic)
+            break
         except Exception as e:
             print(i+1, e)
             raise e

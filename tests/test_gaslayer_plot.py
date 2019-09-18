@@ -116,7 +116,7 @@ def _plot3():
     grid_strecher = GridStrecher(strech_type=2,st2_window_part=0.05, st2_adapt_prop=0.2, D_mnj=1)
     gas_flux_calculator = GasFluxCalculator(x_order=2,alpha_1=3, alpha_2=1)
     tube = Tube([0,1], [0.1, 0.1])
-    n_cells = 300
+    n_cells = 100
     layer = GasLayer(n_cells, tube=tube, gasEOS=gas_eos, flux_calculator=gas_flux_calculator, grid_strecher=grid_strecher, n_qs=3)
     layer.xs_borders[:] = np.linspace(x1, x2, n_cells+1)
     layer.init_ropue_fromfoo(init_foo)
