@@ -558,9 +558,12 @@ def get_distrs_to_time(t, **init_cond):
 
 def plot_distrs(**init_cond):
     import matplotlib.pyplot as plt
-
+    import pickle
     def plot_one_t(t, col, lw):
         res = get_distrs_to_time(t, **init_cond)
+        if init_cond.get('save_to'):
+            with open(init_cond['save_to'], 'wb') as f: 
+                pickle.dump(res, f)
         plt.subplot(232)
         plt.plot(res['xs'], res['ros'], c=col, lw=lw, label=f't = {t}')
         plt.grid(True)
@@ -589,8 +592,11 @@ def plot_distrs(**init_cond):
         plt.legend()
         plt.ylabel(r'$e$')
         plt.xlabel(r'$x$')
+
     for t, col in zip(init_cond['ts'], plt.get_cmap('Set1').colors):
         plot_one_t(t, col, init_cond.get('lw', 2))
+        
+
     plt.subplot(231)
     plot_rays(show=False, **init_cond)
     if(init_cond.get('show', True)):
@@ -623,11 +629,12 @@ def get_init_conds_4_tsts():
             'p_0' : 0,          # параметр в ур-ии состояния        
             'gamma' : 1.4,      # параметр в ур-ии состояния          
             'c_0' : 0,          # параметр в ур-ии состояния     
-            'eps_F':1e-6,       # точность определения решения           
-            'n_iter_max':100,   # максимальное количество итераций при определении решения              
+            'eps_F':1e-9,       # точность определения решения           
+            'n_iter_max':300,   # максимальное количество итераций при определении решения              
             'x0' : 0.5,         # положение разрыва в момент t=0        
             'ts': [t],        # времена, в которых нужно построить графики распределения параметров         
-            'n': 10000          # кол-во точек, в которых ищутся параметры волны разрежения         
+            'n': 10000,         # кол-во точек, в которых ищутся параметры волны разрежения         
+            'save_to': r'C:\Users\Михаил\Google Диск\00_teaching 2019\газовая динамика курсач\пример\sod'
         } 
 
   
