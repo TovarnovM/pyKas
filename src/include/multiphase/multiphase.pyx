@@ -11,7 +11,9 @@ class MultiPhaseLayer(object):
         self.layers = layers
 
     def copy(self):
-        res = MultiPhaseLayer([lr.copy() for lr in self.layers])
+        res = MultiPhaseLayer({name:lr.copy() for name, lr in self.layers.items()})
         return res
+
+    def  
     
     
