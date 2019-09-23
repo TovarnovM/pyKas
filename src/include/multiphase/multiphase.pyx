@@ -13,7 +13,3 @@ class MultiPhaseLayer(object):
     def copy(self):
         res = MultiPhaseLayer({name:lr.copy() for name, lr in self.layers.items()})
         return res
-
-    def  
-    
-    
