@@ -42,7 +42,7 @@ cpdef inline void roue_to_q_(
     double ro,
     double u,
     double e,
-    double[:] q) nogil:
+    double[:] q) nogil:       
 
     q[0] = ro
     q[1] = ro * u
