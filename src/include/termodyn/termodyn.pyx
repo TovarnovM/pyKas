@@ -357,7 +357,7 @@ cdef class DirectBallMany(object):
             self.k += ves * self.ks[i]
             T_1 += ves * self.T_1s[i]
             f_sred += ves * self.fs[i]
-            W -= self.alpha_ks[i] * psi_i * self.omegas[i]
+            # W -= self.alpha_ks[i] * psi_i * self.omegas[i]
         
         self.R_g = f_sred / T_1
         self.T_cur = y[0]*W/(omega_sum*self.R_g)
