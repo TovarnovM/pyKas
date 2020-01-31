@@ -3309,23 +3309,18 @@ static PyObject *__pyx_pf_8termodyn_14DirectBallMany_12set_k_and_stuff(struct __
 <pre class='cython code score-0 '>    __pyx_t_18 = __pyx_v_i;
     if (__pyx_t_18 &lt; 0) __pyx_t_18 += __pyx_v_self-&gt;fs.shape[0];
     __pyx_v_f_sred = (__pyx_v_f_sred + (__pyx_v_ves * (*((double *) ( /* dim=0 */ (__pyx_v_self-&gt;fs.data + __pyx_t_18 * __pyx_v_self-&gt;fs.strides[0]) )))));
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">360</span>:             <span class="n">W</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_ks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">psi_i</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">omegas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></pre>
-<pre class='cython code score-0 '>    __pyx_t_19 = __pyx_v_i;
-    if (__pyx_t_19 &lt; 0) __pyx_t_19 += __pyx_v_self-&gt;alpha_ks.shape[0];
-    __pyx_t_20 = __pyx_v_i;
-    if (__pyx_t_20 &lt; 0) __pyx_t_20 += __pyx_v_self-&gt;omegas.shape[0];
-    __pyx_v_W = (__pyx_v_W - (((*((double *) ( /* dim=0 */ (__pyx_v_self-&gt;alpha_ks.data + __pyx_t_19 * __pyx_v_self-&gt;alpha_ks.strides[0]) ))) * __pyx_v_psi_i) * (*((double *) ( /* dim=0 */ (__pyx_v_self-&gt;omegas.data + __pyx_t_20 * __pyx_v_self-&gt;omegas.strides[0]) )))));
   }
-</pre><pre class="cython line score-0">&#xA0;<span class="">361</span>: </pre>
+</pre><pre class="cython line score-0">&#xA0;<span class="">360</span>:             <span class="c"># W -= self.alpha_ks[i] * psi_i * self.omegas[i]</span></pre>
+<pre class="cython line score-0">&#xA0;<span class="">361</span>: </pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">362</span>:         <span class="bp">self</span><span class="o">.</span><span class="n">R_g</span> <span class="o">=</span> <span class="n">f_sred</span> <span class="o">/</span> <span class="n">T_1</span></pre>
 <pre class='cython code score-0 '>  __pyx_v_self-&gt;R_g = (__pyx_v_f_sred / __pyx_v_T_1);
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">363</span>:         <span class="bp">self</span><span class="o">.</span><span class="n">T_cur</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="o">*</span><span class="n">W</span><span class="o">/</span><span class="p">(</span><span class="n">omega_sum</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">R_g</span><span class="p">)</span></pre>
-<pre class='cython code score-0 '>  __pyx_t_21 = 0;
-  if (__pyx_t_21 &lt; 0) __pyx_t_21 += __pyx_v_y.shape[0];
-  __pyx_v_self-&gt;T_cur = (((*((double *) ( /* dim=0 */ (__pyx_v_y.data + __pyx_t_21 * __pyx_v_y.strides[0]) ))) * __pyx_v_W) / (__pyx_v_omega_sum * __pyx_v_self-&gt;R_g));
+<pre class='cython code score-0 '>  __pyx_t_19 = 0;
+  if (__pyx_t_19 &lt; 0) __pyx_t_19 += __pyx_v_y.shape[0];
+  __pyx_v_self-&gt;T_cur = (((*((double *) ( /* dim=0 */ (__pyx_v_y.data + __pyx_t_19 * __pyx_v_y.strides[0]) ))) * __pyx_v_W) / (__pyx_v_omega_sum * __pyx_v_self-&gt;R_g));
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">364</span>:         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_cur</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_stenki</span><span class="p">:</span></pre>
-<pre class='cython code score-0 '>  __pyx_t_22 = ((__pyx_v_self-&gt;T_cur &lt; __pyx_v_self-&gt;T_stenki) != 0);
-  if (__pyx_t_22) {
+<pre class='cython code score-0 '>  __pyx_t_20 = ((__pyx_v_self-&gt;T_cur &lt; __pyx_v_self-&gt;T_stenki) != 0);
+  if (__pyx_t_20) {
 /* … */
   }
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">365</span>:             <span class="bp">self</span><span class="o">.</span><span class="n">T_cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_stenki</span><span class="o">+</span><span class="mf">0.01</span></pre>
