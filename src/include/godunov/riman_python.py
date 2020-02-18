@@ -530,8 +530,8 @@ def get_distrs_to_time(t, **init_cond):
         init_cond['p_1'], init_cond['ro_1'], init_cond['u_1'], \
         init_cond['p_2'], init_cond['ro_2'], init_cond['u_2'], init_cond['p_0'], init_cond['gamma']
     width = t*D_2 - t*D_1
-    x1 = t*D_1 - 0.15*width
-    x2 = t*D_2 + 0.15*width
+    x1 = -0.5#t*D_1 - 0.15*width
+    x2 = 0.5#t*D_2 + 0.15*width
     xs = np.linspace(x1,x2,n)
     ros, ps, us, es, ms = [],[],[],[],[]
     for x in xs:
@@ -562,6 +562,23 @@ def plot_distrs(**init_cond):
     def plot_one_t(t, col, lw):
         res = get_distrs_to_time(t, **init_cond)
         if init_cond.get('save_to'):
+            # for key in res.keys():
+            #     with open(f'{key}.txt', 'w') as f:
+            #         for v in res[key]:
+            #             f.write(str(v))
+            #             f.write('\n')
+            # with open(init_cond['save_to'], 'w') as f: 
+            #     for key in res.keys():
+            #         f.write(key)
+            #         f.write('; ')
+            #     f.write('\n')
+            #     n = len(res['xs'])
+            #     for i in range(n):
+            #         for key in res.keys():
+            #             f.write(f'{res[key][i]}')
+            #             f.write('; ')
+            #         f.write('\n')
+
             with open(init_cond['save_to'], 'wb') as f: 
                 pickle.dump(res, f)
         plt.subplot(232)
@@ -607,7 +624,7 @@ def get_init_conds_4_tsts():
     #           LEFT          RIGHT              
     #      ro       u       p       ro      u       p       t
     v = [
-         ( 1,       0,      1,      0.125,  0,      0.1,    0.15  ),
+         ( 1,       0,      1,      0.125,  0,      0.1,    0.2 ),
          ( 0.445,   0.698,  3.528,  0.5,    0,      0.571,  0.15  ),       
          ( 1,       0,      1,      0.02,   3.55,   1,      0.15  ),
          ( 3.857,   0.920,  10.333, 1,      3.55,   1,      0.09  ),
@@ -629,12 +646,12 @@ def get_init_conds_4_tsts():
             'p_0' : 0,          # параметр в ур-ии состояния        
             'gamma' : 1.4,      # параметр в ур-ии состояния          
             'c_0' : 0,          # параметр в ур-ии состояния     
-            'eps_F':1e-9,       # точность определения решения           
+            'eps_F':1e-12,       # точность определения решения           
             'n_iter_max':300,   # максимальное количество итераций при определении решения              
             'x0' : 0.5,         # положение разрыва в момент t=0        
             'ts': [t],        # времена, в которых нужно построить графики распределения параметров         
             'n': 10000,         # кол-во точек, в которых ищутся параметры волны разрежения         
-            'save_to': r'C:\Users\Михаил\Google Диск\00_teaching 2019\газовая динамика курсач\пример\sod'
+            'save_to': r'sod.txt'
         } 
 
   
