@@ -3,9 +3,9 @@ import glob
 import os
 import sys
 import shutil
-from distutils.core import setup
+from setuptools import setup
 from Cython.Build import cythonize
-from distutils.extension import Extension
+from setuptools.extension import Extension
 from clean_stuff import cleanstuff
 import numpy
 from shutil import copyfile
