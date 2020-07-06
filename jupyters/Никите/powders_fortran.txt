@@ -1,0 +1,1605 @@
+case (1) ! ÑÔ 033
+   f_powder = 1.047000e+06
+   gamma = 1.236
+   covolume = 1.039000e-03
+   T_1 = 3000.0
+   powder_density = 1600.0
+   I_k = 1.700000e+05
+   z_max = 1.331
+   kappa_1 = 0.309
+   lambda_1 = 1.7
+   kappa_2  = 0.743
+   lambda_2 = -0.996
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (2) ! ÂÓ ôë
+   f_powder = 1.005000e+06
+   gamma = 1.234
+   covolume = 1.030000e-03
+   T_1 = 2873.0
+   powder_density = 1600.0
+   I_k = 1.500000e+05
+   z_max = 1.113
+   kappa_1 = 1.795
+   lambda_1 = -0.417
+   kappa_2  = 0.9
+   lambda_2 = -2.487
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (3) ! ÂÒ
+   f_powder = 9.960000e+05
+   gamma = 1.2349999999999999
+   covolume = 1.034000e-03
+   T_1 = 2820.0
+   powder_density = 1600.0
+   I_k = 2.200000e+05
+   z_max = 1.112
+   kappa_1 = 1.799
+   lambda_1 = -0.448
+   kappa_2  = 0.9
+   lambda_2 = -2.455
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (4) ! ÂÒÌ
+   f_powder = 1.011000e+06
+   gamma = 1.236
+   covolume = 1.017000e-03
+   T_1 = 2930.0
+   powder_density = 1600.0
+   I_k = 2.300000e+05
+   z_max = 1.0
+   kappa_1 = 1.094
+   lambda_1 = -0.086
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (5) ! ÂÒÕ-10
+   f_powder = 8.820000e+05
+   gamma = 1.256
+   covolume = 1.027000e-03
+   T_1 = 2440.0
+   powder_density = 1600.0
+   I_k = 2.700000e+05
+   z_max = 1.0
+   kappa_1 = 1.086
+   lambda_1 = -0.08
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0007
+   k_I = 0.0022
+
+case (6) ! ÂÒÕ-20
+   f_powder = 7.110000e+05
+   gamma = 1.286
+   covolume = 9.710000e-04
+   T_1 = 1875.0
+   powder_density = 1600.0
+   I_k = 3.900000e+05
+   z_max = 1.0
+   kappa_1 = 1.086
+   lambda_1 = -0.08
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (7) ! ÂÒÄ-25
+   f_powder = 6.250000e+05
+   gamma = 1.31
+   covolume = 9.410000e-04
+   T_1 = 1625.0
+   powder_density = 1600.0
+   I_k = 4.500000e+05
+   z_max = 1.0
+   kappa_1 = 1.086
+   lambda_1 = -0.08
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (8) ! 4\1
+   f_powder = 1.014000e+06
+   gamma = 1.221
+   covolume = 1.001000e-03
+   T_1 = 2970.0
+   powder_density = 1600.0
+   I_k = 3.000000e+05
+   z_max = 1.0
+   kappa_1 = 1.07
+   lambda_1 = -0.066
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (9) ! 4\1 ôë
+   f_powder = 1.006000e+06
+   gamma = 1.233
+   covolume = 1.026000e-03
+   T_1 = 2874.0
+   powder_density = 1600.0
+   I_k = 4.000000e+05
+   z_max = 1.069
+   kappa_1 = 0.752
+   lambda_1 = 0.239
+   kappa_2  = 0.961
+   lambda_2 = 0.374
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (10) ! 4\7
+   f_powder = 1.027000e+06
+   gamma = 1.228
+   covolume = 1.008000e-03
+   T_1 = 3006.0
+   powder_density = 1600.0
+   I_k = 3.200000e+05
+   z_max = 1.488
+   kappa_1 = 0.811
+   lambda_1 = 0.081
+   kappa_2  = 0.505
+   lambda_2 = -1.024
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (11) ! 4\7 ñâ
+   f_powder = 1.018000e+06
+   gamma = 1.229
+   covolume = 1.014000e-03
+   T_1 = 2956.0
+   powder_density = 1600.0
+   I_k = 3.300000e+05
+   z_max = 1.488
+   kappa_1 = 0.811
+   lambda_1 = 0.081
+   kappa_2  = 0.505
+   lambda_2 = -1.024
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (12) ! 4\7 ôë ÂÁÏ
+   f_powder = 9.150000e+05
+   gamma = 1.254
+   covolume = 1.059000e-03
+   T_1 = 2410.0
+   powder_density = 1600.0
+   I_k = 3.800000e+05
+   z_max = 1.556
+   kappa_1 = 0.478
+   lambda_1 = 0.711
+   kappa_2  = 0.65
+   lambda_2 = -0.893
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (13) ! 4\7 ÏÒ-3 ôë
+   f_powder = 9.880000e+05
+   gamma = 1.237
+   covolume = 1.038000e-03
+   T_1 = 2790.0
+   powder_density = 1600.0
+   I_k = 2.800000e+05
+   z_max = 1.671
+   kappa_1 = 0.163
+   lambda_1 = 3.84
+   kappa_2  = 0.6
+   lambda_2 = -0.706
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (14) ! 4\7 Ö ãð
+   f_powder = 9.880000e+05
+   gamma = 1.24
+   covolume = 1.053000e-03
+   T_1 = 2736.0
+   powder_density = 1600.0
+   I_k = 3.000000e+05
+   z_max = 1.602
+   kappa_1 = 0.653
+   lambda_1 = 0.247
+   kappa_2  = 0.65
+   lambda_2 = -0.791
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (15) ! 5\1
+   f_powder = 1.009000e+06
+   gamma = 1.223
+   covolume = 1.005000e-03
+   T_1 = 2930.0
+   powder_density = 1600.0
+   I_k = 2.500000e+05
+   z_max = 1.0
+   kappa_1 = 1.062
+   lambda_1 = -0.058
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (16) ! 5\1 õ-10
+   f_powder = 8.820000e+05
+   gamma = 1.2570000000000001
+   covolume = 1.026000e-03
+   T_1 = 2440.0
+   powder_density = 1600.0
+   I_k = 5.000000e+05
+   z_max = 1.0
+   kappa_1 = 1.045
+   lambda_1 = -0.043
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0007
+   k_I = 0.0022
+
+case (17) ! 5\1 õ-20
+   f_powder = 7.130000e+05
+   gamma = 1.286
+   covolume = 9.620000e-04
+   T_1 = 1890.0
+   powder_density = 1600.0
+   I_k = 7.000000e+05
+   z_max = 1.0
+   kappa_1 = 1.045
+   lambda_1 = -0.043
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0007
+   k_I = 0.0022
+
+case (18) ! 5\1 ä-20
+   f_powder = 7.260000e+05
+   gamma = 1.293
+   covolume = 1.007000e-03
+   T_1 = 1920.0
+   powder_density = 1600.0
+   I_k = 6.800000e+05
+   z_max = 1.0
+   kappa_1 = 1.045
+   lambda_1 = -0.043
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0007
+   k_I = 0.0022
+
+case (19) ! 5\1 ä-25
+   f_powder = 6.270000e+05
+   gamma = 1.31
+   covolume = 9.420000e-04
+   T_1 = 1625.0
+   powder_density = 1600.0
+   I_k = 8.200000e+05
+   z_max = 1.0
+   kappa_1 = 1.045
+   lambda_1 = -0.043
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0007
+   k_I = 0.0022
+
+case (20) ! 5\7 ñâ
+   f_powder = 1.014000e+06
+   gamma = 1.229
+   covolume = 1.015000e-03
+   T_1 = 2930.0
+   powder_density = 1600.0
+   I_k = 3.500000e+05
+   z_max = 1.509
+   kappa_1 = 0.805
+   lambda_1 = 0.0802
+   kappa_2  = 0.505
+   lambda_2 = -0.982
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (21) ! 5\7 í\à
+   f_powder = 9.680000e+05
+   gamma = 1.236
+   covolume = 1.034000e-03
+   T_1 = 2733.0
+   powder_density = 1600.0
+   I_k = 3.200000e+05
+   z_max = 1.502
+   kappa_1 = 0.773
+   lambda_1 = 0.121
+   kappa_2  = 0.522
+   lambda_2 = -0.977
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (22) ! 5\7 â\à
+   f_powder = 1.022000e+06
+   gamma = 1.229
+   covolume = 1.012000e-03
+   T_1 = 2970.0
+   powder_density = 1600.0
+   I_k = 3.700000e+05
+   z_max = 1.49
+   kappa_1 = 0.779
+   lambda_1 = 0.12
+   kappa_2  = 0.523
+   lambda_2 = -1.02
+   k_f = 0.00025
+   k_I = 0.0016
+
+case (23) ! 5\7 Ö ôë
+   f_powder = 9.240000e+05
+   gamma = 1.254
+   covolume = 1.098000e-03
+   T_1 = 2425.0
+   powder_density = 1600.0
+   I_k = 3.500000e+05
+   z_max = 1.564
+   kappa_1 = 0.618
+   lambda_1 = 0.343
+   kappa_2  = 0.6
+   lambda_2 = -0.882
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (24) ! 6\7 ãð
+   f_powder = 1.015000e+06
+   gamma = 1.231
+   covolume = 1.020000e-03
+   T_1 = 2923.0
+   powder_density = 1600.0
+   I_k = 5.000000e+05
+   z_max = 1.498
+   kappa_1 = 0.794
+   lambda_1 = 0.098
+   kappa_2  = 0.513
+   lambda_2 = -1.004
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (25) ! 6\7 ÁÏ ãð
+   f_powder = 9.600000e+05
+   gamma = 1.245
+   covolume = 1.069000e-03
+   T_1 = 2620.0
+   powder_density = 1600.0
+   I_k = 5.600000e+05
+   z_max = 1.461
+   kappa_1 = 0.759
+   lambda_1 = 0.156
+   kappa_2  = 0.539
+   lambda_2 = -1.084
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (26) ! 6\7 ôë Â ÁÏ
+   f_powder = 9.800000e+05
+   gamma = 1.241
+   covolume = 1.056000e-03
+   T_1 = 2704.0
+   powder_density = 1600.0
+   I_k = 4.300000e+05
+   z_max = 1.546
+   kappa_1 = 0.677
+   lambda_1 = 0.233
+   kappa_2  = 0.6
+   lambda_2 = -0.909
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (27) ! 6\7 Ï-5 ÁÏ ôë
+   f_powder = 9.880000e+05
+   gamma = 1.236
+   covolume = 1.038000e-03
+   T_1 = 2800.0
+   powder_density = 1600.0
+   I_k = 4.800000e+05
+   z_max = 1.622
+   kappa_1 = 0.138
+   lambda_1 = 4.696
+   kappa_2  = 0.65
+   lambda_2 = -0.757
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (28) ! 6\7 ôë 
+   f_powder = 1.014000e+06
+   gamma = 1.232
+   covolume = 1.025000e-03
+   T_1 = 2910.0
+   powder_density = 1600.0
+   I_k = 4.300000e+05
+   z_max = 1.546
+   kappa_1 = 0.618
+   lambda_1 = 0.343
+   kappa_2  = 0.6
+   lambda_2 = -0.882
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (29) ! 7\1
+   f_powder = 1.009000e+06
+   gamma = 1.223
+   covolume = 1.010000e-03
+   T_1 = 2930.0
+   powder_density = 1600.0
+   I_k = 5.000000e+05
+   z_max = 1.0
+   kappa_1 = 1.059
+   lambda_1 = -0.056
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (30) ! 7\1 ôë ÁÏ
+   f_powder = 9.680000e+05
+   gamma = 1.238
+   covolume = 1.041000e-03
+   T_1 = 2715.0
+   powder_density = 1600.0
+   I_k = 5.100000e+05
+   z_max = 1.055
+   kappa_1 = 0.811
+   lambda_1 = 0.165
+   kappa_2  = 1.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (31) ! 7\7
+   f_powder = 1.006000e+06
+   gamma = 1.224
+   covolume = 1.010000e-03
+   T_1 = 2900.0
+   powder_density = 1600.0
+   I_k = 5.000000e+05
+   z_max = 1.607
+   kappa_1 = 0.769
+   lambda_1 = 0.101
+   kappa_2  = 0.506
+   lambda_2 = -0.823
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (32) ! 7\14
+   f_powder = 1.021000e+06
+   gamma = 1.229
+   covolume = 1.013000e-03
+   T_1 = 2962.0
+   powder_density = 1600.0
+   I_k = 4.000000e+05
+   z_max = 1.46
+   kappa_1 = 0.581
+   lambda_1 = 0.289
+   kappa_2  = 0.091
+   lambda_2 = 1.087
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (33) ! 7\1 ÓÃ
+   f_powder = 4.010000e+05
+   gamma = 1.193
+   covolume = 5.430000e-04
+   T_1 = 1775.0
+   powder_density = 1600.0
+   I_k = 9.000000e+05
+   z_max = 1.0
+   kappa_1 = 1.107
+   lambda_1 = -0.097
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0007
+   k_I = 0.003
+
+case (34) ! 8\1 òð
+   f_powder = 9.980000e+05
+   gamma = 1.227
+   covolume = 1.017000e-03
+   T_1 = 2850.0
+   powder_density = 1600.0
+   I_k = 7.000000e+05
+   z_max = 1.0
+   kappa_1 = 1.002
+   lambda_1 = -0.002
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (35) ! 8\7
+   f_powder = 9.980000e+05
+   gamma = 1.227
+   covolume = 1.015000e-03
+   T_1 = 2855.0
+   powder_density = 1600.0
+   I_k = 5.000000e+05
+   z_max = 1.504
+   kappa_1 = 0.783
+   lambda_1 = 0.17
+   kappa_2  = 0.542
+   lambda_2 = -0.993
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (36) ! 8\1 ÓÃ
+   f_powder = 3.910000e+05
+   gamma = 1.198
+   covolume = 5.340000e-04
+   T_1 = 1685.0
+   powder_density = 1600.0
+   I_k = 1.000000e+06
+   z_max = 1.0
+   kappa_1 = 1.079
+   lambda_1 = -0.073
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0007
+   k_I = 0.003
+
+case (37) ! 9\7
+   f_powder = 9.980000e+05
+   gamma = 1.227
+   covolume = 1.015000e-03
+   T_1 = 2855.0
+   powder_density = 1600.0
+   I_k = 6.000000e+05
+   z_max = 1.526
+   kappa_1 = 0.724
+   lambda_1 = 0.183
+   kappa_2  = 0.545
+   lambda_2 = -0.951
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (38) ! 9\7 ÌÍ
+   f_powder = 9.630000e+05
+   gamma = 1.237
+   covolume = 1.045000e-03
+   T_1 = 2690.0
+   powder_density = 1600.0
+   I_k = 7.600000e+05
+   z_max = 1.523
+   kappa_1 = 0.725
+   lambda_1 = 0.182
+   kappa_2  = 0.545
+   lambda_2 = -0.956
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (39) ! 9\7 ÁÏ
+   f_powder = 9.110000e+05
+   gamma = 1.2530000000000001
+   covolume = 1.090000e-03
+   T_1 = 2410.0
+   powder_density = 1600.0
+   I_k = 9.400000e+05
+   z_max = 1.49
+   kappa_1 = 0.75
+   lambda_1 = 0.156
+   kappa_2  = 0.537
+   lambda_2 = -1.009
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (40) ! 11\1 ÁÏ
+   f_powder = 9.160000e+05
+   gamma = 1.251
+   covolume = 1.086000e-03
+   T_1 = 2440.0
+   powder_density = 1600.0
+   I_k = 1.090000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (41) ! 11\7
+   f_powder = 9.980000e+05
+   gamma = 1.227
+   covolume = 1.015000e-03
+   T_1 = 2855.0
+   powder_density = 1600.0
+   I_k = 6.800000e+05
+   z_max = 1.536
+   kappa_1 = 0.715
+   lambda_1 = 0.194
+   kappa_2  = 0.549
+   lambda_2 = -0.933
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (42) ! 11\1 ÓÃ
+   f_powder = 3.990000e+05
+   gamma = 1.193
+   covolume = 5.400000e-04
+   T_1 = 1765.0
+   powder_density = 1600.0
+   I_k = 1.430000e+06
+   z_max = 1.0
+   kappa_1 = 1.1
+   lambda_1 = -0.091
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0007
+   k_I = 0.003
+
+case (43) ! 12\1 Òð
+   f_powder = 9.980000e+05
+   gamma = 1.227
+   covolume = 1.016600e-03
+   T_1 = 2850.0
+   powder_density = 1600.0
+   I_k = 8.700000e+05
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (44) ! 12\1 òð ÁÏ
+   f_powder = 9.160000e+05
+   gamma = 1.251
+   covolume = 1.086000e-03
+   T_1 = 2440.0
+   powder_density = 1600.0
+   I_k = 1.090000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (45) ! 12\1 òð ÌÍ
+   f_powder = 9.640000e+05
+   gamma = 1.237
+   covolume = 1.045000e-03
+   T_1 = 2645.0
+   powder_density = 1600.0
+   I_k = 8.800000e+05
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (46) ! 12\7
+   f_powder = 1.004000e+06
+   gamma = 1.226
+   covolume = 1.013000e-03
+   T_1 = 2890.0
+   powder_density = 1600.0
+   I_k = 8.100000e+05
+   z_max = 1.522
+   kappa_1 = 0.725
+   lambda_1 = 0.183
+   kappa_2  = 0.546
+   lambda_2 = -0.957
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (47) ! 12\7 Â\À
+   f_powder = 1.016000e+06
+   gamma = 1.222
+   covolume = 1.007000e-03
+   T_1 = 2970.0
+   powder_density = 1600.0
+   I_k = 7.200000e+05
+   z_max = 1.531
+   kappa_1 = 0.724
+   lambda_1 = 0.18
+   kappa_2  = 0.543
+   lambda_2 = -0.932
+   k_f = 0.00025
+   k_I = 0.0016
+
+case (48) ! 12\1 ÓÃ
+   f_powder = 3.990000e+05
+   gamma = 1.193
+   covolume = 5.400000e-04
+   T_1 = 1765.0
+   powder_density = 1600.0
+   I_k = 1.500000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0007
+   k_I = 0.003
+
+case (49) ! 14\1 òð Â\À
+   f_powder = 1.019000e+06
+   gamma = 1.224
+   covolume = 1.008000e-03
+   T_1 = 2935.0
+   powder_density = 1600.0
+   I_k = 8.400000e+05
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00025
+   k_I = 0.0016
+
+case (50) ! 14\7
+   f_powder = 1.000000e+06
+   gamma = 1.227
+   covolume = 1.015000e-03
+   T_1 = 2865.0
+   powder_density = 1600.0
+   I_k = 9.600000e+05
+   z_max = 1.535
+   kappa_1 = 0.728
+   lambda_1 = 0.174
+   kappa_2  = 0.541
+   lambda_2 = -0.934
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (51) ! 14\7 Â\À
+   f_powder = 1.013000e+06
+   gamma = 1.224
+   covolume = 1.010000e-03
+   T_1 = 2935.0
+   powder_density = 1600.0
+   I_k = 8.300000e+05
+   z_max = 1.553
+   kappa_1 = 0.725
+   lambda_1 = 0.173
+   kappa_2  = 0.539
+   lambda_2 = -0.903
+   k_f = 0.00025
+   k_I = 0.0016
+
+case (52) ! 14\7 ÁÏ
+   f_powder = 9.040000e+05
+   gamma = 1.255
+   covolume = 1.098000e-03
+   T_1 = 2375.0
+   powder_density = 1600.0
+   I_k = 1.380000e+06
+   z_max = 1.525
+   kappa_1 = 0.731
+   lambda_1 = 0.174
+   kappa_2  = 0.542
+   lambda_2 = -0.953
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (53) ! 15\1 òð Â\À
+   f_powder = 1.019000e+06
+   gamma = 1.222
+   covolume = 1.005000e-03
+   T_1 = 2970.0
+   powder_density = 1600.0
+   I_k = 9.100000e+05
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00025
+   k_I = 0.0016
+
+case (54) ! 15\7
+   f_powder = 1.010000e+06
+   gamma = 1.225
+   covolume = 1.010000e-03
+   T_1 = 2915.0
+   powder_density = 1600.0
+   I_k = 9.300000e+05
+   z_max = 1.541
+   kappa_1 = 0.73
+   lambda_1 = 0.17
+   kappa_2  = 0.539
+   lambda_2 = -0.924
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (55) ! 16\1 òð
+   f_powder = 1.004000e+06
+   gamma = 1.225
+   covolume = 1.012000e-03
+   T_1 = 2895.0
+   powder_density = 1600.0
+   I_k = 1.130000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (56) ! 16\1 òð Â\À
+   f_powder = 1.015000e+06
+   gamma = 1.224
+   covolume = 1.009000e-03
+   T_1 = 2940.0
+   powder_density = 1600.0
+   I_k = 1.040000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00025
+   k_I = 0.0016
+
+case (57) ! 17\7
+   f_powder = 1.000000e+06
+   gamma = 1.227
+   covolume = 1.016000e-03
+   T_1 = 2870.0
+   powder_density = 1600.0
+   I_k = 1.160000e+06
+   z_max = 1.533
+   kappa_1 = 0.753
+   lambda_1 = 0.141
+   kappa_2  = 0.529
+   lambda_2 = -0.937
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (58) ! 18\1 òð
+   f_powder = 1.008000e+06
+   gamma = 1.223
+   covolume = 1.006000e-03
+   T_1 = 2935.0
+   powder_density = 1600.0
+   I_k = 1.100000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (59) ! 18\1 òð ÁÏ
+   f_powder = 9.110000e+05
+   gamma = 1.2530000000000001
+   covolume = 1.091000e-03
+   T_1 = 2410.0
+   powder_density = 1600.0
+   I_k = 1.530000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (60) ! 22\1 òð
+   f_powder = 9.980000e+05
+   gamma = 1.227
+   covolume = 1.018000e-03
+   T_1 = 2850.0
+   powder_density = 1600.0
+   I_k = 1.330000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (61) ! 22\7
+   f_powder = 9.830000e+05
+   gamma = 1.232
+   covolume = 1.029000e-03
+   T_1 = 2755.0
+   powder_density = 1600.0
+   I_k = 1.530000e+06
+   z_max = 1.501
+   kappa_1 = 0.749
+   lambda_1 = 0.155
+   kappa_2  = 0.537
+   lambda_2 = -0.997
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (62) ! 23\7
+   f_powder = 9.860000e+05
+   gamma = 1.237
+   covolume = 1.040000e-03
+   T_1 = 2780.0
+   powder_density = 1600.0
+   I_k = 1.670000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (63) ! 28\1 òð
+   f_powder = 9.960000e+05
+   gamma = 1.227
+   covolume = 1.015000e-03
+   T_1 = 2850.0
+   powder_density = 1600.0
+   I_k = 1.320000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (64) ! 37\1 òð
+   f_powder = 9.940000e+05
+   gamma = 1.228
+   covolume = 1.019000e-03
+   T_1 = 2825.0
+   powder_density = 1600.0
+   I_k = 2.480000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (65) ! ÍÄÒ-3 16\1
+   f_powder = 9.610000e+05
+   gamma = 1.255
+   covolume = 1.131000e-03
+   T_1 = 2525.0
+   powder_density = 1540.0
+   I_k = 1.290000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0004
+   k_I = 0.0022
+
+case (66) ! ÍÄÒ-3 18\1
+   f_powder = 9.610000e+05
+   gamma = 1.255
+   covolume = 1.131000e-03
+   T_1 = 2525.0
+   powder_density = 1540.0
+   I_k = 1.460000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0004
+   k_I = 0.0022
+
+case (67) ! ÍÄÒ-3 19\1
+   f_powder = 9.610000e+05
+   gamma = 1.255
+   covolume = 1.131000e-03
+   T_1 = 2525.0
+   powder_density = 1540.0
+   I_k = 1.540000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0004
+   k_I = 0.0022
+
+case (68) ! ÍÄÒ-3 23\1
+   f_powder = 9.610000e+05
+   gamma = 1.255
+   covolume = 1.131000e-03
+   T_1 = 2525.0
+   powder_density = 1540.0
+   I_k = 1.860000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0004
+   k_I = 0.0022
+
+case (69) ! ÍÄÒ-3 32\1
+   f_powder = 9.610000e+05
+   gamma = 1.255
+   covolume = 1.131000e-03
+   T_1 = 2525.0
+   powder_density = 1540.0
+   I_k = 2.590000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0004
+   k_I = 0.0022
+
+case (70) ! ÍÄÒ-3 152\57
+   f_powder = 9.610000e+05
+   gamma = 1.255
+   covolume = 1.131000e-03
+   T_1 = 2525.0
+   powder_density = 1540.0
+   I_k = 2.440000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0004
+   k_I = 0.0022
+
+case (71) ! ÄÃ-2 15\1
+   f_powder = 9.330000e+05
+   gamma = 1.255
+   covolume = 1.133000e-03
+   T_1 = 2370.0
+   powder_density = 1520.0
+   I_k = 1.340000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00044
+   k_I = 0.0022
+
+case (72) ! ÄÃ-2 17\1
+   f_powder = 9.330000e+05
+   gamma = 1.255
+   covolume = 1.133000e-03
+   T_1 = 2370.0
+   powder_density = 1520.0
+   I_k = 1.520000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00044
+   k_I = 0.0022
+
+case (73) ! ÄÃ-3 13\1
+   f_powder = 9.680000e+05
+   gamma = 1.25
+   covolume = 1.113000e-03
+   T_1 = 2505.0
+   powder_density = 1520.0
+   I_k = 1.075000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0004
+   k_I = 0.0022
+
+case (74) ! ÄÃ-3 14\1
+   f_powder = 9.680000e+05
+   gamma = 1.25
+   covolume = 1.113000e-03
+   T_1 = 2505.0
+   powder_density = 1520.0
+   I_k = 1.150000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0004
+   k_I = 0.0022
+
+case (75) ! ÄÃ-3 17\1
+   f_powder = 9.680000e+05
+   gamma = 1.25
+   covolume = 1.113000e-03
+   T_1 = 2505.0
+   powder_density = 1520.0
+   I_k = 1.390000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0004
+   k_I = 0.0022
+
+case (76) ! ÄÃ-3 18\1
+   f_powder = 9.680000e+05
+   gamma = 1.25
+   covolume = 1.113000e-03
+   T_1 = 2505.0
+   powder_density = 1520.0
+   I_k = 1.480000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0004
+   k_I = 0.0022
+
+case (77) ! ÄÃ-3 20\1
+   f_powder = 9.680000e+05
+   gamma = 1.25
+   covolume = 1.113000e-03
+   T_1 = 2505.0
+   powder_density = 1520.0
+   I_k = 1.640000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0004
+   k_I = 0.0022
+
+case (78) ! ÄÃ-3 23\1
+   f_powder = 9.680000e+05
+   gamma = 1.25
+   covolume = 1.113000e-03
+   T_1 = 2505.0
+   powder_density = 1520.0
+   I_k = 1.890000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0004
+   k_I = 0.0022
+
+case (79) ! ÄÃ-4 13\1
+   f_powder = 1.004000e+06
+   gamma = 1.2429999999999999
+   covolume = 1.085000e-03
+   T_1 = 2655.0
+   powder_density = 1520.0
+   I_k = 9.000000e+05
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00036
+   k_I = 0.0022
+
+case (80) ! 100\56
+   f_powder = 9.840000e+05
+   gamma = 1.232
+   covolume = 1.031000e-03
+   T_1 = 2760.0
+   powder_density = 1600.0
+   I_k = 1.521000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (81) ! 100\70
+   f_powder = 9.900000e+05
+   gamma = 1.231
+   covolume = 1.027000e-03
+   T_1 = 2795.0
+   powder_density = 1600.0
+   I_k = 1.160000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (82) ! 130\50
+   f_powder = 9.830000e+05
+   gamma = 1.233
+   covolume = 1.034000e-03
+   T_1 = 2750.0
+   powder_density = 1600.0
+   I_k = 1.840000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (83) ! 130\58 ÁÏ
+   f_powder = 8.930000e+05
+   gamma = 1.259
+   covolume = 1.110000e-03
+   T_1 = 2320.0
+   powder_density = 1600.0
+   I_k = 2.330000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (84) ! 152\57
+   f_powder = 9.900000e+05
+   gamma = 1.232
+   covolume = 1.030000e-03
+   T_1 = 2785.0
+   powder_density = 1600.0
+   I_k = 2.470000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (85) ! 152\57 Ø
+   f_powder = 9.900000e+05
+   gamma = 1.232
+   covolume = 1.030000e-03
+   T_1 = 2785.0
+   powder_density = 1600.0
+   I_k = 1.830000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (86) ! 152\57 ÁÏ
+   f_powder = 8.890000e+05
+   gamma = 1.26
+   covolume = 1.114000e-03
+   T_1 = 2295.0
+   powder_density = 1600.0
+   I_k = 1.820000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (87) ! 180\57
+   f_powder = 9.700000e+05
+   gamma = 1.237
+   covolume = 1.043000e-03
+   T_1 = 2670.0
+   powder_density = 1600.0
+   I_k = 1.730000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (88) ! 180\57 ÁÏ
+   f_powder = 8.750000e+05
+   gamma = 1.263
+   covolume = 1.119000e-03
+   T_1 = 2240.0
+   powder_density = 1600.0
+   I_k = 2.500000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (89) ! 180\57 Ø3 ÁÏ
+   f_powder = 9.400000e+05
+   gamma = 1.203
+   covolume = 9.070000e-04
+   T_1 = 2660.0
+   powder_density = 1600.0
+   I_k = 1.400000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (90) ! 180\60
+   f_powder = 9.810000e+05
+   gamma = 1.238
+   covolume = 1.040000e-03
+   T_1 = 2730.0
+   powder_density = 1600.0
+   I_k = 2.700000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0016
+
+case (91) ! ÍÄÒ-2 16\1
+   f_powder = 9.220000e+05
+   gamma = 1.262
+   covolume = 1.156000e-03
+   T_1 = 2370.0
+   powder_density = 1540.0
+   I_k = 1.420000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00044
+   k_I = 0.0022
+
+case (92) ! ÍÄÒ-2 19\1
+   f_powder = 9.220000e+05
+   gamma = 1.262
+   covolume = 1.156000e-03
+   T_1 = 2370.0
+   powder_density = 1540.0
+   I_k = 1.690000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00044
+   k_I = 0.0022
+
+case (93) ! ÍÄÒ-2 25\1
+   f_powder = 9.220000e+05
+   gamma = 1.262
+   covolume = 1.156000e-03
+   T_1 = 2370.0
+   powder_density = 1540.0
+   I_k = 2.200000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00044
+   k_I = 0.0022
+
+case (94) ! ÍÄÒ-2 130\50
+   f_powder = 9.220000e+05
+   gamma = 1.262
+   covolume = 1.156000e-03
+   T_1 = 2370.0
+   powder_density = 1540.0
+   I_k = 1.900000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00044
+   k_I = 0.0022
+
+case (95) ! ÍÄÒ-2 152\57
+   f_powder = 9.220000e+05
+   gamma = 1.262
+   covolume = 1.156000e-03
+   T_1 = 2370.0
+   powder_density = 1540.0
+   I_k = 1.900000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00044
+   k_I = 0.0022
+
+case (96) ! ÄÃ-4 14\1
+   f_powder = 1.004000e+06
+   gamma = 1.2429999999999999
+   covolume = 1.085000e-03
+   T_1 = 2655.0
+   powder_density = 1520.0
+   I_k = 1.050000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00036
+   k_I = 0.0022
+
+case (97) ! ÄÃ-4 15\1
+   f_powder = 1.004000e+06
+   gamma = 1.2429999999999999
+   covolume = 1.085000e-03
+   T_1 = 2650.0
+   powder_density = 1520.0
+   I_k = 1.120000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.00036
+   k_I = 0.0022
+
+case (98) !  ÀÏÖ-235 Ï 16\1
+   f_powder = 1.101000e+06
+   gamma = 1.25
+   covolume = 1.020000e-03
+   T_1 = 3060.0
+   powder_density = 1630.0
+   I_k = 1.140000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (99) ! ÁÍÃ-1355 25\1
+   f_powder = 1.125000e+06
+   gamma = 1.223
+   covolume = 9.950000e-04
+   T_1 = 3328.0
+   powder_density = 1630.0
+   I_k = 1.260000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (100) ! ÌÀÏ-1 23\1
+   f_powder = 1.259000e+06
+   gamma = 1.2570000000000001
+   covolume = 1.120000e-03
+   T_1 = 3300.0
+   powder_density = 1650.0
+   I_k = 1.180000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0003
+   k_I = 0.0022
+
+case (101) ! ÓÃ-1
+   f_powder = 3.910000e+05
+   gamma = 1.197
+   covolume = 5.340000e-04
+   T_1 = 1690.0
+   powder_density = 1600.0
+   I_k = 1.350000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0007
+   k_I = 0.003
+
+case (102) ! ÓÃ-2
+   f_powder = 3.910000e+05
+   gamma = 1.197
+   covolume = 5.340000e-04
+   T_1 = 1695.0
+   powder_density = 1600.0
+   I_k = 2.710000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0007
+   k_I = 0.003
+
+case (103) ! ÓÃÔ-1
+   f_powder = 4.010000e+05
+   gamma = 1.191
+   covolume = 5.400000e-04
+   T_1 = 1795.0
+   powder_density = 1600.0
+   I_k = 1.340000e+06
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0007
+   k_I = 0.003
+
+case (104) ! ÄÐÏ
+   f_powder = 2.600000e+05
+   gamma = 1.22
+   covolume = 6.000000e-04
+   T_1 = 2427.0
+   powder_density = 1700.0
+   I_k = 1.000000e+05
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.001
+   k_I = 0.003
+
+case (105) ! ÊÇÄÏ
+   f_powder = 2.600000e+05
+   gamma = 1.22
+   covolume = 6.000000e-04
+   T_1 = 2427.0
+   powder_density = 1700.0
+   I_k = 1.000000e+05
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.002
+   k_I = 0.003
+
+case (106) ! Ñâèíöîâàÿ ïðîâîëêà
+   f_powder = 0.000000e+00
+   gamma = 1.0
+   covolume = 0.000000e+00
+   T_1 = 0.0
+   powder_density = 11350.0
+   I_k = 1.000000e+05
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0
+   k_I = 0.0
+
+case (107) ! K2SO4
+   f_powder = 0.000000e+00
+   gamma = 1.0
+   covolume = 0.000000e+00
+   T_1 = 0.0
+   powder_density = 2300.0
+   I_k = 1.000000e+05
+   z_max = 1.0
+   kappa_1 = 1.0
+   lambda_1 = 0.0
+   kappa_2  = 0.0
+   lambda_2 = 0.0
+   k_f = 0.0
+   k_I = 0.0
+
