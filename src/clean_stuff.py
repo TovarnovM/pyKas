@@ -6,12 +6,12 @@ import pathlib
 import itertools as it
 
 def multiple_file_types(*patterns):
-    return it.chain.from_iterable(glob.iglob('**\\'+pattern,recursive=True) for pattern in patterns)
+    return it.chain.from_iterable(glob.iglob('**/'+pattern,recursive=True) for pattern in patterns)
 
 def cleanstuff(remove_build=True, remove_cpp=True, rename_pyd=True):
     try:
         if remove_build:
-            print("Try remove 'build\\' folder...", end=' ')
+            print("Try remove 'build/' folder...", end=' ')
             shutil.rmtree('build')
             print("Done")
     except Exception as e:

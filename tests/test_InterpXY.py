@@ -7,7 +7,7 @@ from tube import Tube, InterpXY
 from math import pi, sqrt
 from pytest import approx
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import pprint as pp
 
 def test_integrate():
@@ -63,29 +63,29 @@ def test_get_xs_zeros4():
     zeros = interp.get_xs_zeros()
     assert zeros is None
 
-def _main():
-    xs = [-2,2,3,4,9]
-    ys = [1,5,3,1,2]
-    interp1 = InterpXY(xs, ys)
+# def _main():
+#     xs = [-2,2,3,4,9]
+#     ys = [1,5,3,1,2]
+#     interp1 = InterpXY(xs, ys)
 
-    xs = [-1,2,3,5.1,7]
-    ys = [-1,2,6,-3,0]
-    interp2 = InterpXY(xs, ys) + (-4,3)
+#     xs = [-1,2,3,5.1,7]
+#     ys = [-1,2,6,-3,0]
+#     interp2 = InterpXY(xs, ys) + (-4,3)
 
 
-    fig, ax = plt.subplots()
-    interp1.plot_diff(interp2, fig, ax)
-    # interp1.plot(fig, ax, marker='o')
-    # interp2.plot(fig, ax, marker='x')
-    # abs(interp1-interp2).plot(fig, ax, marker='*')
-    plt.grid(True)
-    pp.pprint(InterpXY.get_diff_report(interp1, interp2))
-    plt.show()
+#     fig, ax = plt.subplots()
+#     interp1.plot_diff(interp2, fig, ax)
+#     # interp1.plot(fig, ax, marker='o')
+#     # interp2.plot(fig, ax, marker='x')
+#     # abs(interp1-interp2).plot(fig, ax, marker='*')
+#     plt.grid(True)
+#     pp.pprint(InterpXY.get_diff_report(interp1, interp2))
+#     plt.show()
 
-def _main2():
-    a1 = np.array([1,2,3,4.1,-1])
-    a2 = np.array([4,4.100000001])
-    print(a1[a1.argsort()])
+# def _main2():
+#     a1 = np.array([1,2,3,4.1,-1])
+#     a2 = np.array([4,4.100000001])
+#     print(a1[a1.argsort()])
 
-if __name__ == "__main__":
-    _main()
+# if __name__ == "__main__":
+#     _main()

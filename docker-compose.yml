@@ -1,0 +1,23 @@
+version: "3.1"
+
+services:
+  scheduler:
+    build: .
+    image: pykas-image
+    hostname: dask-scheduler
+    ports:
+      - "172.16.49.81:8786:8786"
+      - "172.16.49.81:8787:8787"
+    command: ["dask-scheduler"]
+
+  worker:
+    build: .
+    image: pykas-image
+    hostname: dask-worker
+    command: ["dask-worker", "--nprocs=11", "tcp://scheduler:8786"]
+
+# "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+# docker run --rm --name worker --network="host" daskdocker dask-worker 192.168.0.100:8786
+# docker stop worker
+# docker save -o d:/ftp_folder/image.tar pykas-image
+# docker load -i image.tar

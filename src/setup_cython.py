@@ -29,15 +29,15 @@ def compile_bicycle(packages, n_parallel=12):
         depends = packages[pn].get("depends")
         if depends:
             for dep in depends:
-                pxd = f'{wd}\\{incl_dir}\\{dep}\\{dep}.pxd'
+                pxd = f'{wd}/{incl_dir}/{dep}/{dep}.pxd'
                 print(f'Finding pxd ... {pxd}...', end='')
                 if os.path.isfile(pxd):
                     print('FIND')
-                    todir = f'{wd}\\{incl_dir}\\{pn}'
+                    todir = f'{wd}/{incl_dir}/{pn}'
                     print(f'Finding to dir for {dep}.pxd...{todir}...', end='')
                     if os.path.isdir(todir):
                         print('FIND')
-                        pxds.append((pxd, f'{todir}\\{dep}.pxd'))
+                        pxds.append((pxd, f'{todir}/{dep}.pxd'))
                     else:
                         raise AttributeError(f'Папка {todir} не найженf')
                 else:
@@ -49,7 +49,7 @@ def compile_bicycle(packages, n_parallel=12):
         extentions = [
             Extension( 
                 pn, 
-                [f'{wd}\\{incl_dir}\\{pn}\\{pn}.pyx'], 
+                [f'{wd}/{incl_dir}/{pn}/{pn}.pyx'], 
                 **packages[pn]["Extention_kwargs"])
             for pn in packages]
 
@@ -115,12 +115,12 @@ if __name__ == '__main__':
         # pass
         # true_mod_name='all'
         # extentions = [
-        #     Extension("tube", ["include\\tube\\tube.pyx"] ,include_dirs=[numpy.get_include()]),
-        #     Extension("gaslayer", ["include\\gaslayer\\gaslayer.pyx"], library_dirs=['\\include\\tube'] ),
+        #     Extension("tube", ["include/tube/tube.pyx"] ,include_dirs=[numpy.get_include()]),
+        #     Extension("gaslayer", ["include/gaslayer/gaslayer.pyx"], library_dirs=['/include/tube'] ),
         # ]
         # ext_modules = cythonize(extentions, annotate=True)
         # setup(
         #     name=true_mod_name,
         #     ext_modules=ext_modules,
-        #     library_dirs=['\\include\\tube']
+        #     library_dirs=['/include/tube']
         # )   
