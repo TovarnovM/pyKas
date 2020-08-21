@@ -4034,7 +4034,7 @@ static PyObject *__pyx_pf_8gaslayer_17GasFluxCalculator_4create_rr_arrs(struct _
   __pyx_v_layer-&gt;rr_vals = __pyx_t_6;
   __pyx_t_6.memview = NULL;
   __pyx_t_6.data = NULL;
-</pre><pre class="cython line score-43" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0329</span>:         <span class="n">layer</span><span class="o">.</span><span class="n">rr_bint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">layer</span><span class="o">.</span><span class="n">n_cells</span><span class="o">+</span><span class="mf">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rr_bint_len</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span></pre>
+</pre><pre class="cython line score-43" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0329</span>:         <span class="n">layer</span><span class="o">.</span><span class="n">rr_bint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">layer</span><span class="o">.</span><span class="n">n_cells</span><span class="o">+</span><span class="mf">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rr_bint_len</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span></pre>
 <pre class='cython code score-43 '>  <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_5, __pyx_n_s_np);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 329, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_5);
   __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_t_5, __pyx_n_s_zeros);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 329, __pyx_L1_error)</span>
@@ -4061,7 +4061,7 @@ static PyObject *__pyx_pf_8gaslayer_17GasFluxCalculator_4create_rr_arrs(struct _
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_2);
   <span class='pyx_c_api'>__Pyx_GetModuleGlobalName</span>(__pyx_t_5, __pyx_n_s_np);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 329, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_5);
-  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_t_5, __pyx_n_s_int);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 329, __pyx_L1_error)</span>
+  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(__pyx_t_5, __pyx_n_s_int32);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 329, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_5); __pyx_t_5 = 0;
   if (<span class='py_c_api'>PyDict_SetItem</span>(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_1) &lt; 0) <span class='error_goto'>__PYX_ERR(0, 329, __pyx_L1_error)</span>
@@ -7422,7 +7422,7 @@ static int __pyx_pf_8gaslayer_12GridStrecher___init__(struct __pyx_obj_8gaslayer
 <pre class='cython code score-7 '>  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(__pyx_v_index_anchor); if (unlikely((__pyx_t_1 == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 646, __pyx_L1_error)</span>
   __pyx_v_self-&gt;index_anchor = __pyx_t_1;
 </pre><pre class="cython line score-0">&#xA0;<span class="">0647</span>: </pre>
-<pre class="cython line score-106" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0648</span>:     <span class="k">cpdef</span> <span class="kt">bint</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">double</span> <span class="n">tau</span><span class="p">,</span> <span class="n">GasLayer</span> <span class="n">layer</span><span class="p">):</span></pre>
+<pre class="cython line score-106" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0648</span>:     <span class="k">cpdef</span> <span class="kt">int</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">double</span> <span class="n">tau</span><span class="p">,</span> <span class="n">GasLayer</span> <span class="n">layer</span><span class="p">):</span></pre>
 <pre class='cython code score-106 '>static PyObject *__pyx_pw_8gaslayer_12GridStrecher_3evaluate(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static int __pyx_f_8gaslayer_12GridStrecher_evaluate(struct __pyx_obj_8gaslayer_GridStrecher *__pyx_v_self, double __pyx_v_tau, struct __pyx_obj_8gaslayer_GasLayer *__pyx_v_layer, int __pyx_skip_dispatch) {
   size_t __pyx_v_i;
@@ -7491,9 +7491,9 @@ static int __pyx_f_8gaslayer_12GridStrecher_evaluate(struct __pyx_obj_8gaslayer_
           <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_7); __pyx_t_7 = 0;
         }
         <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_8 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_2); if (unlikely((__pyx_t_8 == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 648, __pyx_L1_error)</span>
+        __pyx_t_6 = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(__pyx_t_2); if (unlikely((__pyx_t_6 == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 648, __pyx_L1_error)</span>
         <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_r = __pyx_t_8;
+        __pyx_r = __pyx_t_6;
         <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
         goto __pyx_L0;
       }
@@ -7599,7 +7599,7 @@ static PyObject *__pyx_pf_8gaslayer_12GridStrecher_2evaluate(struct __pyx_obj_8g
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("evaluate", 0);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
-  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyBool_FromLong</span>(__pyx_f_8gaslayer_12GridStrecher_evaluate(__pyx_v_self, __pyx_v_tau, __pyx_v_layer, 1));<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 648, __pyx_L1_error)</span>
+  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyInt_From_int</span>(__pyx_f_8gaslayer_12GridStrecher_evaluate(__pyx_v_self, __pyx_v_tau, __pyx_v_layer, 1));<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 648, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -7617,28 +7617,28 @@ static PyObject *__pyx_pf_8gaslayer_12GridStrecher_2evaluate(struct __pyx_obj_8g
 }
 </pre><pre class="cython line score-0">&#xA0;<span class="">0649</span>:         <span class="k">cdef</span> <span class="kt">size_t</span> <span class="nf">i</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0650</span>:         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">xs_borders</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mf">0</span><span class="p">]):</span></pre>
-<pre class='cython code score-0 '>  __pyx_t_9 = (__pyx_v_layer-&gt;xs_borders.shape[0]);
-  __pyx_t_10 = __pyx_t_9;
-  for (__pyx_t_11 = 0; __pyx_t_11 &lt; __pyx_t_10; __pyx_t_11+=1) {
-    __pyx_v_i = __pyx_t_11;
+<pre class='cython code score-0 '>  __pyx_t_8 = (__pyx_v_layer-&gt;xs_borders.shape[0]);
+  __pyx_t_9 = __pyx_t_8;
+  for (__pyx_t_10 = 0; __pyx_t_10 &lt; __pyx_t_9; __pyx_t_10+=1) {
+    __pyx_v_i = __pyx_t_10;
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0651</span>:             <span class="n">layer</span><span class="o">.</span><span class="n">xs_borders</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">xs_borders</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">tau</span> <span class="o">*</span> <span class="n">layer</span><span class="o">.</span><span class="n">Vs_borders</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></pre>
-<pre class='cython code score-0 '>    __pyx_t_12 = __pyx_v_i;
+<pre class='cython code score-0 '>    __pyx_t_11 = __pyx_v_i;
+    __pyx_t_12 = __pyx_v_i;
     __pyx_t_13 = __pyx_v_i;
-    __pyx_t_14 = __pyx_v_i;
-    *((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;xs_borders.data + __pyx_t_14 * __pyx_v_layer-&gt;xs_borders.strides[0]) )) = ((*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;xs_borders.data + __pyx_t_12 * __pyx_v_layer-&gt;xs_borders.strides[0]) ))) + (__pyx_v_tau * (*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;Vs_borders.data + __pyx_t_13 * __pyx_v_layer-&gt;Vs_borders.strides[0]) )))));
+    *((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;xs_borders.data + __pyx_t_13 * __pyx_v_layer-&gt;xs_borders.strides[0]) )) = ((*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;xs_borders.data + __pyx_t_11 * __pyx_v_layer-&gt;xs_borders.strides[0]) ))) + (__pyx_v_tau * (*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;Vs_borders.data + __pyx_t_12 * __pyx_v_layer-&gt;Vs_borders.strides[0]) )))));
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0652</span>:             <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mf">0</span> <span class="ow">and</span> <span class="n">layer</span><span class="o">.</span><span class="n">xs_borders</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">layer</span><span class="o">.</span><span class="n">xs_borders</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mf">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">1e-12</span><span class="p">:</span></pre>
 <pre class='cython code score-0 '>    __pyx_t_15 = ((__pyx_v_i &gt; 0) != 0);
     if (__pyx_t_15) {
     } else {
-      __pyx_t_8 = __pyx_t_15;
+      __pyx_t_14 = __pyx_t_15;
       goto __pyx_L6_bool_binop_done;
     }
-    __pyx_t_13 = __pyx_v_i;
-    __pyx_t_12 = (__pyx_v_i - 1);
-    __pyx_t_15 = ((((*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;xs_borders.data + __pyx_t_13 * __pyx_v_layer-&gt;xs_borders.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;xs_borders.data + __pyx_t_12 * __pyx_v_layer-&gt;xs_borders.strides[0]) )))) &lt;= 1e-12) != 0);
-    __pyx_t_8 = __pyx_t_15;
+    __pyx_t_12 = __pyx_v_i;
+    __pyx_t_11 = (__pyx_v_i - 1);
+    __pyx_t_15 = ((((*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;xs_borders.data + __pyx_t_12 * __pyx_v_layer-&gt;xs_borders.strides[0]) ))) - (*((double *) ( /* dim=0 */ (__pyx_v_layer-&gt;xs_borders.data + __pyx_t_11 * __pyx_v_layer-&gt;xs_borders.strides[0]) )))) &lt;= 1e-12) != 0);
+    __pyx_t_14 = __pyx_t_15;
     __pyx_L6_bool_binop_done:;
-    if (__pyx_t_8) {
+    if (__pyx_t_14) {
 /* … */
     }
   }
@@ -7877,7 +7877,7 @@ static PyObject *__pyx_pf_8gaslayer_12GridStrecher_4init_regular(struct __pyx_ob
     *((double *) ( /* dim=0 */ (__pyx_v_vs.data + __pyx_t_13 * __pyx_v_vs.strides[0]) )) = (__pyx_v_v1 + (__pyx_v_i * __pyx_v_dv));
   }
 </pre><pre class="cython line score-0">&#xA0;<span class="">0663</span>: </pre>
-<pre class="cython line score-166" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0664</span>:     <span class="k">cpdef</span> <span class="kt">bint</span> <span class="nf">sync_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GasLayer</span> <span class="n">layer0</span><span class="p">,</span> <span class="n">GasLayer</span> <span class="n">layer1</span><span class="p">,</span> <span class="n">double</span> <span class="n">tau</span><span class="p">,</span> <span class="n">double</span> <span class="n">v_left</span><span class="p">,</span> <span class="n">double</span> <span class="n">v_right</span><span class="p">):</span></pre>
+<pre class="cython line score-166" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0664</span>:     <span class="k">cpdef</span> <span class="kt">int</span> <span class="nf">sync_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">GasLayer</span> <span class="n">layer0</span><span class="p">,</span> <span class="n">GasLayer</span> <span class="n">layer1</span><span class="p">,</span> <span class="n">double</span> <span class="n">tau</span><span class="p">,</span> <span class="n">double</span> <span class="n">v_left</span><span class="p">,</span> <span class="n">double</span> <span class="n">v_right</span><span class="p">):</span></pre>
 <pre class='cython code score-166 '>static PyObject *__pyx_pw_8gaslayer_12GridStrecher_7sync_layers(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static int __pyx_f_8gaslayer_12GridStrecher_sync_layers(struct __pyx_obj_8gaslayer_GridStrecher *__pyx_v_self, struct __pyx_obj_8gaslayer_GasLayer *__pyx_v_layer0, struct __pyx_obj_8gaslayer_GasLayer *__pyx_v_layer1, double __pyx_v_tau, double __pyx_v_v_left, double __pyx_v_v_right, int __pyx_skip_dispatch) {
   size_t __pyx_v_i;
@@ -7964,9 +7964,9 @@ static int __pyx_f_8gaslayer_12GridStrecher_sync_layers(struct __pyx_obj_8gaslay
           <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_9); __pyx_t_9 = 0;
         }
         <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_6); __pyx_t_6 = 0;
-        __pyx_t_10 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_2); if (unlikely((__pyx_t_10 == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 664, __pyx_L1_error)</span>
+        __pyx_t_8 = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(__pyx_t_2); if (unlikely((__pyx_t_8 == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 664, __pyx_L1_error)</span>
         <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_r = __pyx_t_10;
+        __pyx_r = __pyx_t_8;
         <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_1); __pyx_t_1 = 0;
         goto __pyx_L0;
       }
@@ -8109,7 +8109,7 @@ static PyObject *__pyx_pf_8gaslayer_12GridStrecher_6sync_layers(struct __pyx_obj
   <span class='refnanny'>__Pyx_RefNannyDeclarations</span>
   <span class='refnanny'>__Pyx_RefNannySetupContext</span>("sync_layers", 0);
   <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
-  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyBool_FromLong</span>(__pyx_f_8gaslayer_12GridStrecher_sync_layers(__pyx_v_self, __pyx_v_layer0, __pyx_v_layer1, __pyx_v_tau, __pyx_v_v_left, __pyx_v_v_right, 1));<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 664, __pyx_L1_error)</span>
+  __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyInt_From_int</span>(__pyx_f_8gaslayer_12GridStrecher_sync_layers(__pyx_v_self, __pyx_v_layer0, __pyx_v_layer1, __pyx_v_tau, __pyx_v_v_left, __pyx_v_v_right, 1));<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 664, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -8128,7 +8128,7 @@ static PyObject *__pyx_pf_8gaslayer_12GridStrecher_6sync_layers(struct __pyx_obj
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0665</span>:         <span class="n">layer1</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">layer0</span><span class="o">.</span><span class="n">time</span> <span class="o">+</span> <span class="n">tau</span></pre>
 <pre class='cython code score-0 '>  __pyx_v_layer1-&gt;time = (__pyx_v_layer0-&gt;time + __pyx_v_tau);
 </pre><pre class="cython line score-0">&#xA0;<span class="">0666</span>:         <span class="k">cdef</span> <span class="kt">size_t</span> <span class="nf">i</span></pre>
-<pre class="cython line score-0">&#xA0;<span class="">0667</span>:         <span class="k">cdef</span> <span class="kt">bint</span> <span class="nf">suc</span></pre>
+<pre class="cython line score-0">&#xA0;<span class="">0667</span>:         <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">suc</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0668</span>:         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strech_type</span> <span class="o">==</span> <span class="mf">1</span><span class="p">:</span></pre>
 <pre class='cython code score-0 '>  switch (__pyx_v_self-&gt;strech_type) {
     case 1:
@@ -12392,7 +12392,7 @@ static PyObject *__pyx_pf_8gaslayer_8GasLayer_6copy(struct __pyx_obj_8gaslayer_G
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">0979</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">0980</span>: </pre>
-<pre class="cython line score-105" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0981</span>:     <span class="k">cpdef</span> <span class="kt">void</span> <span class="nf">init_ropue_fromfoo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo_ropu</span><span class="p">,</span> <span class="n">bint</span> <span class="n">init_q</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>  <span class="n">bint</span> <span class="n">init_SsdW</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span></pre>
+<pre class="cython line score-105" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">0981</span>:     <span class="k">cpdef</span> <span class="kt">void</span> <span class="nf">init_ropue_fromfoo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo_ropu</span><span class="p">,</span> <span class="nb">int</span> <span class="n">init_q</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>  <span class="nb">int</span> <span class="n">init_SsdW</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span></pre>
 <pre class='cython code score-105 '>static PyObject *__pyx_pw_8gaslayer_8GasLayer_9init_ropue_fromfoo(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static void __pyx_f_8gaslayer_8GasLayer_init_ropue_fromfoo(struct __pyx_obj_8gaslayer_GasLayer *__pyx_v_self, PyObject *__pyx_v_foo_ropu, int __pyx_skip_dispatch, struct __pyx_opt_args_8gaslayer_8GasLayer_init_ropue_fromfoo *__pyx_optional_args) {
   int __pyx_v_init_q = ((int)1);
@@ -12424,9 +12424,9 @@ static void __pyx_f_8gaslayer_8GasLayer_init_ropue_fromfoo(struct __pyx_obj_8gas
       __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(((PyObject *)__pyx_v_self), __pyx_n_s_init_ropue_fromfoo);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 981, __pyx_L1_error)</span>
       <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_8gaslayer_8GasLayer_9init_ropue_fromfoo)) {
-        __pyx_t_3 = <span class='pyx_c_api'>__Pyx_PyBool_FromLong</span>(__pyx_v_init_q);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 981, __pyx_L1_error)</span>
+        __pyx_t_3 = <span class='pyx_c_api'>__Pyx_PyInt_From_int</span>(__pyx_v_init_q);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 981, __pyx_L1_error)</span>
         <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
-        __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyBool_FromLong</span>(__pyx_v_init_SsdW);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 981, __pyx_L1_error)</span>
+        __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyInt_From_int</span>(__pyx_v_init_SsdW);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 981, __pyx_L1_error)</span>
         <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_4);
         <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_t_1);
         __pyx_t_5 = __pyx_t_1; __pyx_t_6 = NULL;
@@ -12573,12 +12573,12 @@ static PyObject *__pyx_pw_8gaslayer_8GasLayer_9init_ropue_fromfoo(PyObject *__py
     }
     __pyx_v_foo_ropu = values[0];
     if (values[1]) {
-      __pyx_v_init_q = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(values[1]); if (unlikely((__pyx_v_init_q == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 981, __pyx_L3_error)</span>
+      __pyx_v_init_q = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(values[1]); if (unlikely((__pyx_v_init_q == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 981, __pyx_L3_error)</span>
     } else {
       __pyx_v_init_q = ((int)1);
     }
     if (values[2]) {
-      __pyx_v_init_SsdW = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(values[2]); if (unlikely((__pyx_v_init_SsdW == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 981, __pyx_L3_error)</span>
+      __pyx_v_init_SsdW = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(values[2]); if (unlikely((__pyx_v_init_SsdW == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 981, __pyx_L3_error)</span>
     } else {
       __pyx_v_init_SsdW = ((int)1);
     }
@@ -14730,7 +14730,7 @@ static PyObject *__pyx_pf_8gaslayer_8GasLayer_36step_simple(struct __pyx_obj_8ga
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   __pyx_v_layer1 = ((struct __pyx_obj_8gaslayer_GasLayer *)__pyx_t_1);
   __pyx_t_1 = 0;
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">1129</span>:         <span class="k">cdef</span> <span class="kt">bint</span> <span class="nf">suc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_strecher</span><span class="o">.</span><span class="n">sync_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer1</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">v_left</span><span class="p">,</span> <span class="n">v_right</span><span class="p">)</span></pre>
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">1129</span>:         <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">suc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_strecher</span><span class="o">.</span><span class="n">sync_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer1</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">v_left</span><span class="p">,</span> <span class="n">v_right</span><span class="p">)</span></pre>
 <pre class='cython code score-0 '>  __pyx_v_suc = ((struct __pyx_vtabstruct_8gaslayer_GridStrecher *)__pyx_v_self-&gt;grid_strecher-&gt;__pyx_vtab)-&gt;sync_layers(__pyx_v_self-&gt;grid_strecher, __pyx_v_self, __pyx_v_layer1, __pyx_v_tau, __pyx_v_v_left, __pyx_v_v_right, 0);
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">1130</span>:         <span class="k">if</span> <span class="ow">not</span> <span class="n">suc</span><span class="p">:</span></pre>
 <pre class='cython code score-0 '>  __pyx_t_11 = ((!(__pyx_v_suc != 0)) != 0);
@@ -15086,7 +15086,7 @@ static PyObject *__pyx_pf_8gaslayer_8GasLayer_38corrector(struct __pyx_obj_8gasl
   __pyx_t_1 = 0;
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">1157</span>:         <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">tau2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">+</span><span class="n">tau</span><span class="o">-</span><span class="n">lr_simple05</span><span class="o">.</span><span class="n">time</span></pre>
 <pre class='cython code score-0 '>  __pyx_v_tau2 = ((__pyx_v_self-&gt;time + __pyx_v_tau) - __pyx_v_lr_simple05-&gt;time);
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">1158</span>:         <span class="k">cdef</span> <span class="kt">bint</span> <span class="nf">suc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_strecher</span><span class="o">.</span><span class="n">sync_layers</span><span class="p">(</span><span class="n">lr_simple05</span><span class="p">,</span> <span class="n">layer2</span><span class="p">,</span> <span class="n">tau2</span><span class="p">,</span> <span class="n">v_left</span><span class="p">,</span> <span class="n">v_right</span><span class="p">)</span></pre>
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">1158</span>:         <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">suc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_strecher</span><span class="o">.</span><span class="n">sync_layers</span><span class="p">(</span><span class="n">lr_simple05</span><span class="p">,</span> <span class="n">layer2</span><span class="p">,</span> <span class="n">tau2</span><span class="p">,</span> <span class="n">v_left</span><span class="p">,</span> <span class="n">v_right</span><span class="p">)</span></pre>
 <pre class='cython code score-0 '>  __pyx_v_suc = ((struct __pyx_vtabstruct_8gaslayer_GridStrecher *)__pyx_v_self-&gt;grid_strecher-&gt;__pyx_vtab)-&gt;sync_layers(__pyx_v_self-&gt;grid_strecher, __pyx_v_lr_simple05, __pyx_v_layer2, __pyx_v_tau2, __pyx_v_v_left, __pyx_v_v_right, 0);
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">1159</span>:         <span class="k">if</span> <span class="ow">not</span> <span class="n">suc</span><span class="p">:</span></pre>
 <pre class='cython code score-0 '>  __pyx_t_11 = ((!(__pyx_v_suc != 0)) != 0);
@@ -15427,7 +15427,7 @@ static PyObject *__pyx_pf_8gaslayer_8GasLayer_40corrector_bogdanov(struct __pyx_
 <pre class='cython code score-0 '>  __pyx_t_9 = __pyx_v_lr_simple-&gt;n_cells;
   if (__pyx_t_9 &lt; 0) __pyx_t_9 += __pyx_v_lr_simple-&gt;Vs_borders.shape[0];
   __pyx_v_vr = (0.5 * (__pyx_v_v_right + (*((double *) ( /* dim=0 */ (__pyx_v_lr_simple-&gt;Vs_borders.data + __pyx_t_9 * __pyx_v_lr_simple-&gt;Vs_borders.strides[0]) )))));
-</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">1189</span>:         <span class="k">cdef</span> <span class="kt">bint</span> <span class="nf">suc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_strecher</span><span class="o">.</span><span class="n">sync_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer2</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">vl</span><span class="p">,</span> <span class="n">vr</span><span class="p">)</span></pre>
+</pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">1189</span>:         <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">suc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_strecher</span><span class="o">.</span><span class="n">sync_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer2</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">vl</span><span class="p">,</span> <span class="n">vr</span><span class="p">)</span></pre>
 <pre class='cython code score-0 '>  __pyx_v_suc = ((struct __pyx_vtabstruct_8gaslayer_GridStrecher *)__pyx_v_self-&gt;grid_strecher-&gt;__pyx_vtab)-&gt;sync_layers(__pyx_v_self-&gt;grid_strecher, __pyx_v_self, __pyx_v_layer2, __pyx_v_tau, __pyx_v_vl, __pyx_v_vr, 0);
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">1190</span>:         <span class="k">if</span> <span class="ow">not</span> <span class="n">suc</span><span class="p">:</span></pre>
 <pre class='cython code score-0 '>  __pyx_t_10 = ((!(__pyx_v_suc != 0)) != 0);

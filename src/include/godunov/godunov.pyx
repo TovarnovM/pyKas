@@ -318,9 +318,9 @@ cpdef MegaFooResult mega_foo_cython(double p_1, double ro_1, double u_1, double 
 
 cpdef void mega_foo_fill_rr(double p_1, double ro_1, double u_1, double c_1, \
              double p_2, double ro_2, double u_2, double c_2, \
-             double p_0, double gamma, double[:] rr_vals, bint[:] rr_bint, double eps_F=1e-5, int n_iter_max=37) nogil:
+             double p_0, double gamma, double[:] rr_vals, int[:] rr_bint, double eps_F=1e-5, int n_iter_max=37) nogil:
     cdef double D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P
-    cdef bint suc, UD_left, UD_right
+    cdef int suc, UD_left, UD_right
     suc, UD_left, UD_right, D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P = mega_foo(p_1, ro_1, u_1, c_1, \
              p_2, ro_2, u_2, c_2, \
              p_0, gamma, eps_F, n_iter_max)  
@@ -340,7 +340,7 @@ cpdef void mega_foo_fill_rr(double p_1, double ro_1, double u_1, double c_1, \
 cdef class Border_URPDD_Result:
     pass
 
-cpdef Border_URPDD_Result border_wall_URPDD_result(bint left_border, double vbi, double p, double ro, double u, double c, \
+cpdef Border_URPDD_Result border_wall_URPDD_result(int left_border, double vbi, double p, double ro, double u, double c, \
              double p_0, double gamma, double eps_F=1e-6, int n_iter_max=13):
     cdef double rU,rR,rP,D_1,D_2,U_kr 
     rU,rR,rP,D_1,D_2,U_kr= border_wall_URPDD(left_border,vbi,p, ro, u, c, \
@@ -356,11 +356,11 @@ cpdef Border_URPDD_Result border_wall_URPDD_result(bint left_border, double vbi,
 
 
 
-cpdef (double, double, double) border_wall_fill_rr(bint left_border, double vbi, double p, double ro, double u, double c, \
-             double p_0, double gamma, double[:] rr_vals, bint[:] rr_bint, double eps_F=1e-6, int n_iter_max=13) nogil:
+cpdef (double, double, double) border_wall_fill_rr(int left_border, double vbi, double p, double ro, double u, double c, \
+             double p_0, double gamma, double[:] rr_vals, int[:] rr_bint, double eps_F=1e-6, int n_iter_max=13) nogil:
     
     cdef double rU,rR,rP,p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2,D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P
-    cdef bint suc, UD_left, UD_right
+    cdef int suc, UD_left, UD_right
     p_1, p_2 = p, p
     ro_1, ro_2 = ro, ro
     c_1, c_2 = c, c
@@ -397,11 +397,11 @@ cpdef (double, double, double) border_wall_fill_rr(bint left_border, double vbi,
     
 
 
-cpdef (double, double, double, double, double,double) border_wall_URPDD(bint left_border, double vbi, double p, double ro, double u, double c, \
+cpdef (double, double, double, double, double,double) border_wall_URPDD(int left_border, double vbi, double p, double ro, double u, double c, \
              double p_0, double gamma, double eps_F=1e-6, int n_iter_max=13) nogil:
     
     cdef double p_1, ro_1, u_1, c_1, p_2, ro_2, u_2, c_2, rU,rR,rP,D_1, D_star_1, U, D_star_2, D_2, R_1, R_2, P
-    cdef bint suc, UD_left, UD_right
+    cdef int suc, UD_left, UD_right
     p_1, p_2 = p, p
     ro_1, ro_2 = ro, ro
     c_1, c_2 = c, c
@@ -423,7 +423,7 @@ cpdef (double, double, double, double, double,double) border_wall_URPDD(bint lef
                          p_1=p_1, ro_1=ro_1, u_1=u_1, c_1=c_1, p_2=p_2, ro_2=ro_2, u_2=u_2, c_2=c_2, gamma=gamma)
     return rU,rR,rP,D_1,D_2,U
 
-cpdef (bint, bint, bint, double, double, double, double, double, double, double, double) \
+cpdef (int, int, int, double, double, double, double, double, double, double, double) \
     mega_foo(double p_1, double ro_1, double u_1, double c_1, \
              double p_2, double ro_2, double u_2, double c_2, \
              double p_0, double gamma, double eps_F=1e-5, int n_iter_max=37) nogil:
@@ -460,7 +460,7 @@ cpdef (bint, bint, bint, double, double, double, double, double, double, double,
                  [10] P        {float} -- давление в зоне контактного разрыва
     """
 
-    cdef bint reverse = False
+    cdef int reverse = False
     if (p_1 > p_2):
         reverse = True
         p_1, p_2 = p_2, p_1
@@ -511,7 +511,7 @@ cpdef (bint, bint, bint, double, double, double, double, double, double, double,
     
     cdef double D_1, R_1, D_star_1, D_2, D_star_2, R_2
     # УД слева
-    cdef bint UD_left = u_1-u_2 > U_raz
+    cdef int UD_left = u_1-u_2 > U_raz
     if UD_left:
         D_1 = u_1 - a_1/ro_1
         R_1 = get_R_13_2(ro_1, p_1, P, p_0, gamma)
@@ -523,7 +523,7 @@ cpdef (bint, bint, bint, double, double, double, double, double, double, double,
         R_1 = gamma*(P+p_0)/pow(c_star_1, 2)
 
     # УД справа
-    cdef bint UD_right = u_1-u_2 > U_ud
+    cdef int UD_right = u_1-u_2 > U_ud
     if UD_right:
         D_2 = u_2 + a_2/ro_2
         R_2 = get_R_13_2(ro_2, p_2, P, p_0, gamma)
@@ -540,7 +540,7 @@ cpdef (bint, bint, bint, double, double, double, double, double, double, double,
 
 
 cpdef (double, double, double) get_ray_URP( \
-    double ray_W, bint UD_left, bint UD_right, double D_1, double D_star_1, double U, \
+    double ray_W, int UD_left, int UD_right, double D_1, double D_star_1, double U, \
     double D_star_2, double D_2, double R_1, double R_2, double P, \
     double p_1, double ro_1, double u_1, double c_1, \
     double p_2, double ro_2, double u_2, double c_2, double gamma) nogil:

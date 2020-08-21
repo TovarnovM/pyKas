@@ -94,7 +94,7 @@ cdef class GridStrecher:
     cdef public double st2_window_part, st2_adapt_prop, D_mnj
     cdef public double[:] bufarr,bufarr_border
     cdef public InterpXY interp_smooth, interp_adapt
-    cpdef bint evaluate(self, double tau, GasLayer layer)
+    cpdef int evaluate(self, double tau, GasLayer layer)
     cpdef void init_regular(self, double v1, double v2, double[:] vs)
     cpdef void fill_euler_vel0_regular(self, double tau, double[:] xs0, double[:] xs1, double[:] vel0_fill)
     cpdef void fill_xs_cells(self, double[:] xs_borders, double[:] xs_fill)
@@ -103,7 +103,7 @@ cdef class GridStrecher:
     cpdef void fill_Vs_borders_proportional(self, double v_left, double v_right, double[:] xs_borders, double[:] Vs_borders)
     cpdef void fill_Vs_borders_anchor(self, double v_left, double v_right, double[:] xs_borders, double[:] Vs_borders)
     cpdef void strech_layer_adaptive(self, GasLayer layer, GasLayer layer_prev, double tau)
-    cpdef bint sync_layers(self, GasLayer layer0, GasLayer layer1, double tau, double v_left, double v_right)
+    cpdef int sync_layers(self, GasLayer layer0, GasLayer layer1, double tau, double v_left, double v_right)
     cpdef void sync_xs_borders(self, double[:] xs_borders, double xl, double xr)
 
 cdef class GasLayer:
@@ -112,7 +112,7 @@ cdef class GasLayer:
         ds, S, W, bettas
     cdef public double[:,:] qs, hs, fluxes, rr_vals
         #pars # 0 - ros, 1 - ps, 2 - us  
-    cdef public bint[:,:] rr_bint
+    cdef public int[:,:] rr_bint
     cdef public int n_cells, n_qs
     cdef public Tube tube
     cdef public GasEOS gasEOS
@@ -122,7 +122,7 @@ cdef class GasLayer:
     cdef public str color_4_plot
     cpdef void copy_params_to(self, GasLayer to_me)
     cpdef GasLayer copy(self)
-    cpdef void init_ropue_fromfoo(self, foo_ropu, bint init_q=*, bint init_SsdW=*)
+    cpdef void init_ropue_fromfoo(self, foo_ropu, int init_q=*, int init_SsdW=*)
     cpdef void init_SsdW(self)
     cpdef void init_q(self)
     cpdef void init_ropue(self)

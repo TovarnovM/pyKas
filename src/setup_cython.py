@@ -18,7 +18,7 @@ def setup_ext(ext_tup):
             ext_modules=[ext],
     )
 
-def compile_bicycle(packages, n_parallel=12):
+def compile_bicycle(packages, n_parallel=8):
     true_mod_name='all'
     incl_dir = "include"
     wd = os.path.abspath(__file__) # os.path.dirname(os.path.dirname(os.getcwd()))

@@ -21,7 +21,7 @@ cdef class PowderOvLayer(GasLayer):
     cdef public double[:] zs
     cpdef void copy_params_to_Ov(self, PowderOvLayer to_me)
     cpdef GasLayer copy(self)
-    cpdef void init_ropue_fromfoo(self, foo_ropu, bint init_q=*,  bint init_SsdW=*)
+    cpdef void init_ropue_fromfoo(self, foo_ropu, int init_q=*,  int init_SsdW=*)
     cpdef void init_q(self)
     cpdef void init_ropue(self)
     cpdef void init_h(self)

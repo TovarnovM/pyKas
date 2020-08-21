@@ -3360,9 +3360,9 @@ static PyObject *__pyx_pf_7godunov_32mega_foo_fill_rr(CYTHON_UNUSED PyObject *__
   return __pyx_r;
 }
 </pre><pre class="cython line score-0">&#xA0;<span class="">320</span>:              <span class="n">double</span> <span class="n">p_2</span><span class="p">,</span> <span class="n">double</span> <span class="n">ro_2</span><span class="p">,</span> <span class="n">double</span> <span class="n">u_2</span><span class="p">,</span> <span class="n">double</span> <span class="n">c_2</span><span class="p">,</span> \</pre>
-<pre class="cython line score-0">&#xA0;<span class="">321</span>:              <span class="n">double</span> <span class="n">p_0</span><span class="p">,</span> <span class="n">double</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">double</span><span class="p">[:]</span> <span class="n">rr_vals</span><span class="p">,</span> <span class="n">bint</span><span class="p">[:]</span> <span class="n">rr_bint</span><span class="p">,</span> <span class="n">double</span> <span class="n">eps_F</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="nb">int</span> <span class="n">n_iter_max</span><span class="o">=</span><span class="mf">37</span><span class="p">)</span> <span class="k">nogil</span><span class="p">:</span></pre>
+<pre class="cython line score-0">&#xA0;<span class="">321</span>:              <span class="n">double</span> <span class="n">p_0</span><span class="p">,</span> <span class="n">double</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">double</span><span class="p">[:]</span> <span class="n">rr_vals</span><span class="p">,</span> <span class="nb">int</span><span class="p">[:]</span> <span class="n">rr_bint</span><span class="p">,</span> <span class="n">double</span> <span class="n">eps_F</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="nb">int</span> <span class="n">n_iter_max</span><span class="o">=</span><span class="mf">37</span><span class="p">)</span> <span class="k">nogil</span><span class="p">:</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">322</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">D_1</span><span class="p">,</span> <span class="nf">D_star_1</span><span class="p">,</span> <span class="nf">U</span><span class="p">,</span> <span class="nf">D_star_2</span><span class="p">,</span> <span class="nf">D_2</span><span class="p">,</span> <span class="nf">R_1</span><span class="p">,</span> <span class="nf">R_2</span><span class="p">,</span> <span class="nf">P</span></pre>
-<pre class="cython line score-0">&#xA0;<span class="">323</span>:     <span class="k">cdef</span> <span class="kt">bint</span> <span class="nf">suc</span><span class="p">,</span> <span class="nf">UD_left</span><span class="p">,</span> <span class="nf">UD_right</span></pre>
+<pre class="cython line score-0">&#xA0;<span class="">323</span>:     <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">suc</span><span class="p">,</span> <span class="nf">UD_left</span><span class="p">,</span> <span class="nf">UD_right</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">324</span>:     <span class="n">suc</span><span class="p">,</span> <span class="n">UD_left</span><span class="p">,</span> <span class="n">UD_right</span><span class="p">,</span> <span class="n">D_1</span><span class="p">,</span> <span class="n">D_star_1</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">D_star_2</span><span class="p">,</span> <span class="n">D_2</span><span class="p">,</span> <span class="n">R_1</span><span class="p">,</span> <span class="n">R_2</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="n">mega_foo</span><span class="p">(</span><span class="n">p_1</span><span class="p">,</span> <span class="n">ro_1</span><span class="p">,</span> <span class="n">u_1</span><span class="p">,</span> <span class="n">c_1</span><span class="p">,</span> \</pre>
 <pre class='cython code score-0 '>  __pyx_t_2.__pyx_n = 2;
   __pyx_t_2.eps_F = __pyx_v_eps_F;
@@ -3430,7 +3430,7 @@ static PyObject *__pyx_pf_7godunov_32mega_foo_fill_rr(CYTHON_UNUSED PyObject *__
 <pre class="cython line score-0">&#xA0;<span class="">340</span>: <span class="k">cdef</span> <span class="k">class</span> <span class="nf">Border_URPDD_Result</span><span class="p">:</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">341</span>:     <span class="k">pass</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">342</span>: </pre>
-<pre class="cython line score-170" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">343</span>: <span class="k">cpdef</span> <span class="kt">Border_URPDD_Result</span> <span class="nf">border_wall_URPDD_result</span><span class="p">(</span><span class="n">bint</span> <span class="n">left_border</span><span class="p">,</span> <span class="n">double</span> <span class="n">vbi</span><span class="p">,</span> <span class="n">double</span> <span class="n">p</span><span class="p">,</span> <span class="n">double</span> <span class="n">ro</span><span class="p">,</span> <span class="n">double</span> <span class="n">u</span><span class="p">,</span> <span class="n">double</span> <span class="n">c</span><span class="p">,</span> \</pre>
+<pre class="cython line score-170" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">343</span>: <span class="k">cpdef</span> <span class="kt">Border_URPDD_Result</span> <span class="nf">border_wall_URPDD_result</span><span class="p">(</span><span class="nb">int</span> <span class="n">left_border</span><span class="p">,</span> <span class="n">double</span> <span class="n">vbi</span><span class="p">,</span> <span class="n">double</span> <span class="n">p</span><span class="p">,</span> <span class="n">double</span> <span class="n">ro</span><span class="p">,</span> <span class="n">double</span> <span class="n">u</span><span class="p">,</span> <span class="n">double</span> <span class="n">c</span><span class="p">,</span> \</pre>
 <pre class='cython code score-170 '>static PyObject *__pyx_pw_7godunov_35border_wall_URPDD_result(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static struct __pyx_obj_7godunov_Border_URPDD_Result *__pyx_f_7godunov_border_wall_URPDD_result(int __pyx_v_left_border, double __pyx_v_vbi, double __pyx_v_p, double __pyx_v_ro, double __pyx_v_u, double __pyx_v_c, double __pyx_v_p_0, double __pyx_v_gamma, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_7godunov_border_wall_URPDD_result *__pyx_optional_args) {
   double __pyx_v_eps_F = ((double)1e-6);
@@ -3593,7 +3593,7 @@ static PyObject *__pyx_pw_7godunov_35border_wall_URPDD_result(PyObject *__pyx_se
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_left_border = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(values[0]); if (unlikely((__pyx_v_left_border == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 343, __pyx_L3_error)</span>
+    __pyx_v_left_border = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(values[0]); if (unlikely((__pyx_v_left_border == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 343, __pyx_L3_error)</span>
     __pyx_v_vbi = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[1]); if (unlikely((__pyx_v_vbi == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 343, __pyx_L3_error)</span>
     __pyx_v_p = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[2]); if (unlikely((__pyx_v_p == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 343, __pyx_L3_error)</span>
     __pyx_v_ro = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[3]); if (unlikely((__pyx_v_ro == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 343, __pyx_L3_error)</span>
@@ -3699,7 +3699,7 @@ static PyObject *__pyx_pf_7godunov_34border_wall_URPDD_result(CYTHON_UNUSED PyOb
 </pre><pre class="cython line score-0">&#xA0;<span class="">356</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">357</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">358</span>: </pre>
-<pre class="cython line score-184" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">359</span>: <span class="k">cpdef</span> (<span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="kt">double</span>) <span class="nf">border_wall_fill_rr</span><span class="p">(</span><span class="n">bint</span> <span class="n">left_border</span><span class="p">,</span> <span class="n">double</span> <span class="n">vbi</span><span class="p">,</span> <span class="n">double</span> <span class="n">p</span><span class="p">,</span> <span class="n">double</span> <span class="n">ro</span><span class="p">,</span> <span class="n">double</span> <span class="n">u</span><span class="p">,</span> <span class="n">double</span> <span class="n">c</span><span class="p">,</span> \</pre>
+<pre class="cython line score-184" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">359</span>: <span class="k">cpdef</span> (<span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="kt">double</span>) <span class="nf">border_wall_fill_rr</span><span class="p">(</span><span class="nb">int</span> <span class="n">left_border</span><span class="p">,</span> <span class="n">double</span> <span class="n">vbi</span><span class="p">,</span> <span class="n">double</span> <span class="n">p</span><span class="p">,</span> <span class="n">double</span> <span class="n">ro</span><span class="p">,</span> <span class="n">double</span> <span class="n">u</span><span class="p">,</span> <span class="n">double</span> <span class="n">c</span><span class="p">,</span> \</pre>
 <pre class='cython code score-184 '>static PyObject *__pyx_pw_7godunov_37border_wall_fill_rr(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static __pyx_ctuple_double__and_double__and_double __pyx_f_7godunov_border_wall_fill_rr(int __pyx_v_left_border, double __pyx_v_vbi, double __pyx_v_p, double __pyx_v_ro, double __pyx_v_u, double __pyx_v_c, double __pyx_v_p_0, double __pyx_v_gamma, __Pyx_memviewslice __pyx_v_rr_vals, __Pyx_memviewslice __pyx_v_rr_bint, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_7godunov_border_wall_fill_rr *__pyx_optional_args) {
   double __pyx_v_eps_F = ((double)1e-6);
@@ -3887,7 +3887,7 @@ static PyObject *__pyx_pw_7godunov_37border_wall_fill_rr(PyObject *__pyx_self, P
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_left_border = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(values[0]); if (unlikely((__pyx_v_left_border == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 359, __pyx_L3_error)</span>
+    __pyx_v_left_border = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(values[0]); if (unlikely((__pyx_v_left_border == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 359, __pyx_L3_error)</span>
     __pyx_v_vbi = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[1]); if (unlikely((__pyx_v_vbi == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 359, __pyx_L3_error)</span>
     __pyx_v_p = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[2]); if (unlikely((__pyx_v_p == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 359, __pyx_L3_error)</span>
     __pyx_v_ro = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[3]); if (unlikely((__pyx_v_ro == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 359, __pyx_L3_error)</span>
@@ -3953,10 +3953,10 @@ static PyObject *__pyx_pf_7godunov_36border_wall_fill_rr(CYTHON_UNUSED PyObject 
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
 }
-</pre><pre class="cython line score-0">&#xA0;<span class="">360</span>:              <span class="n">double</span> <span class="n">p_0</span><span class="p">,</span> <span class="n">double</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">double</span><span class="p">[:]</span> <span class="n">rr_vals</span><span class="p">,</span> <span class="n">bint</span><span class="p">[:]</span> <span class="n">rr_bint</span><span class="p">,</span> <span class="n">double</span> <span class="n">eps_F</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="nb">int</span> <span class="n">n_iter_max</span><span class="o">=</span><span class="mf">13</span><span class="p">)</span> <span class="k">nogil</span><span class="p">:</span></pre>
+</pre><pre class="cython line score-0">&#xA0;<span class="">360</span>:              <span class="n">double</span> <span class="n">p_0</span><span class="p">,</span> <span class="n">double</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">double</span><span class="p">[:]</span> <span class="n">rr_vals</span><span class="p">,</span> <span class="nb">int</span><span class="p">[:]</span> <span class="n">rr_bint</span><span class="p">,</span> <span class="n">double</span> <span class="n">eps_F</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="nb">int</span> <span class="n">n_iter_max</span><span class="o">=</span><span class="mf">13</span><span class="p">)</span> <span class="k">nogil</span><span class="p">:</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">361</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">362</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">rU</span><span class="p">,</span><span class="nf">rR</span><span class="p">,</span><span class="nf">rP</span><span class="p">,</span><span class="nf">p_1</span><span class="p">,</span> <span class="nf">ro_1</span><span class="p">,</span> <span class="nf">u_1</span><span class="p">,</span> <span class="nf">c_1</span><span class="p">,</span> <span class="nf">p_2</span><span class="p">,</span> <span class="nf">ro_2</span><span class="p">,</span> <span class="nf">u_2</span><span class="p">,</span> <span class="nf">c_2</span><span class="p">,</span><span class="nf">D_1</span><span class="p">,</span> <span class="nf">D_star_1</span><span class="p">,</span> <span class="nf">U</span><span class="p">,</span> <span class="nf">D_star_2</span><span class="p">,</span> <span class="nf">D_2</span><span class="p">,</span> <span class="nf">R_1</span><span class="p">,</span> <span class="nf">R_2</span><span class="p">,</span> <span class="nf">P</span></pre>
-<pre class="cython line score-0">&#xA0;<span class="">363</span>:     <span class="k">cdef</span> <span class="kt">bint</span> <span class="nf">suc</span><span class="p">,</span> <span class="nf">UD_left</span><span class="p">,</span> <span class="nf">UD_right</span></pre>
+<pre class="cython line score-0">&#xA0;<span class="">363</span>:     <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">suc</span><span class="p">,</span> <span class="nf">UD_left</span><span class="p">,</span> <span class="nf">UD_right</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">364</span>:     <span class="n">p_1</span><span class="p">,</span> <span class="n">p_2</span> <span class="o">=</span> <span class="n">p</span><span class="p">,</span> <span class="n">p</span></pre>
 <pre class='cython code score-0 '>  __pyx_t_1 = __pyx_v_p;
   __pyx_t_2 = __pyx_v_p;
@@ -4063,9 +4063,9 @@ static PyObject *__pyx_pf_7godunov_36border_wall_fill_rr(CYTHON_UNUSED PyObject 
 <pre class="cython line score-0">&#xA0;<span class="">397</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">398</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">399</span>: </pre>
-<pre class="cython line score-166" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">400</span>: <span class="k">cpdef</span> (<span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span><span class="kt">double</span>) <span class="nf">border_wall_URPDD</span><span class="p">(</span><span class="n">bint</span> <span class="n">left_border</span><span class="p">,</span> <span class="n">double</span> <span class="n">vbi</span><span class="p">,</span> <span class="n">double</span> <span class="n">p</span><span class="p">,</span> <span class="n">double</span> <span class="n">ro</span><span class="p">,</span> <span class="n">double</span> <span class="n">u</span><span class="p">,</span> <span class="n">double</span> <span class="n">c</span><span class="p">,</span> \</pre>
+<pre class="cython line score-166" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">400</span>: <span class="k">cpdef</span> (<span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span><span class="kt">double</span>) <span class="nf">border_wall_URPDD</span><span class="p">(</span><span class="nb">int</span> <span class="n">left_border</span><span class="p">,</span> <span class="n">double</span> <span class="n">vbi</span><span class="p">,</span> <span class="n">double</span> <span class="n">p</span><span class="p">,</span> <span class="n">double</span> <span class="n">ro</span><span class="p">,</span> <span class="n">double</span> <span class="n">u</span><span class="p">,</span> <span class="n">double</span> <span class="n">c</span><span class="p">,</span> \</pre>
 <pre class='cython code score-166 '>static PyObject *__pyx_pw_7godunov_39border_wall_URPDD(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static __pyx_ctuple_4c317__double__and_double__and_double__and_double__and_double__and_double__etc __pyx_f_7godunov_border_wall_URPDD(int __pyx_v_left_border, double __pyx_v_vbi, double __pyx_v_p, double __pyx_v_ro, double __pyx_v_u, double __pyx_v_c, double __pyx_v_p_0, double __pyx_v_gamma, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_7godunov_border_wall_URPDD *__pyx_optional_args) {
+static __pyx_ctuple_c4f74__double__and_double__and_double__and_double__and_double__and_double__etc __pyx_f_7godunov_border_wall_URPDD(int __pyx_v_left_border, double __pyx_v_vbi, double __pyx_v_p, double __pyx_v_ro, double __pyx_v_u, double __pyx_v_c, double __pyx_v_p_0, double __pyx_v_gamma, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_7godunov_border_wall_URPDD *__pyx_optional_args) {
   double __pyx_v_eps_F = ((double)1e-6);
   int __pyx_v_n_iter_max = ((int)13);
   double __pyx_v_p_1;
@@ -4090,7 +4090,7 @@ static __pyx_ctuple_4c317__double__and_double__and_double__and_double__and_doubl
   int __pyx_v_suc;
   int __pyx_v_UD_left;
   int __pyx_v_UD_right;
-  __pyx_ctuple_4c317__double__and_double__and_double__and_double__and_double__and_double__etc __pyx_r;
+  __pyx_ctuple_c4f74__double__and_double__and_double__and_double__and_double__and_double__etc __pyx_r;
   if (__pyx_optional_args) {
     if (__pyx_optional_args-&gt;__pyx_n &gt; 0) {
       __pyx_v_eps_F = __pyx_optional_args-&gt;eps_F;
@@ -4232,7 +4232,7 @@ static PyObject *__pyx_pw_7godunov_39border_wall_URPDD(PyObject *__pyx_self, PyO
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_left_border = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(values[0]); if (unlikely((__pyx_v_left_border == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 400, __pyx_L3_error)</span>
+    __pyx_v_left_border = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(values[0]); if (unlikely((__pyx_v_left_border == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 400, __pyx_L3_error)</span>
     __pyx_v_vbi = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[1]); if (unlikely((__pyx_v_vbi == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 400, __pyx_L3_error)</span>
     __pyx_v_p = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[2]); if (unlikely((__pyx_v_p == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 400, __pyx_L3_error)</span>
     __pyx_v_ro = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[3]); if (unlikely((__pyx_v_ro == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 400, __pyx_L3_error)</span>
@@ -4278,7 +4278,7 @@ static PyObject *__pyx_pf_7godunov_38border_wall_URPDD(CYTHON_UNUSED PyObject *_
   __pyx_t_2.eps_F = __pyx_v_eps_F;
   __pyx_t_2.n_iter_max = __pyx_v_n_iter_max;
   __pyx_t_1 = __pyx_f_7godunov_border_wall_URPDD(__pyx_v_left_border, __pyx_v_vbi, __pyx_v_p, __pyx_v_ro, __pyx_v_u, __pyx_v_c, __pyx_v_p_0, __pyx_v_gamma, 0, &amp;__pyx_t_2); 
-  __pyx_t_3 = __pyx_convert__to_py___pyx_ctuple_4c317__double__and_double__and_double__and_double__and_double__and_double__etc(__pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 400, __pyx_L1_error)</span>
+  __pyx_t_3 = __pyx_convert__to_py___pyx_ctuple_c4f74__double__and_double__and_double__and_double__and_double__and_double__etc(__pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 400, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
@@ -4297,7 +4297,7 @@ static PyObject *__pyx_pf_7godunov_38border_wall_URPDD(CYTHON_UNUSED PyObject *_
 </pre><pre class="cython line score-0">&#xA0;<span class="">401</span>:              <span class="n">double</span> <span class="n">p_0</span><span class="p">,</span> <span class="n">double</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">double</span> <span class="n">eps_F</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="nb">int</span> <span class="n">n_iter_max</span><span class="o">=</span><span class="mf">13</span><span class="p">)</span> <span class="k">nogil</span><span class="p">:</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">402</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">403</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">p_1</span><span class="p">,</span> <span class="nf">ro_1</span><span class="p">,</span> <span class="nf">u_1</span><span class="p">,</span> <span class="nf">c_1</span><span class="p">,</span> <span class="nf">p_2</span><span class="p">,</span> <span class="nf">ro_2</span><span class="p">,</span> <span class="nf">u_2</span><span class="p">,</span> <span class="nf">c_2</span><span class="p">,</span> <span class="nf">rU</span><span class="p">,</span><span class="nf">rR</span><span class="p">,</span><span class="nf">rP</span><span class="p">,</span><span class="nf">D_1</span><span class="p">,</span> <span class="nf">D_star_1</span><span class="p">,</span> <span class="nf">U</span><span class="p">,</span> <span class="nf">D_star_2</span><span class="p">,</span> <span class="nf">D_2</span><span class="p">,</span> <span class="nf">R_1</span><span class="p">,</span> <span class="nf">R_2</span><span class="p">,</span> <span class="nf">P</span></pre>
-<pre class="cython line score-0">&#xA0;<span class="">404</span>:     <span class="k">cdef</span> <span class="kt">bint</span> <span class="nf">suc</span><span class="p">,</span> <span class="nf">UD_left</span><span class="p">,</span> <span class="nf">UD_right</span></pre>
+<pre class="cython line score-0">&#xA0;<span class="">404</span>:     <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">suc</span><span class="p">,</span> <span class="nf">UD_left</span><span class="p">,</span> <span class="nf">UD_right</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">405</span>:     <span class="n">p_1</span><span class="p">,</span> <span class="n">p_2</span> <span class="o">=</span> <span class="n">p</span><span class="p">,</span> <span class="n">p</span></pre>
 <pre class='cython code score-0 '>  __pyx_t_1 = __pyx_v_p;
   __pyx_t_2 = __pyx_v_p;
@@ -4337,68 +4337,68 @@ static PyObject *__pyx_pf_7godunov_38border_wall_URPDD(CYTHON_UNUSED PyObject *_
   __pyx_t_5.eps_F = __pyx_v_eps_F;
   __pyx_t_5.n_iter_max = __pyx_v_n_iter_max;
   __pyx_t_4 = __pyx_f_7godunov_mega_foo(__pyx_v_p_1, __pyx_v_ro_1, __pyx_v_u_1, __pyx_v_c_1, __pyx_v_p_2, __pyx_v_ro_2, __pyx_v_u_2, __pyx_v_c_2, __pyx_v_p_0, __pyx_v_gamma, 0, &amp;__pyx_t_5); 
-  __pyx_t_3 = __pyx_t_4.f0;
-  __pyx_t_6 = __pyx_t_4.f1;
-  __pyx_t_7 = __pyx_t_4.f2;
+  __pyx_t_6 = __pyx_t_4.f0;
+  __pyx_t_7 = __pyx_t_4.f1;
+  __pyx_t_8 = __pyx_t_4.f2;
   __pyx_t_2 = __pyx_t_4.f3;
   __pyx_t_1 = __pyx_t_4.f4;
-  __pyx_t_8 = __pyx_t_4.f5;
-  __pyx_t_9 = __pyx_t_4.f6;
-  __pyx_t_10 = __pyx_t_4.f7;
-  __pyx_t_11 = __pyx_t_4.f8;
-  __pyx_t_12 = __pyx_t_4.f9;
-  __pyx_t_13 = __pyx_t_4.f10;
-  __pyx_v_suc = __pyx_t_3;
-  __pyx_v_UD_left = __pyx_t_6;
-  __pyx_v_UD_right = __pyx_t_7;
+  __pyx_t_9 = __pyx_t_4.f5;
+  __pyx_t_10 = __pyx_t_4.f6;
+  __pyx_t_11 = __pyx_t_4.f7;
+  __pyx_t_12 = __pyx_t_4.f8;
+  __pyx_t_13 = __pyx_t_4.f9;
+  __pyx_t_14 = __pyx_t_4.f10;
+  __pyx_v_suc = __pyx_t_6;
+  __pyx_v_UD_left = __pyx_t_7;
+  __pyx_v_UD_right = __pyx_t_8;
   __pyx_v_D_1 = __pyx_t_2;
   __pyx_v_D_star_1 = __pyx_t_1;
-  __pyx_v_U = __pyx_t_8;
-  __pyx_v_D_star_2 = __pyx_t_9;
-  __pyx_v_D_2 = __pyx_t_10;
-  __pyx_v_R_1 = __pyx_t_11;
-  __pyx_v_R_2 = __pyx_t_12;
-  __pyx_v_P = __pyx_t_13;
+  __pyx_v_U = __pyx_t_9;
+  __pyx_v_D_star_2 = __pyx_t_10;
+  __pyx_v_D_2 = __pyx_t_11;
+  __pyx_v_R_1 = __pyx_t_12;
+  __pyx_v_R_2 = __pyx_t_13;
+  __pyx_v_P = __pyx_t_14;
 </pre><pre class="cython line score-0">&#xA0;<span class="">416</span>:              <span class="n">p_2</span><span class="p">,</span> <span class="n">ro_2</span><span class="p">,</span> <span class="n">u_2</span><span class="p">,</span> <span class="n">c_2</span><span class="p">,</span> \</pre>
 <pre class="cython line score-0">&#xA0;<span class="">417</span>:              <span class="n">p_0</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">eps_F</span><span class="p">,</span> <span class="n">n_iter_max</span><span class="p">)</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">418</span>: </pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">419</span>:     <span class="k">if</span> <span class="ow">not</span> <span class="n">suc</span><span class="p">:</span></pre>
-<pre class='cython code score-0 '>  __pyx_t_7 = ((!(__pyx_v_suc != 0)) != 0);
-  if (__pyx_t_7) {
+<pre class='cython code score-0 '>  __pyx_t_3 = ((!(__pyx_v_suc != 0)) != 0);
+  if (__pyx_t_3) {
 /* … */
   }
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">420</span>:         <span class="k">return</span> <span class="n">vbi</span><span class="p">,</span><span class="n">ro</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">D_1</span><span class="p">,</span><span class="n">D_2</span><span class="p">,</span><span class="n">U</span></pre>
-<pre class='cython code score-0 '>    __pyx_t_14.f0 = __pyx_v_vbi;
-    __pyx_t_14.f1 = __pyx_v_ro;
-    __pyx_t_14.f2 = __pyx_v_p;
-    __pyx_t_14.f3 = __pyx_v_D_1;
-    __pyx_t_14.f4 = __pyx_v_D_2;
-    __pyx_t_14.f5 = __pyx_v_U;
-    __pyx_r = __pyx_t_14;
+<pre class='cython code score-0 '>    __pyx_t_15.f0 = __pyx_v_vbi;
+    __pyx_t_15.f1 = __pyx_v_ro;
+    __pyx_t_15.f2 = __pyx_v_p;
+    __pyx_t_15.f3 = __pyx_v_D_1;
+    __pyx_t_15.f4 = __pyx_v_D_2;
+    __pyx_t_15.f5 = __pyx_v_U;
+    __pyx_r = __pyx_t_15;
     goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">421</span>: </pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">422</span>:     <span class="n">rU</span><span class="p">,</span><span class="n">rR</span><span class="p">,</span><span class="n">rP</span><span class="o">=</span><span class="n">get_ray_URP</span><span class="p">(</span><span class="n">vbi</span><span class="p">,</span> <span class="n">UD_left</span><span class="p">,</span> <span class="n">UD_right</span><span class="p">,</span> <span class="n">D_1</span><span class="p">,</span> <span class="n">D_star_1</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">D_star_2</span><span class="p">,</span> <span class="n">D_2</span><span class="p">,</span> <span class="n">R_1</span><span class="p">,</span> <span class="n">R_2</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span></pre>
-<pre class='cython code score-0 '>  __pyx_t_15 = __pyx_f_7godunov_get_ray_URP(__pyx_v_vbi, __pyx_v_UD_left, __pyx_v_UD_right, __pyx_v_D_1, __pyx_v_D_star_1, __pyx_v_U, __pyx_v_D_star_2, __pyx_v_D_2, __pyx_v_R_1, __pyx_v_R_2, __pyx_v_P, __pyx_v_p_1, __pyx_v_ro_1, __pyx_v_u_1, __pyx_v_c_1, __pyx_v_p_2, __pyx_v_ro_2, __pyx_v_u_2, __pyx_v_c_2, __pyx_v_gamma, 0);
-  __pyx_t_13 = __pyx_t_15.f0;
-  __pyx_t_12 = __pyx_t_15.f1;
-  __pyx_t_11 = __pyx_t_15.f2;
-  __pyx_v_rU = __pyx_t_13;
-  __pyx_v_rR = __pyx_t_12;
-  __pyx_v_rP = __pyx_t_11;
+<pre class='cython code score-0 '>  __pyx_t_16 = __pyx_f_7godunov_get_ray_URP(__pyx_v_vbi, __pyx_v_UD_left, __pyx_v_UD_right, __pyx_v_D_1, __pyx_v_D_star_1, __pyx_v_U, __pyx_v_D_star_2, __pyx_v_D_2, __pyx_v_R_1, __pyx_v_R_2, __pyx_v_P, __pyx_v_p_1, __pyx_v_ro_1, __pyx_v_u_1, __pyx_v_c_1, __pyx_v_p_2, __pyx_v_ro_2, __pyx_v_u_2, __pyx_v_c_2, __pyx_v_gamma, 0);
+  __pyx_t_14 = __pyx_t_16.f0;
+  __pyx_t_13 = __pyx_t_16.f1;
+  __pyx_t_12 = __pyx_t_16.f2;
+  __pyx_v_rU = __pyx_t_14;
+  __pyx_v_rR = __pyx_t_13;
+  __pyx_v_rP = __pyx_t_12;
 </pre><pre class="cython line score-0">&#xA0;<span class="">423</span>:                          <span class="n">p_1</span><span class="o">=</span><span class="n">p_1</span><span class="p">,</span> <span class="n">ro_1</span><span class="o">=</span><span class="n">ro_1</span><span class="p">,</span> <span class="n">u_1</span><span class="o">=</span><span class="n">u_1</span><span class="p">,</span> <span class="n">c_1</span><span class="o">=</span><span class="n">c_1</span><span class="p">,</span> <span class="n">p_2</span><span class="o">=</span><span class="n">p_2</span><span class="p">,</span> <span class="n">ro_2</span><span class="o">=</span><span class="n">ro_2</span><span class="p">,</span> <span class="n">u_2</span><span class="o">=</span><span class="n">u_2</span><span class="p">,</span> <span class="n">c_2</span><span class="o">=</span><span class="n">c_2</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">)</span></pre>
 <pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">424</span>:     <span class="k">return</span> <span class="n">rU</span><span class="p">,</span><span class="n">rR</span><span class="p">,</span><span class="n">rP</span><span class="p">,</span><span class="n">D_1</span><span class="p">,</span><span class="n">D_2</span><span class="p">,</span><span class="n">U</span></pre>
-<pre class='cython code score-0 '>  __pyx_t_14.f0 = __pyx_v_rU;
-  __pyx_t_14.f1 = __pyx_v_rR;
-  __pyx_t_14.f2 = __pyx_v_rP;
-  __pyx_t_14.f3 = __pyx_v_D_1;
-  __pyx_t_14.f4 = __pyx_v_D_2;
-  __pyx_t_14.f5 = __pyx_v_U;
-  __pyx_r = __pyx_t_14;
+<pre class='cython code score-0 '>  __pyx_t_15.f0 = __pyx_v_rU;
+  __pyx_t_15.f1 = __pyx_v_rR;
+  __pyx_t_15.f2 = __pyx_v_rP;
+  __pyx_t_15.f3 = __pyx_v_D_1;
+  __pyx_t_15.f4 = __pyx_v_D_2;
+  __pyx_t_15.f5 = __pyx_v_U;
+  __pyx_r = __pyx_t_15;
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">425</span>: </pre>
-<pre class="cython line score-201" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">426</span>: <span class="k">cpdef</span> (<span class="nf">bint</span><span class="p">,</span> <span class="nf">bint</span><span class="p">,</span> <span class="nf">bint</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="kt">double</span>) \</pre>
+<pre class="cython line score-201" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">426</span>: <span class="k">cpdef</span> (<span class="nf">int</span><span class="p">,</span> <span class="nf">int</span><span class="p">,</span> <span class="nf">int</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="nf">double</span><span class="p">,</span> <span class="kt">double</span>) \</pre>
 <pre class='cython code score-201 '>static PyObject *__pyx_pw_7godunov_41mega_foo(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static __pyx_ctuple_602cb__int__and_int__and_int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_f_7godunov_mega_foo(double __pyx_v_p_1, double __pyx_v_ro_1, double __pyx_v_u_1, double __pyx_v_c_1, double __pyx_v_p_2, double __pyx_v_ro_2, double __pyx_v_u_2, double __pyx_v_c_2, double __pyx_v_p_0, double __pyx_v_gamma, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_7godunov_mega_foo *__pyx_optional_args) {
+static __pyx_ctuple_4958b__int__and_int__and_int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_f_7godunov_mega_foo(double __pyx_v_p_1, double __pyx_v_ro_1, double __pyx_v_u_1, double __pyx_v_c_1, double __pyx_v_p_2, double __pyx_v_ro_2, double __pyx_v_u_2, double __pyx_v_c_2, double __pyx_v_p_0, double __pyx_v_gamma, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_7godunov_mega_foo *__pyx_optional_args) {
   double __pyx_v_eps_F = ((double)1e-5);
   int __pyx_v_n_iter_max = ((int)37);
   int __pyx_v_reverse;
@@ -4423,7 +4423,7 @@ static __pyx_ctuple_602cb__int__and_int__and_int__and_double__and_double__and_do
   double __pyx_v_c_star_1;
   int __pyx_v_UD_right;
   double __pyx_v_c_star_2;
-  __pyx_ctuple_602cb__int__and_int__and_int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_r;
+  __pyx_ctuple_4958b__int__and_int__and_int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc __pyx_r;
   if (__pyx_optional_args) {
     if (__pyx_optional_args-&gt;__pyx_n &gt; 0) {
       __pyx_v_eps_F = __pyx_optional_args-&gt;eps_F;
@@ -4634,7 +4634,7 @@ static PyObject *__pyx_pf_7godunov_40mega_foo(CYTHON_UNUSED PyObject *__pyx_self
   __pyx_t_2.eps_F = __pyx_v_eps_F;
   __pyx_t_2.n_iter_max = __pyx_v_n_iter_max;
   __pyx_t_1 = __pyx_f_7godunov_mega_foo(__pyx_v_p_1, __pyx_v_ro_1, __pyx_v_u_1, __pyx_v_c_1, __pyx_v_p_2, __pyx_v_ro_2, __pyx_v_u_2, __pyx_v_c_2, __pyx_v_p_0, __pyx_v_gamma, 0, &amp;__pyx_t_2); 
-  __pyx_t_3 = __pyx_convert__to_py___pyx_ctuple_602cb__int__and_int__and_int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc(__pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 426, __pyx_L1_error)</span>
+  __pyx_t_3 = __pyx_convert__to_py___pyx_ctuple_4958b__int__and_int__and_int__and_double__and_double__and_double__and_double__and_double__and_double__and_double__and_double__etc(__pyx_t_1);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 426, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
@@ -4686,7 +4686,7 @@ static PyObject *__pyx_pf_7godunov_40mega_foo(CYTHON_UNUSED PyObject *__pyx_self
 <pre class="cython line score-0">&#xA0;<span class="">460</span>: <span class="sd">                 [10] P        {float} -- давление в зоне контактного разрыва</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">461</span>: <span class="sd">    &quot;&quot;&quot;</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">462</span>: </pre>
-<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">463</span>:     <span class="k">cdef</span> <span class="kt">bint</span> <span class="nf">reverse</span> <span class="o">=</span> <span class="bp">False</span></pre>
+<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">463</span>:     <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">reverse</span> <span class="o">=</span> <span class="bp">False</span></pre>
 <pre class='cython code score-0 '>  __pyx_v_reverse = 0;
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">464</span>:     <span class="k">if</span> <span class="p">(</span><span class="n">p_1</span> <span class="o">&gt;</span> <span class="n">p_2</span><span class="p">):</span></pre>
 <pre class='cython code score-0 '>  __pyx_t_1 = ((__pyx_v_p_1 &gt; __pyx_v_p_2) != 0);
@@ -4829,7 +4829,7 @@ static PyObject *__pyx_pf_7godunov_40mega_foo(CYTHON_UNUSED PyObject *__pyx_self
 </pre><pre class="cython line score-0">&#xA0;<span class="">511</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">512</span>:     <span class="k">cdef</span> <span class="kt">double</span> <span class="nf">D_1</span><span class="p">,</span> <span class="nf">R_1</span><span class="p">,</span> <span class="nf">D_star_1</span><span class="p">,</span> <span class="nf">D_2</span><span class="p">,</span> <span class="nf">D_star_2</span><span class="p">,</span> <span class="nf">R_2</span></pre>
 <pre class="cython line score-0">&#xA0;<span class="">513</span>:     <span class="c"># УД слева</span></pre>
-<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">514</span>:     <span class="k">cdef</span> <span class="kt">bint</span> <span class="nf">UD_left</span> <span class="o">=</span> <span class="n">u_1</span><span class="o">-</span><span class="n">u_2</span> <span class="o">&gt;</span> <span class="n">U_raz</span></pre>
+<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">514</span>:     <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">UD_left</span> <span class="o">=</span> <span class="n">u_1</span><span class="o">-</span><span class="n">u_2</span> <span class="o">&gt;</span> <span class="n">U_raz</span></pre>
 <pre class='cython code score-0 '>  __pyx_v_UD_left = ((__pyx_v_u_1 - __pyx_v_u_2) &gt; __pyx_v_U_raz);
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">515</span>:     <span class="k">if</span> <span class="n">UD_left</span><span class="p">:</span></pre>
 <pre class='cython code score-0 '>  __pyx_t_10 = (__pyx_v_UD_left != 0);
@@ -4857,7 +4857,7 @@ static PyObject *__pyx_pf_7godunov_40mega_foo(CYTHON_UNUSED PyObject *__pyx_self
   __pyx_L10:;
 </pre><pre class="cython line score-0">&#xA0;<span class="">524</span>: </pre>
 <pre class="cython line score-0">&#xA0;<span class="">525</span>:     <span class="c"># УД справа</span></pre>
-<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">526</span>:     <span class="k">cdef</span> <span class="kt">bint</span> <span class="nf">UD_right</span> <span class="o">=</span> <span class="n">u_1</span><span class="o">-</span><span class="n">u_2</span> <span class="o">&gt;</span> <span class="n">U_ud</span></pre>
+<pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">526</span>:     <span class="k">cdef</span> <span class="kt">int</span> <span class="nf">UD_right</span> <span class="o">=</span> <span class="n">u_1</span><span class="o">-</span><span class="n">u_2</span> <span class="o">&gt;</span> <span class="n">U_ud</span></pre>
 <pre class='cython code score-0 '>  __pyx_v_UD_right = ((__pyx_v_u_1 - __pyx_v_u_2) &gt; __pyx_v_U_ud);
 </pre><pre class="cython line score-0" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">527</span>:     <span class="k">if</span> <span class="n">UD_right</span><span class="p">:</span></pre>
 <pre class='cython code score-0 '>  __pyx_t_10 = (__pyx_v_UD_right != 0);
@@ -5161,8 +5161,8 @@ static PyObject *__pyx_pw_7godunov_43get_ray_URP(PyObject *__pyx_self, PyObject 
       values[19] = <span class='py_macro_api'>PyTuple_GET_ITEM</span>(__pyx_args, 19);
     }
     __pyx_v_ray_W = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[0]); if (unlikely((__pyx_v_ray_W == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 543, __pyx_L3_error)</span>
-    __pyx_v_UD_left = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(values[1]); if (unlikely((__pyx_v_UD_left == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 543, __pyx_L3_error)</span>
-    __pyx_v_UD_right = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(values[2]); if (unlikely((__pyx_v_UD_right == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 543, __pyx_L3_error)</span>
+    __pyx_v_UD_left = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(values[1]); if (unlikely((__pyx_v_UD_left == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 543, __pyx_L3_error)</span>
+    __pyx_v_UD_right = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(values[2]); if (unlikely((__pyx_v_UD_right == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 543, __pyx_L3_error)</span>
     __pyx_v_D_1 = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[3]); if (unlikely((__pyx_v_D_1 == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 543, __pyx_L3_error)</span>
     __pyx_v_D_star_1 = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[4]); if (unlikely((__pyx_v_D_star_1 == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 543, __pyx_L3_error)</span>
     __pyx_v_U = __pyx_<span class='py_c_api'>PyFloat_AsDouble</span>(values[5]); if (unlikely((__pyx_v_U == (double)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 543, __pyx_L3_error)</span>
@@ -5220,7 +5220,7 @@ static PyObject *__pyx_pf_7godunov_42get_ray_URP(CYTHON_UNUSED PyObject *__pyx_s
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
 }
-</pre><pre class="cython line score-0">&#xA0;<span class="">543</span>:     <span class="n">double</span> <span class="n">ray_W</span><span class="p">,</span> <span class="n">bint</span> <span class="n">UD_left</span><span class="p">,</span> <span class="n">bint</span> <span class="n">UD_right</span><span class="p">,</span> <span class="n">double</span> <span class="n">D_1</span><span class="p">,</span> <span class="n">double</span> <span class="n">D_star_1</span><span class="p">,</span> <span class="n">double</span> <span class="n">U</span><span class="p">,</span> \</pre>
+</pre><pre class="cython line score-0">&#xA0;<span class="">543</span>:     <span class="n">double</span> <span class="n">ray_W</span><span class="p">,</span> <span class="nb">int</span> <span class="n">UD_left</span><span class="p">,</span> <span class="nb">int</span> <span class="n">UD_right</span><span class="p">,</span> <span class="n">double</span> <span class="n">D_1</span><span class="p">,</span> <span class="n">double</span> <span class="n">D_star_1</span><span class="p">,</span> <span class="n">double</span> <span class="n">U</span><span class="p">,</span> \</pre>
 <pre class="cython line score-0">&#xA0;<span class="">544</span>:     <span class="n">double</span> <span class="n">D_star_2</span><span class="p">,</span> <span class="n">double</span> <span class="n">D_2</span><span class="p">,</span> <span class="n">double</span> <span class="n">R_1</span><span class="p">,</span> <span class="n">double</span> <span class="n">R_2</span><span class="p">,</span> <span class="n">double</span> <span class="n">P</span><span class="p">,</span> \</pre>
 <pre class="cython line score-0">&#xA0;<span class="">545</span>:     <span class="n">double</span> <span class="n">p_1</span><span class="p">,</span> <span class="n">double</span> <span class="n">ro_1</span><span class="p">,</span> <span class="n">double</span> <span class="n">u_1</span><span class="p">,</span> <span class="n">double</span> <span class="n">c_1</span><span class="p">,</span> \</pre>
 <pre class="cython line score-0">&#xA0;<span class="">546</span>:     <span class="n">double</span> <span class="n">p_2</span><span class="p">,</span> <span class="n">double</span> <span class="n">ro_2</span><span class="p">,</span> <span class="n">double</span> <span class="n">u_2</span><span class="p">,</span> <span class="n">double</span> <span class="n">c_2</span><span class="p">,</span> <span class="n">double</span> <span class="n">gamma</span><span class="p">)</span> <span class="k">nogil</span><span class="p">:</span></pre>

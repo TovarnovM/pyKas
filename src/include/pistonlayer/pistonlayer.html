@@ -2407,10 +2407,10 @@ static int __pyx_pf_11pistonlayer_9ElPistEOS___init__(struct __pyx_obj_11pistonl
   <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_v_self-&gt;tau_s = __pyx_t_5;
 </pre><pre class="cython line score-7" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">152</span>:         <span class="bp">self</span><span class="o">.</span><span class="n">zeroP</span> <span class="o">=</span> <span class="n">zeroP</span></pre>
-<pre class='cython code score-7 '>  __pyx_t_7 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_v_zeroP); if (unlikely((__pyx_t_7 == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 152, __pyx_L1_error)</span>
+<pre class='cython code score-7 '>  __pyx_t_7 = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(__pyx_v_zeroP); if (unlikely((__pyx_t_7 == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 152, __pyx_L1_error)</span>
   __pyx_v_self-&gt;zeroP = __pyx_t_7;
 </pre><pre class="cython line score-7" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">153</span>:         <span class="bp">self</span><span class="o">.</span><span class="n">zeroE</span> <span class="o">=</span> <span class="n">zeroE</span></pre>
-<pre class='cython code score-7 '>  __pyx_t_7 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_v_zeroE); if (unlikely((__pyx_t_7 == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 153, __pyx_L1_error)</span>
+<pre class='cython code score-7 '>  __pyx_t_7 = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(__pyx_v_zeroE); if (unlikely((__pyx_t_7 == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 153, __pyx_L1_error)</span>
   __pyx_v_self-&gt;zeroE = __pyx_t_7;
 </pre><pre class="cython line score-0">&#xA0;<span class="">154</span>: </pre>
 <pre class="cython line score-5" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">155</span>:     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre>
@@ -2444,8 +2444,8 @@ static PyObject *__pyx_pf_11pistonlayer_9ElPistEOS_2__repr__(struct __pyx_obj_11
   <span class='refnanny'>__Pyx_RefNannyFinishContext</span>();
   return __pyx_r;
 }
-</pre><pre class="cython line score-209" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">156</span>:         <span class="k">return</span> <span class="n">f</span><span class="s">&#39;&#39;&#39;ElPistEOS(k={self.gamma}, c_0={self.c_0}, ro_0={self.ro_0}, </span></pre>
-<pre class='cython code score-209 '>  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
+</pre><pre class="cython line score-219" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">156</span>:         <span class="k">return</span> <span class="n">f</span><span class="s">&#39;&#39;&#39;ElPistEOS(k={self.gamma}, c_0={self.c_0}, ro_0={self.ro_0}, </span></pre>
+<pre class='cython code score-219 '>  <span class='pyx_macro_api'>__Pyx_XDECREF</span>(__pyx_r);
   __pyx_t_1 = <span class='py_c_api'>PyTuple_New</span>(25);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 156, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
   __pyx_t_2 = 0;
@@ -2594,7 +2594,10 @@ static PyObject *__pyx_pf_11pistonlayer_9ElPistEOS_2__repr__(struct __pyx_obj_11
   __pyx_t_2 += 16;
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_kp_u_zeroP_2);
   <span class='py_macro_api'>PyTuple_SET_ITEM</span>(__pyx_t_1, 20, __pyx_kp_u_zeroP_2);
-  __pyx_t_6 = __pyx_v_self-&gt;zeroP;
+  __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyInt_From_int</span>(__pyx_v_self-&gt;zeroP);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 156, __pyx_L1_error)</span>
+  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_4);
+  __pyx_t_6 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_4); if (unlikely(__pyx_t_6 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 156, __pyx_L1_error)</span>
+  <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyBool_FromLong</span>((!(!__pyx_t_6)));<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 156, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_4);
   __pyx_t_5 = <span class='pyx_c_api'>__Pyx_PyObject_FormatSimple</span>(__pyx_t_4, __pyx_empty_unicode);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 156, __pyx_L1_error)</span>
@@ -2609,7 +2612,10 @@ static PyObject *__pyx_pf_11pistonlayer_9ElPistEOS_2__repr__(struct __pyx_obj_11
   __pyx_t_2 += 8;
   <span class='refnanny'>__Pyx_GIVEREF</span>(__pyx_kp_u_zeroE_2);
   <span class='py_macro_api'>PyTuple_SET_ITEM</span>(__pyx_t_1, 22, __pyx_kp_u_zeroE_2);
-  __pyx_t_6 = __pyx_v_self-&gt;zeroE;
+  __pyx_t_5 = <span class='pyx_c_api'>__Pyx_PyInt_From_int</span>(__pyx_v_self-&gt;zeroE);<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 156, __pyx_L1_error)</span>
+  <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_5);
+  __pyx_t_6 = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(__pyx_t_5); if (unlikely(__pyx_t_6 &lt; 0)) <span class='error_goto'>__PYX_ERR(0, 156, __pyx_L1_error)</span>
+  <span class='pyx_macro_api'>__Pyx_DECREF</span>(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_5 = <span class='pyx_c_api'>__Pyx_PyBool_FromLong</span>((!(!__pyx_t_6)));<span class='error_goto'> if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 156, __pyx_L1_error)</span>
   <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_5);
   __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyObject_FormatSimple</span>(__pyx_t_5, __pyx_empty_unicode);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 156, __pyx_L1_error)</span>

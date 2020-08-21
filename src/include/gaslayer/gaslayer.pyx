@@ -326,7 +326,7 @@ cdef class GasFluxCalculator(object):
 
     cpdef void create_rr_arrs(self, GasLayer layer):
         layer.rr_vals = np.zeros((layer.n_cells+1, self.rr_vals_len), dtype=np.double)
-        layer.rr_bint = np.zeros((layer.n_cells+1, self.rr_bint_len), dtype=np.int)
+        layer.rr_bint = np.zeros((layer.n_cells+1, self.rr_bint_len), dtype=np.int32)
 
 
     cpdef void fill_rr_vals(self, GasLayer layer):
@@ -645,7 +645,7 @@ cdef class GridStrecher(object):
         self.D_mnj =D_mnj
         self.index_anchor = index_anchor
 
-    cpdef bint evaluate(self, double tau, GasLayer layer):
+    cpdef int evaluate(self, double tau, GasLayer layer):
         cdef size_t i
         for i in range(layer.xs_borders.shape[0]):
             layer.xs_borders[i] = layer.xs_borders[i] + tau * layer.Vs_borders[i]
@@ -661,10 +661,10 @@ cdef class GridStrecher(object):
         for i in range(vs.shape[0]):
             vs[i] = v1 + i*dv
 
-    cpdef bint sync_layers(self, GasLayer layer0, GasLayer layer1, double tau, double v_left, double v_right):
+    cpdef int sync_layers(self, GasLayer layer0, GasLayer layer1, double tau, double v_left, double v_right):
         layer1.time = layer0.time + tau
         cdef size_t i
-        cdef bint suc
+        cdef int suc
         if self.strech_type == 1:
             self.fill_Vs_borders_proportional(v_left, v_right, layer0.xs_borders, layer0.Vs_borders)
             self.fill_Vs_borders_proportional(v_left, v_right, layer1.xs_borders, layer1.Vs_borders)
@@ -978,7 +978,7 @@ cdef class GasLayer(object):
         return res
 
 
-    cpdef void init_ropue_fromfoo(self, foo_ropu, bint init_q=True,  bint init_SsdW=True):
+    cpdef void init_ropue_fromfoo(self, foo_ropu, int init_q=True,  int init_SsdW=True):
         self.grid_strecher.fill_xs_cells(self.xs_borders, self.xs_cells)
         cdef size_t i
         cdef double x
@@ -1126,7 +1126,7 @@ cdef class GasLayer(object):
         self.Vs_borders[self.n_cells] = v_right
         self.fill_rr()
         cpdef GasLayer layer1 = self.copy() 
-        cdef bint suc = self.grid_strecher.sync_layers(self, layer1, tau, v_left, v_right)
+        cdef int suc = self.grid_strecher.sync_layers(self, layer1, tau, v_left, v_right)
         if not suc:
             print('suc 454')
             return self
@@ -1155,7 +1155,7 @@ cdef class GasLayer(object):
         lr_simple05.fill_rr()
         cpdef GasLayer layer2 = lr_simple05.copy()
         cdef double tau2 = self.time+tau-lr_simple05.time
-        cdef bint suc = self.grid_strecher.sync_layers(lr_simple05, layer2, tau2, v_left, v_right)
+        cdef int suc = self.grid_strecher.sync_layers(lr_simple05, layer2, tau2, v_left, v_right)
         if not suc:
             print('suc 354')
             return self
@@ -1186,7 +1186,7 @@ cdef class GasLayer(object):
         cdef double tau = lr_simple.time - self.time
         cdef double vl = 0.5*(v_left + lr_simple.Vs_borders[0])
         cdef double vr = 0.5*(v_right + lr_simple.Vs_borders[lr_simple.n_cells])
-        cdef bint suc = self.grid_strecher.sync_layers(self, layer2, tau, vl, vr)
+        cdef int suc = self.grid_strecher.sync_layers(self, layer2, tau, vl, vr)
         if not suc:
             print('suc 254')
             return self

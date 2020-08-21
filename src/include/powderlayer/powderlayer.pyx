@@ -241,7 +241,7 @@ cdef class PowderOvLayer(GasLayer):
         self.copy_params_to_Ov(res)
         return res
     
-    cpdef void init_ropue_fromfoo(self, foo_ropu, bint init_q=True,  bint init_SsdW=True):
+    cpdef void init_ropue_fromfoo(self, foo_ropu, int init_q=True,  int init_SsdW=True):
         self.grid_strecher.fill_xs_cells(self.xs_borders, self.xs_cells)
         cdef size_t i
         cdef double x

@@ -4254,7 +4254,7 @@ static PyObject *__pyx_pf_11powderlayer_13PowderOvLayer_6copy(struct __pyx_obj_1
   __pyx_r = ((struct __pyx_obj_8gaslayer_GasLayer *)__pyx_v_res);
   goto __pyx_L0;
 </pre><pre class="cython line score-0">&#xA0;<span class="">243</span>: </pre>
-<pre class="cython line score-105" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">244</span>:     <span class="k">cpdef</span> <span class="kt">void</span> <span class="nf">init_ropue_fromfoo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo_ropu</span><span class="p">,</span> <span class="n">bint</span> <span class="n">init_q</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>  <span class="n">bint</span> <span class="n">init_SsdW</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span></pre>
+<pre class="cython line score-105" onclick="(function(s){s.display=s.display==='block'?'none':'block'})(this.nextElementSibling.style)">+<span class="">244</span>:     <span class="k">cpdef</span> <span class="kt">void</span> <span class="nf">init_ropue_fromfoo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo_ropu</span><span class="p">,</span> <span class="nb">int</span> <span class="n">init_q</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>  <span class="nb">int</span> <span class="n">init_SsdW</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span></pre>
 <pre class='cython code score-105 '>static PyObject *__pyx_pw_11powderlayer_13PowderOvLayer_9init_ropue_fromfoo(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static void __pyx_f_11powderlayer_13PowderOvLayer_init_ropue_fromfoo(struct __pyx_obj_11powderlayer_PowderOvLayer *__pyx_v_self, PyObject *__pyx_v_foo_ropu, int __pyx_skip_dispatch, struct __pyx_opt_args_11powderlayer_13PowderOvLayer_init_ropue_fromfoo *__pyx_optional_args) {
   int __pyx_v_init_q = ((int)1);
@@ -4287,9 +4287,9 @@ static void __pyx_f_11powderlayer_13PowderOvLayer_init_ropue_fromfoo(struct __py
       __pyx_t_1 = <span class='pyx_c_api'>__Pyx_PyObject_GetAttrStr</span>(((PyObject *)__pyx_v_self), __pyx_n_s_init_ropue_fromfoo);<span class='error_goto'> if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 244, __pyx_L1_error)</span>
       <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_1);
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_11powderlayer_13PowderOvLayer_9init_ropue_fromfoo)) {
-        __pyx_t_3 = <span class='pyx_c_api'>__Pyx_PyBool_FromLong</span>(__pyx_v_init_q);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 244, __pyx_L1_error)</span>
+        __pyx_t_3 = <span class='pyx_c_api'>__Pyx_PyInt_From_int</span>(__pyx_v_init_q);<span class='error_goto'> if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 244, __pyx_L1_error)</span>
         <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_3);
-        __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyBool_FromLong</span>(__pyx_v_init_SsdW);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 244, __pyx_L1_error)</span>
+        __pyx_t_4 = <span class='pyx_c_api'>__Pyx_PyInt_From_int</span>(__pyx_v_init_SsdW);<span class='error_goto'> if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 244, __pyx_L1_error)</span>
         <span class='refnanny'>__Pyx_GOTREF</span>(__pyx_t_4);
         <span class='pyx_macro_api'>__Pyx_INCREF</span>(__pyx_t_1);
         __pyx_t_5 = __pyx_t_1; __pyx_t_6 = NULL;
@@ -4436,12 +4436,12 @@ static PyObject *__pyx_pw_11powderlayer_13PowderOvLayer_9init_ropue_fromfoo(PyOb
     }
     __pyx_v_foo_ropu = values[0];
     if (values[1]) {
-      __pyx_v_init_q = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(values[1]); if (unlikely((__pyx_v_init_q == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 244, __pyx_L3_error)</span>
+      __pyx_v_init_q = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(values[1]); if (unlikely((__pyx_v_init_q == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 244, __pyx_L3_error)</span>
     } else {
       __pyx_v_init_q = ((int)1);
     }
     if (values[2]) {
-      __pyx_v_init_SsdW = <span class='pyx_c_api'>__Pyx_PyObject_IsTrue</span>(values[2]); if (unlikely((__pyx_v_init_SsdW == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 244, __pyx_L3_error)</span>
+      __pyx_v_init_SsdW = <span class='pyx_c_api'>__Pyx_PyInt_As_int</span>(values[2]); if (unlikely((__pyx_v_init_SsdW == (int)-1) &amp;&amp; <span class='py_c_api'>PyErr_Occurred</span>())) <span class='error_goto'>__PYX_ERR(0, 244, __pyx_L3_error)</span>
     } else {
       __pyx_v_init_SsdW = ((int)1);
     }
