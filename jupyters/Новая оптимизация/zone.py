@@ -4,6 +4,7 @@ import numpy.random as rnd
 # import matplotlib.pyplot as plt
 import numpy as np
 
+
 class Zone:
     @classmethod
     def get_x2min(cls, x1, r1, r2, alpha_max=30):
@@ -75,6 +76,33 @@ class Zone:
     def get_split_zones(self, x, r):
         if self.is_in(x, r):
             return Zone(self.x1, x, self.r1, r, self.alpha_max), Zone(x, self.x2, r, self.r2, self.alpha_max)
+        
+    def fix_points(self, points_xd):
+        good_points = [(x, d) for x, d in points_xd if self.is_in(x, d/2)] 
+        if len(good_points) == points_xd.shape[0]:
+            return points_xd
+        zs = [self]
+        res = []
+        for x, d in good_points:
+            for i, z in enumerate(zs):
+                if z.is_in(x, d/2):
+                    break
+            z = zs.pop(i)
+            z1, z2 = z.get_split_zones(x, d/2)
+            res.append((x, d))
+            zs.append(z1)
+            zs.append(z2)
+        while len(res) != points_xd.shape[0]:
+            areas = np.array([z.area for z in zs])
+            areas /= np.sum(areas)
+            i = rnd.choice(len(zs), p=areas)
+            z = zs.pop(i)
+            x, r = z.get_rnd_x_r()
+            res.append((x, r*2))
+            z1, z2 = z.get_split_zones(x, r)
+            zs.append(z1)
+            zs.append(z2)
+        return np.array(sorted(res))
         
     @property
     def area(self):

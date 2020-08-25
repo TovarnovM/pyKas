@@ -440,7 +440,7 @@ class ChromoController(object):
             keys = [np.random.choice(list(self))]
         return self.mutate(chromo, keys)
 
-    def mutate(self, chromo, keys):
+    def mutate(self, chromo, keys=None):
         """
         метод проведения мутации хромосомы 
         
@@ -449,6 +449,8 @@ class ChromoController(object):
         
         return  хромосома-мутант
         """
+        if keys is None:
+            return self.mutate(chromo, [np.random.choice(list(self))])
         mutant = {}
         for k in self:
             mutant[k] = chromo[k]
