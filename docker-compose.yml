@@ -15,7 +15,7 @@ services:
     build: .
     image: pykas-image
     hostname: dask-worker
-    command: ["dask-worker", "--nprocs=8", "tcp://scheduler:8786"]
+    command: ["dask-worker", "--nprocs=4", "--nthreads=1", "tcp://scheduler:8786"]
 
 # "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 # docker run --rm --name worker --network="host" daskdocker dask-worker 192.168.0.100:8786

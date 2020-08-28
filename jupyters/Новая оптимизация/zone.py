@@ -78,7 +78,14 @@ class Zone:
             return Zone(self.x1, x, self.r1, r, self.alpha_max), Zone(x, self.x2, r, self.r2, self.alpha_max)
         
     def fix_points(self, points_xd):
-        good_points = [(x, d) for x, d in points_xd if self.is_in(x, d/2)] 
+        good_points1 = [(x, d) for x, d in points_xd if self.is_in(x, d/2)] 
+        good_points = []
+        x1, r1 = self.x1, self.r1
+        for x, d in good_points1:
+            alpha = atan((r1 - d/2)/(x - x1)) * 180 / pi
+            if alpha <= self.alpha_max:
+                good_points.append((x, d/2))
+                x1, r1 = x, d/2
         if len(good_points) == points_xd.shape[0]:
             return points_xd
         zs = [self]
