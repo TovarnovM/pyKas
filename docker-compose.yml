@@ -22,3 +22,5 @@ services:
 # docker stop worker
 # docker save -o d:/ftp_folder/image.tar pykas-image
 # docker load -i image.tar
+
+# docker run --rm  -p 8889:8889 dask-image jupyter notebook --port=8889 --ip=0.0.0.0 --allow-root --no-browser
