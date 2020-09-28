@@ -44,4 +44,5 @@ def cleanstuff(remove_build=True, remove_cpp=True, rename_pyd=True):
 if __name__ == "__main__":
     # for file_cpp in multiple_file_types('*.cpp', "*.c"):
     #     print(file_cpp)
+    # ddd
     cleanstuff()
