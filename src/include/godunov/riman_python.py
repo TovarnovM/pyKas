@@ -651,7 +651,7 @@ def get_init_conds_4_tsts():
             'x0' : 0.5,         # положение разрыва в момент t=0        
             'ts': [t],        # времена, в которых нужно построить графики распределения параметров         
             'n': 10000,         # кол-во точек, в которых ищутся параметры волны разрежения         
-            'save_to': r'sod.txt'
+           # 'save_to': r'sod.txt'
         } 
 
   
@@ -678,7 +678,7 @@ if __name__ == "__main__":
     for i, ic in enumerate(get_init_conds_4_tsts()):
         try:
             plot_distrs(**ic)
-            break
+            # break
         except Exception as e:
             print(i+1, e)
             raise e
