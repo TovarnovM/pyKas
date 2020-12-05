@@ -3,6 +3,7 @@ import numpy as np
 from gaslayer import GasEOS, GasLayer
 from powderlayer import PowderOvLayer
 from pistonlayer import ElPistLayer
+from reactant import ReactantGasLayer
 
 class Sandwich(object):
     @classmethod
@@ -19,6 +20,8 @@ class Sandwich(object):
                 lr = PowderOvLayer.get_standart(tube, x_left, lr_dict, sandwich_dict['calc_settings']['powder_settings'])
             elif lr_dict['type'] == 'pist':
                 lr = ElPistLayer.get_standart(tube, x_left, lr_dict, sandwich_dict['calc_settings']['pist_settings'])
+            elif lr_dict['type'] == 'reactant':
+                lr = ReactantGasLayer.get_standart(tube, x_left, lr_dict, sandwich_dict['calc_settings']['reactant_settings'])
             else:
                 t = lr_dict["type"]
                 raise AttributeError(f'Неправильный тип области {t}')
